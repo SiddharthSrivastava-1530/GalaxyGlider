@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">NewApp</string>
+    <string name="title_activity_location">LocationActivity</string>
+
+    <string name="ChatActivity_intent_petKey">PetKey</string>
+    <string name="ChatActivity_intent_receiverKey">receiverKey</string>
+    <string name="ChatActivity_intent_receiverName">receiverName</string>
+    <string name="ChatActivity_intent_receiverEmail">receiverEmail</string>
+    <string name="ChatActivity_intent_receiverPic">receiverProfilePic</string>
+    <string name="ChatActivity_intent_senderKey">senderKey</string>
+    <string name="ChatActivity_intent_senderName">senderName</string>
+    <string name="ChatActivity_intent_senderEmail">senderEmail</string>
+    <string name="ChatActivity_intent_senderPic">senderPic</string>
+
+    <string name="LocationActivity_intent_latitudeData">petLat</string>
+    <string name="LocationActivity_intent_longitudeData">petLong</string>
+    <string name="LocationActivity_intent_PetNameData">petName</string>
+
+    <string name="PetDetailsActivity_intent_petName">petName</string>
+    <string name="PetDetailsActivity_intent_breed">breed</string>
+    <string name="PetDetailsActivity_intent_age">age</string>
+    <string name="PetDetailsActivity_intent_size">size"</string>
+    <string name="PetDetailsActivity_intent_gender">gender</string>
+    <string name="PetDetailsActivity_intent_pic">pic</string>
+    <string name="PetDetailsActivity_intent_OwnerProfileKey">OwnerProfileKey</string>
+    <string name="PetDetailsActivity_intent_OwnerName">OwnerName</string>
+    <string name="PetDetailsActivity_intent_OwnerEmail">OwnerEmail</string>
+    <string name="PetDetailsActivity_intent_OwnerProfilePic">OwnerProfilePic</string>
+    <string name="PetDetailsActivity_intent_PetKey">PetKey</string>
+    <string name="PetDetailsActivity_intent_PetLat">PetLat</string>
+    <string name="PetDetailsActivity_intent_PetLong">PetLong</string>
+
+    <string name="tabHeading_Pets">PETS</string>
+    <string name="tabHeading_Chats">CHATS</string>
+    <string name="tabHeading_Favourites">FAVOURITES</string>
+    <string name="tabHeading_My_Pets">MY PETS</string>
+
+    <string name="set_location_Activity_location">Set Location</string>
+
+    <string name="email_hint_Activity_login_page">E-mail</string>
+    <string name="password_hint_Activity_login_page">Password</string>
+
+    <string name="name_hint_Activity_main">John</string>
+    <string name="email_hint_Activity_main">mail@gmail.com</string>
+    <string name="number_hint_Activity_main">Number</string>
+    <string name="password_hint_Activity_main">Password</string>
+
+    <string name="animalName_hint_Pets_Editor">Tommy</string>
+    <string name="breed_hint_Pets_editor">German Shepherd</string>
+
+    <string name="breed_text_user_per_holder">breed</string>
+    <string name="gender_User_Pet_holder">gender</string>
+    <string name="animal_text_pet_Holder">animal</string>
+
+    <string name="flag_Val">flag_Val</string>
+</resources>
