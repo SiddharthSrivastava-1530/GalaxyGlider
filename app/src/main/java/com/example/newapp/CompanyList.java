@@ -51,6 +51,14 @@ public class CompanyList extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab);
         swipeRefreshLayout = findViewById(R.id.swip);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCompanies();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         getCompanies();
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {

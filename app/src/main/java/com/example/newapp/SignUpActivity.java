@@ -35,8 +35,9 @@ public class SignUpActivity extends AppCompatActivity {
     private String username;
     private String useremail;
     private String usernumber;
-
     private String loginMode;
+    private TextView loginView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +48,17 @@ public class SignUpActivity extends AppCompatActivity {
         password = findViewById(R.id.Password_et);
         number = findViewById(R.id.Number_et);
         submit = findViewById(R.id.submit_tv);
+        loginView = findViewById(R.id.login_sign_up_activity_tv);
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
 
+        // If user is already logged in then open the CompaniesList activity.
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Intent intent1 = new Intent(SignUpActivity.this, CompanyList.class);
+            startActivity(intent1);
+            finish();
+        }
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +144,17 @@ public class SignUpActivity extends AppCompatActivity {
                 handleSignUp();
             }
         });
+
+        loginView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(SignUpActivity.this, LoginActivity.class);
+                intent1.putExtra("loginMode",loginMode);
+                startActivity(intent1);
+            }
+        });
+
+
     }
 
 
@@ -183,6 +202,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                                                 //Navigating to login activity for user to login after verifying email.
                                                 Intent intent = new Intent(SignUpActivity.this,CompanyList.class);
+
+                                                intent.putExtra("loginMode",loginMode);
 
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK

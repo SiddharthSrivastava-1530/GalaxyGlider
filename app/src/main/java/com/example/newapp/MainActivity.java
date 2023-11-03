@@ -7,12 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.newapp.DataModel.Company;
-import com.example.newapp.DataModel.SpaceShip;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,15 +30,6 @@ public class MainActivity extends AppCompatActivity {
 //        FirebaseDatabase.getInstance().getReference("company/" + "abc/").
 //                setValue(new Company("spacex","spacex@gmail.com","do a travel with us","","","",true,spaceShips));
 
-
-
-
-        // If user is already logged in then open the CompaniesList activity.
-        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Intent intent = new Intent(MainActivity.this, CompanyList.class);
-            startActivity(intent);
-            finish();
-        }
 
         enterAsUser.setOnClickListener(new View.OnClickListener() {
             @Override

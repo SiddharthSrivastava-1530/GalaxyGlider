@@ -1,2 +1,5 @@
-package com.example.newapp.DataModel;public class Transactions {
+package com.example.newapp.DataModel;
+
+public class Transactions {
+
 }
