@@ -6,20 +6,20 @@ public class Company {
 
     private String name;
     private String email;
+    private String loginMode;
+    private String companyId;
     private String description;
     private String imageUrl;
-    private String companyId;
-    private String loginMode;
     private Boolean isOperational;
     private ArrayList<SpaceShip> spaceShips;
 
-    public Company(String name, String email, String description, String imageUrl, String companyId, String loginMode, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
+    public Company(String name, String email, String loginMode, String companyId, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
         this.name = name;
         this.email = email;
+        this.loginMode = loginMode;
+        this.companyId = companyId;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.companyId = companyId;
-        this.loginMode = loginMode;
         this.isOperational = isOperational;
         this.spaceShips = spaceShips;
     }

@@ -2,6 +2,8 @@ package com.example.newapp.DataModel;
 
 public class SpaceShip {
     private String spaceShipName;
+    private String description;
+    private String spaceShipImageUrl;
     private String spaceShipId;
     private String ratings;
     private String feedback;
@@ -9,9 +11,16 @@ public class SpaceShip {
     private boolean haveRideSharing;
     private long busyTime;
     private float price;
+    private float speed;
 
-    public SpaceShip(String spaceShipName, String spaceShipId, String ratings, String feedback, String seatAvailability, boolean haveRideSharing, long busyTime, float price) {
+    public SpaceShip(){
+
+    }
+
+    public SpaceShip(String spaceShipName, String description, String spaceShipImageUrl, String spaceShipId, String ratings, String feedback, String seatAvailability, boolean haveRideSharing, long busyTime, float price, float speed) {
         this.spaceShipName = spaceShipName;
+        this.description = description;
+        this.spaceShipImageUrl = spaceShipImageUrl;
         this.spaceShipId = spaceShipId;
         this.ratings = ratings;
         this.feedback = feedback;
@@ -19,6 +28,7 @@ public class SpaceShip {
         this.haveRideSharing = haveRideSharing;
         this.busyTime = busyTime;
         this.price = price;
+        this.speed = speed;
     }
 
     public String getSpaceShipName() {
@@ -27,6 +37,22 @@ public class SpaceShip {
 
     public void setSpaceShipName(String spaceShipName) {
         this.spaceShipName = spaceShipName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSpaceShipImageUrl() {
+        return spaceShipImageUrl;
+    }
+
+    public void setSpaceShipImageUrl(String spaceShipImageUrl) {
+        this.spaceShipImageUrl = spaceShipImageUrl;
     }
 
     public String getSpaceShipId() {
@@ -83,5 +109,13 @@ public class SpaceShip {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 }

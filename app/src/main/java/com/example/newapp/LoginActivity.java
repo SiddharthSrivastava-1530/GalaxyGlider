@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,11 +24,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email;
-    EditText pass;
-    TextView sub;
-    TextView signup;
-    ImageView psw_show;
+    private EditText email;
+    private EditText pass;
+    private TextView sub;
+    private TextView signup;
+    private ImageView psw_show;
+    private String loginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class LoginActivity extends AppCompatActivity {
         signup = findViewById(R.id.signup_tv);
         psw_show = findViewById(R.id.psd_eye);
 
+        Intent intent = getIntent();
+        loginMode = intent.getStringExtra("loginMode");
 
         psw_show.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +82,9 @@ public class LoginActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                Intent intent1 = new Intent(new Intent(LoginActivity.this, SignUpActivity.class));
+                intent1.putExtra("loginMode",loginMode);
+                startActivity(intent1);
             }
         });
     }
@@ -95,7 +101,23 @@ public class LoginActivity extends AppCompatActivity {
                             //If the user's email is verified then send him to allListsActivity
                             if(firebaseUser.isEmailVerified()){
                                 Toast.makeText(getApplicationContext(),"Logged in successful",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, CompanyList.class));
+                                Intent intent1 = null;
+                                if(loginMode.equals("admin")){
+                                    intent1 = new Intent(LoginActivity.this, CompanyList.class);
+                                } else if(loginMode.equals("owner")) {
+                                    String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                    intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
+                                    intent1.putExtra("companyID",companyId);
+                                } else {
+                                    intent1 = new Intent(LoginActivity.this, CompanyList.class);
+                                }
+                                intent1.putExtra("loginMode",loginMode);
+                                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                startActivity(intent1);
+                                finish();
                             }
                             else{
                                 //If the user's email is not verified then send him another email and sign out him.

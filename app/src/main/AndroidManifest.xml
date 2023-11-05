@@ -13,6 +13,21 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
+            android:name=".SpaceShipDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CompanyProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SpaceShipEditorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SpaceShipList"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
