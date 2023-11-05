@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swip1_spaceship"
-    tools:context="SpaceShipList">
+    android:background="@drawable/spaceships"
+    android:id="@+id/swip1_spaceship">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/companies_constraint"
@@ -56,16 +56,16 @@
                 android:layout_height="60dp"
                 android:paddingTop="5dp">
 
-                <SearchView
-                    android:id="@+id/srchCompany_spaceship"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:layout_marginStart="5dp"
-                    android:queryHint="Search Spaceships here..."
-                    android:layout_gravity="center_vertical"
-                    android:visibility="visible"
-                    android:iconifiedByDefault="false" />
+<!--                <SearchView-->
+<!--                    android:id="@+id/srchCompany_spaceship"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="5"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:queryHint="Search Spaceships here..."-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:visibility="visible"-->
+<!--                    android:iconifiedByDefault="false" />-->
 
                 <Space
                     android:layout_width="0dp"

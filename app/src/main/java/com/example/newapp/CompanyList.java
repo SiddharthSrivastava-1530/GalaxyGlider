@@ -69,7 +69,7 @@ public class CompanyList extends AppCompatActivity {
 
         Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
 
-        getUserData();
+//        getUserData();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

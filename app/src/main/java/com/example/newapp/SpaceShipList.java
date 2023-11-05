@@ -40,7 +40,7 @@ public class SpaceShipList extends AppCompatActivity {
 
     private ArrayList<SpaceShip> spaceShipArrayList;
     private Spinner spinner;
-    private SearchView searchCompany;
+//    private SearchView searchCompany;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SpaceShipAdapter spaceShipAdapter;
@@ -67,7 +67,6 @@ public class SpaceShipList extends AppCompatActivity {
         setContentView(R.layout.activity_space_ship_list);
 
         spinner = findViewById(R.id.spinner1_spaceship);
-        searchCompany = findViewById(R.id.srchCompany_spaceship);
 
         spaceShipArrayList = new ArrayList<>();
 

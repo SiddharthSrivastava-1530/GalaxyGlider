@@ -48,17 +48,17 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
 
         holder.spaceShipName.setText(spaceships.get(position).getSpaceShipName());
         holder.price.setText(String.valueOf(spaceships.get(position).getPrice()));
-        holder.ratings.setText(spaceships.get(position).getRatings());
+//        holder.ratings.setText(spaceships.get(position).getRatings());
         holder.seatAvailability.setText(spaceships.get(position).getSeatAvailability());
-        holder.busyTime.setText(String.valueOf(spaceships.get(position).getBusyTime()));
+//        holder.busyTime.setText(String.valueOf(spaceships.get(position).getBusyTime()));
 //
         CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
         circularProgressDrawable.setStrokeWidth(5f);
         circularProgressDrawable.setCenterRadius(30f);
         circularProgressDrawable.start();
             //Using Glide library to put image of pet in imageView.
-            Glide.with(context).load(spaceships.get(position).getSpaceShipImageUrl()).error(R.drawable.account_img)
-                    .placeholder(circularProgressDrawable).into(holder.spaceShipPic);
+//            Glide.with(context).load(spaceships.get(position).getSpaceShipImageUrl()).error(R.drawable.account_img)
+//                    .placeholder(circularProgressDrawable).into(holder.spaceShipPic);
 
     }
 
@@ -71,13 +71,13 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
     class SpaceShipHolder extends RecyclerView.ViewHolder {
 
         TextView spaceShipName;
-        TextView ratings;
+//        TextView ratings;
         //        TextView feedback;
         TextView seatAvailability;
-        TextView rideSharing;
-        TextView busyTime;
+//        TextView rideSharing;
+//        TextView busyTime;
         TextView price;
-        ImageView spaceShipPic;
+//        ImageView spaceShipPic;
 
         public SpaceShipHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,13 +90,13 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
             });
 
             spaceShipName = itemView.findViewById(R.id.spaceShipName_SpaceShipList);
-            ratings = itemView.findViewById(R.id.spaceShip_rating_SpaceShipList);
+//            ratings = itemView.findViewById(R.id.spaceShip_rating_SpaceShipList);
             price = itemView.findViewById(R.id.spaceShip_price_SpaceShipList);
 //            feedback = itemView.findViewById(R.id.sp);
             seatAvailability = itemView.findViewById(R.id.seats_spaceShip_SpaceShipList);
-            rideSharing = itemView.findViewById(R.id.spaceShip_rideSharing_SpaceShipList);
-            busyTime = itemView.findViewById(R.id.spaceShip_busyTime_SpaceShipList);
-            spaceShipPic = itemView.findViewById(R.id.img_SpaceShip);
+//            rideSharing = itemView.findViewById(R.id.spaceShip_rideSharing_SpaceShipList);
+//            busyTime = itemView.findViewById(R.id.spaceShip_busyTime_SpaceShipList);
+//            spaceShipPic = itemView.findViewById(R.id.img_SpaceShip);
 
         }
     }

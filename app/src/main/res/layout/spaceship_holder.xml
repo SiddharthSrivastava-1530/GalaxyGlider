@@ -1,133 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="30dp"
+    android:layout_width="390dp"
+    android:layout_height="650dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="0dp">
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginTop="10dp"
+    app:cardCornerRadius="29dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="297dp"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:padding="17dp"
+        android:background="@drawable/holder3">
 
         <TextView
             android:id="@+id/spaceShipName_SpaceShipList"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginStart="160dp"
-            android:layout_marginTop="5dp"
-            android:textSize="24sp"
-            tools:text="Company Name" />
-
-        <TextView
-            android:id="@+id/spaceShip_price_SpaceShipList"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginStart="160dp"
-            android:layout_marginTop="5dp"
-            android:textSize="16sp"
-            tools:text="Price" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="350dp"
+            android:inputType="text"
+            android:text="Luna"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/spaceShip_speed_SpaceShipList"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginStart="160dp"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            tools:text="Speed" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="220dp"
+            android:layout_marginLeft="234dp"
+            android:layout_marginTop="460dp"
+            android:inputType="text"
+            android:text="18"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/seats_spaceShip_SpaceShipList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="220dp"
+            android:layout_marginTop="350dp"
+            android:inputType="text"
+            android:text="10"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/seats_spaceShip_SpaceShipList"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                tools:text="Seats available" />
-
-            <TextView
-                android:id="@+id/spaceShip_rating_SpaceShipList"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                tools:text="Ratings" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/spaceShip_price_SpaceShipList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/spaceShip_busyTime_SpaceShipList"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                tools:text="Busy Time" />
-
-            <TextView
-                android:id="@+id/spaceShip_rideSharing_SpaceShipList"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginStart="60dp"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                tools:text="Have Ride Sharing" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
-        android:elevation="40dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="140dp">
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:id="@+id/cv_img"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="100dp"
-            app:cardCornerRadius="120dp">
-
-            <ImageView
-                android:id="@+id/img_SpaceShip"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center"/>
-
-        </androidx.cardview.widget.CardView>
-
-    </androidx.cardview.widget.CardView>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="460dp"
+            android:inputType="text"
+            android:text="200"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

@@ -98,8 +98,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         companyId = intent.getStringExtra("companyID");
         booleanUpdate = intent.getBooleanExtra("update_spaceship",false);
 
-        Toast.makeText(this, companyId, Toast.LENGTH_SHORT).show();
-
         spaceShipKey = UUID.randomUUID().toString();
 
         CircularProgressDrawable circularProgressDrawable =
@@ -280,75 +278,74 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
     // deleting the spaceships
     private void deleteSpaceShipsData() {
-        String key = UUID.randomUUID().toString();
 
         SpaceShip spaceShipToDelete = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
-                spaceShipPicUrl,key,"","",seatsEditText.getText().toString(),haveSharedRide,
+                spaceShipPicUrl,"","","",seatsEditText.getText().toString(),haveSharedRide,
                 Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 
-        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId)
-                .child("spaceships");
+        Toast.makeText(this, spaceShipToDelete.getSpaceShipName(), Toast.LENGTH_SHORT).show();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
-        builder.setTitle("Delete spaceship")
-                .setIcon(R.drawable.delete_icon1)
-                .setMessage("Do you want to delete this spaceship?")
-                .setNegativeButton("Cancel",null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Fetch the existing spaceShips
-                        companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
+//        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId)
+//                .child("spaceships");
 
-                                if (dataSnapshot.exists()) {
-                                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
-                                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                                        if (spaceShip != null) {
-                                            spaceShipArrayList.add(spaceShip);
-                                        }
-                                    }
-                                }
+//        AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
+//        builder.setTitle("Delete spaceship")
+//                .setIcon(R.drawable.delete_icon1)
+//                .setMessage("Do you want to delete this spaceship?")
+//                .setNegativeButton("Cancel",null)
+//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        // Fetch the existing spaceShips
+//                        companyRef.child("spaceships").addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
+//
+//                                if (dataSnapshot.exists()) {
+//                                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
+//                                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
+//                                        if (spaceShip != null) {
+//                                            spaceShipArrayList.add(spaceShip);
+//                                        }
+//                                    }
+//                                }
+//
+//                                for(SpaceShip spaceShip1 : spaceShipArrayList){
+//                                    Log.e("----------> ", spaceShip1.getSpaceShipName());
+//                                }
+//
+//                                // Remove the spaceShip you want to delete
+//                                spaceShipArrayList.remove(spaceShipToDelete);
+//
+//                                // Set the updated spaceShips back to the company reference
+//                                companyRef.setValue(spaceShipArrayList);
+//
+//                                for(SpaceShip spaceShip1 : spaceShipArrayList){
+//                                    Log.e("----------> ", spaceShip1.getSpaceShipName());
+//                                }
 
-                                for(SpaceShip spaceShip1 : spaceShipArrayList){
-                                    Log.e("----------> ", spaceShip1.getSpaceShipName());
-                                }
 
-                                // Remove the spaceShip you want to delete
-                                spaceShipArrayList.remove(spaceShipToDelete);
+//                            }
 
-                                // Set the updated spaceShips back to the company reference
-                                companyRef.setValue(spaceShipArrayList);
-
-                                for(SpaceShip spaceShip1 : spaceShipArrayList){
-                                    Log.e("----------> ", spaceShip1.getSpaceShipName());
-                                }
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                // Handle any errors here
-                            }
-                        });
-//                        startActivity(new Intent(SpaceShipEditorActivity.this, SpaceShipList.class));
-                    }
-                }).show();
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//                                // Handle any errors here
+//                            }
+//                        });
+////                        startActivity(new Intent(SpaceShipEditorActivity.this, SpaceShipList.class));
+//                    }
+//                }).show();
 
     }
 
     // save the new spaceship data in database
     private void saveSpaceShipsData() {
 
-        String key = UUID.randomUUID().toString();
-
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
         spaceShip = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
-                spaceShipPicUrl,key,"","",seatsEditText.getText().toString(),haveSharedRide,
+                spaceShipPicUrl,"","","",seatsEditText.getText().toString(),haveSharedRide,
                 Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 
@@ -381,38 +378,38 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     // update the existing spaceship
     private void updateSpaceShipsData() {
 
-//        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
-//        spaceShip = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
-//                spaceShipPicUrl,key,"","",seatsEditText.getText().toString(),haveSharedRide,
-//                Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
-//                Float.parseFloat(speedEditText.getText().toString()));
-//        // Fetch the existing spaceShips
-//        companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                ArrayList<SpaceShip> spaceShips = new ArrayList<>();
-//
-//                if (dataSnapshot.exists()) {
-//                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
-//                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-//                        if (spaceShip != null) {
-//                            spaceShips.add(spaceShip);
-//                        }
-//                    }
-//                }
-//
-//                // Make updates to the spaceShips ArrayList
-//                spaceShips.add(newSpaceShip); // Add a new spaceShip
-//
-//                // Set the updated spaceShips back to the company reference
-//                companyRef.setValue(spaceShips);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Handle any errors here
-//            }
-//        });
+        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
+        SpaceShip tobeUpdatedSpaceShip = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
+                spaceShipPicUrl,"","","",seatsEditText.getText().toString(),haveSharedRide,
+                Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
+                Float.parseFloat(speedEditText.getText().toString()));
+        // Fetch the existing spaceShips
+        companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<SpaceShip> spaceShips = new ArrayList<>();
+
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
+                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
+                        if (spaceShip != null) {
+                            spaceShips.add(spaceShip);
+                        }
+                    }
+                }
+
+                // Make updates to the spaceShips ArrayList
+                spaceShips.add(tobeUpdatedSpaceShip); // Add a new spaceShip
+
+                // Set the updated spaceShips back to the company reference
+                companyRef.setValue(spaceShips);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle any errors here
+            }
+        });
 
     }
 
