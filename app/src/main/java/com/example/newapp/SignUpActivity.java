@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
@@ -55,14 +56,14 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent1 = getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 
-        // If user is already logged in then open the CompaniesList activity.
+        // If already logged in then open the specific activity.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             Intent intent = null;
-            if(loginMode.equals("owner")){
+            if (loginMode.equals("owner")) {
 
                 String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 intent = new Intent(SignUpActivity.this, SpaceShipList.class);
-                intent.putExtra("companyID",companyId);
+                intent.putExtra("companyID", companyId);
             } else {
                 intent = new Intent(SignUpActivity.this, CompanyList.class);
             }
@@ -100,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Checking if the useremail is empty and showing error accordingly.
+                //Checking if the userEmail is empty and showing error accordingly.
                 else if (TextUtils.isEmpty(useremail)) {
                     Toast.makeText(SignUpActivity.this, "Please enter your email",
                             Toast.LENGTH_SHORT).show();
@@ -197,7 +198,7 @@ public class SignUpActivity extends AppCompatActivity {
                             String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             FirebaseDatabase.getInstance().getReference("company/" + key)
                                     .setValue(new Company(name.getText().toString(),
-                                            email.getText().toString(),
+                                            email.getText().toString(),number.getText().toString(),
                                             loginMode, key, "", "", false, spaceShips))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -214,7 +215,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                                 //Navigating to login activity for user to login after verifying email.
                                                 Intent intent = new Intent(SignUpActivity.this, SpaceShipList.class);
-                                                intent.putExtra("companyID",key);
+                                                intent.putExtra("companyID", key);
                                                 intent.putExtra("loginMode", loginMode);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -263,10 +264,8 @@ public class SignUpActivity extends AppCompatActivity {
                             // Setting data into the database.
                             FirebaseDatabase.getInstance().getReference("users/" +
                                             FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(new Customer(name.getText().toString()
-                                            , number.getText().toString(),
-                                            email.getText().toString(),
-                                            "", loginMode))
+                                    .setValue(new Customer(name.getText().toString(), number.getText().toString(),
+                                            email.getText().toString(), "", loginMode))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

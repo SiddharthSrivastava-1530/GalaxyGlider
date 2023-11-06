@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.TotpSecret;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SpaceShipEditorActivity extends AppCompatActivity {
@@ -57,14 +59,14 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private String spaceShipPicUrl;
     private Boolean booleanUpdate;
     private String mKey;
-    private  SpaceShip spaceShip;
+    private SpaceShip spaceShip;
     private String spaceShipKey;
     private String imageUrl;
     private String name;
     private String description;
     private String seats;
     private String price;
-    private String speed;
+    private float speed;
     private String busyTime;
     private Boolean haveSharedRide;
     private String companyId;
@@ -90,13 +92,13 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
         imageUrl = intent.getStringExtra("picUrl_ss");
-        speed = intent.getStringExtra("speed_ss");
+        speed = intent.getFloatExtra("speed_ss", 0);
         busyTime = intent.getStringExtra("busyTime_ss");
         seats = intent.getStringExtra("seats_ss");
-        haveSharedRide = intent.getBooleanExtra("shared_ride_ss",false);
+        haveSharedRide = intent.getBooleanExtra("shared_ride_ss", false);
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
-        booleanUpdate = intent.getBooleanExtra("update_spaceship",false);
+        booleanUpdate = intent.getBooleanExtra("update_spaceship", false);
 
         spaceShipKey = UUID.randomUUID().toString();
 
@@ -107,10 +109,10 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         circularProgressDrawable.start();
 
 
-        if(booleanUpdate){
+        if (booleanUpdate) {
+            spaceShipPicUrl = imageUrl;
             setViewData();
         }
-
 
         //Select the picture from internal storage that you want to upload.
         pic_et.setOnClickListener(new View.OnClickListener() {
@@ -118,10 +120,9 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent photoIntent = new Intent(Intent.ACTION_PICK);
                 photoIntent.setType("image/*");
-                startActivityForResult(photoIntent,1);
+                startActivityForResult(photoIntent, 1);
             }
         });
-
 
 
     }
@@ -132,17 +133,17 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==1 && resultCode==RESULT_OK && data!=null){
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             imagePath = data.getData();
             getImageInImageView();
         }
     }
 
     //Putting image in imageView and uploading to Firebase Storage.
-    private void getImageInImageView(){
+    private void getImageInImageView() {
         Bitmap bitmap = null;
         try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),imagePath);
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -150,30 +151,29 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         uploadImage();
     }
 
-    private void uploadImage(){
+    private void uploadImage() {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle(" Uploading... ");
         progressDialog.show();
 
         //Put image in Firebase storage.
-        FirebaseStorage.getInstance().getReference("spaceShipImages/"+ UUID.randomUUID().toString())
+        FirebaseStorage.getInstance().getReference("spaceShipImages/" + UUID.randomUUID().toString())
                 .putFile(imagePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         //task.getResult().toString() Contains the url of the pet picture
                                         spaceShipPicUrl = task.getResult().toString();
                                     }
                                 }
                             });
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(),task.getException().getLocalizedMessage()
-                                    ,Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage()
+                                    , Toast.LENGTH_SHORT).show();
                         }
                         progressDialog.dismiss();
                     }
@@ -181,40 +181,40 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                     @Override
                     //Shows the progress of upload.
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progress = 100.0*snapshot.getBytesTransferred()/snapshot.getTotalByteCount();
-                        progressDialog.setMessage(" Uploaded "+(int)progress+"%");
+                        double progress = 100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
+                        progressDialog.setMessage(" Uploaded " + (int) progress + "%");
                     }
                 });
     }
 
 
     private boolean checkData() {
-        if(spaceShipPicUrl.isEmpty()){
+        if (spaceShipPicUrl.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please upload space ship picture.",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(nameEditText.getText().toString().isEmpty()){
+        if (nameEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter name",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(seatsEditText.getText().toString().isEmpty()){
+        if (seatsEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter seats.",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(priceEditText.getText().toString().isEmpty()){
+        if (priceEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter price.",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(busyTimeEditText.getText().toString().isEmpty()){
+        if (busyTimeEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter busyTime (if no time write 00:00)",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(descriptionEditText.getText().toString().isEmpty()){
+        if (descriptionEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter description",
                     Toast.LENGTH_SHORT).show();
             return false;
@@ -223,23 +223,20 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     }
 
 
-
     //Inflating the menu options.
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.space_ship_editor_activity_menu,menu);
+        getMenuInflater().inflate(R.menu.space_ship_editor_activity_menu, menu);
         return true;
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
         // If this is a new task, hide the "Delete" menu item.
-        if(!booleanUpdate)
-        {
+        if (!booleanUpdate) {
             MenuItem menuItem = menu.findItem(R.id.menu_item_del);
             menuItem.setVisible(false);
         }
@@ -248,28 +245,26 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     }
 
     //Setting what happens when any menu item is clicked.
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-        if(item.getItemId()==R.id.menu_item_save){
-            if(booleanUpdate && checkData()){
+        if (item.getItemId() == R.id.menu_item_save) {
+            if (booleanUpdate && checkData()) {
                 updateSpaceShipsData();
-            }
-            else if(checkData()){
+            } else if (checkData()) {
                 saveSpaceShipsData();
             }
             return true;
         }
-        if(item.getItemId()==R.id.menu_item_del){
-            if(booleanUpdate){
+        if (item.getItemId() == R.id.menu_item_del) {
+            if (booleanUpdate) {
                 deleteSpaceShipsData();
-            }
-            else{
+            } else {
                 startActivity(new Intent(SpaceShipEditorActivity.this, SpaceShipList.class));
                 finish();
             }
             return true;
         }
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
         }
@@ -279,64 +274,119 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     // deleting the spaceships
     private void deleteSpaceShipsData() {
 
-        SpaceShip spaceShipToDelete = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
-                spaceShipPicUrl,"","","",seatsEditText.getText().toString(),haveSharedRide,
-                Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
+        SpaceShip spaceShipToDelete = new SpaceShip(name, description, imageUrl, "", "",
+                "", seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
+        builder.setTitle("Delete spaceship")
+                .setIcon(R.drawable.delete_icon1)
+                .setMessage("Do you want to delete this spaceship?")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
+                                .child(companyId).child("spaceships");
+                        // Fetch the existing spaceShips
+                        companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
+                                int index = -1, counter = 0;
+                                if (dataSnapshot.exists()) {
+                                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
+                                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
+                                        if (spaceShip != null) {
+                                            spaceShipArrayList.add(spaceShip);
+                                            if (areEqualSpaceShips(spaceShip, spaceShipToDelete)) {
+                                                index = counter;
+                                            }
+                                            counter++;
+                                        }
+                                    }
+                                }
+
+                                // Remove the spaceShip you want to delete
+                                if(index != -1) spaceShipArrayList.remove(index);
+
+                                // Set the updated spaceShips back to the company reference
+                                companyRef.setValue(spaceShipArrayList);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle any errors here
+                            }
+                        });
+//                        startActivity(new Intent(SpaceShipEditorActivity.this, SpaceShipList.class));
+                    }
+                }).show();
+
+    }
+
+
+    // update the existing spaceship
+    private void updateSpaceShipsData() {
+
+        SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
+                spaceShipPicUrl, "", "", "", seatsEditText.getText().toString(), haveSharedRide,
+                Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 
-        Toast.makeText(this, spaceShipToDelete.getSpaceShipName(), Toast.LENGTH_SHORT).show();
-
-//        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId)
-//                .child("spaceships");
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
-//        builder.setTitle("Delete spaceship")
-//                .setIcon(R.drawable.delete_icon1)
-//                .setMessage("Do you want to delete this spaceship?")
-//                .setNegativeButton("Cancel",null)
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        // Fetch the existing spaceShips
-//                        companyRef.child("spaceships").addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
-//
-//                                if (dataSnapshot.exists()) {
-//                                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
-//                                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-//                                        if (spaceShip != null) {
-//                                            spaceShipArrayList.add(spaceShip);
-//                                        }
-//                                    }
-//                                }
-//
-//                                for(SpaceShip spaceShip1 : spaceShipArrayList){
-//                                    Log.e("----------> ", spaceShip1.getSpaceShipName());
-//                                }
-//
-//                                // Remove the spaceShip you want to delete
-//                                spaceShipArrayList.remove(spaceShipToDelete);
-//
-//                                // Set the updated spaceShips back to the company reference
-//                                companyRef.setValue(spaceShipArrayList);
-//
-//                                for(SpaceShip spaceShip1 : spaceShipArrayList){
-//                                    Log.e("----------> ", spaceShip1.getSpaceShipName());
-//                                }
+        SpaceShip originalSpaceShip = new SpaceShip(name, description, imageUrl, "", "",
+                "", seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed);
 
 
-//                            }
+        AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
+        builder.setTitle("Update spaceship data")
+                .setMessage("Are you sure you want to update the spaceship data?")
+                .setNegativeButton("NO", null)
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//                                // Handle any errors here
-//                            }
-//                        });
-////                        startActivity(new Intent(SpaceShipEditorActivity.this, SpaceShipList.class));
-//                    }
-//                }).show();
+                        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
+                                .child(companyId).child("spaceships");
+                        // Fetch the existing spaceShips
+                        companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
+                                int index = -1, counter = 0;
+                                if (dataSnapshot.exists()) {
+                                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
+                                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
+                                        if (spaceShip != null) {
+                                            spaceShipArrayList.add(spaceShip);
+                                            if (areEqualSpaceShips(spaceShip, originalSpaceShip)) {
+                                                index = counter;
+                                            }
+                                            counter++;
+                                        }
+                                    }
+                                }
+
+                                // Update the spaceShip you want to delete
+                                try {
+                                    spaceShipArrayList.set(index, updatedSpaceShip);
+                                } catch (IndexOutOfBoundsException e){
+                                    Toast.makeText(SpaceShipEditorActivity.this, "Data not updated. Please retry", Toast.LENGTH_SHORT).show();
+                                }
+
+                                // Set the updated spaceShips back to the company reference
+                                companyRef.setValue(spaceShipArrayList);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle any errors here
+                            }
+                        });
+                    }
+                }).show();
 
     }
 
@@ -344,9 +394,9 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private void saveSpaceShipsData() {
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
-        spaceShip = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
-                spaceShipPicUrl,"","","",seatsEditText.getText().toString(),haveSharedRide,
-                Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
+        spaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
+                spaceShipPicUrl, "", "", "", seatsEditText.getText().toString(), haveSharedRide,
+                Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 
         companyRef.child("spaceships").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -356,7 +406,8 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
                 // Check if the spaceShips field exists
                 if (dataSnapshot.exists()) {
-                    GenericTypeIndicator<ArrayList<SpaceShip>> t = new GenericTypeIndicator<ArrayList<SpaceShip>>() {};
+                    GenericTypeIndicator<ArrayList<SpaceShip>> t = new GenericTypeIndicator<ArrayList<SpaceShip>>() {
+                    };
                     spaceShips = dataSnapshot.getValue(t);
                 }
 
@@ -375,50 +426,13 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
     }
 
-    // update the existing spaceship
-    private void updateSpaceShipsData() {
-
-        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
-        SpaceShip tobeUpdatedSpaceShip = new SpaceShip(nameEditText.getText().toString(),descriptionEditText.getText().toString(),
-                spaceShipPicUrl,"","","",seatsEditText.getText().toString(),haveSharedRide,
-                Long.parseLong(busyTimeEditText.getText().toString()),Float.parseFloat(priceEditText.getText().toString()),
-                Float.parseFloat(speedEditText.getText().toString()));
-        // Fetch the existing spaceShips
-        companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<SpaceShip> spaceShips = new ArrayList<>();
-
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
-                        SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                        if (spaceShip != null) {
-                            spaceShips.add(spaceShip);
-                        }
-                    }
-                }
-
-                // Make updates to the spaceShips ArrayList
-                spaceShips.add(tobeUpdatedSpaceShip); // Add a new spaceShip
-
-                // Set the updated spaceShips back to the company reference
-                companyRef.setValue(spaceShips);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle any errors here
-            }
-        });
-
-    }
 
     // setting the data to views
     private void setViewData() {
 
         nameEditText.setText(name);
         priceEditText.setText(price);
-        speedEditText.setText(speed);
+        speedEditText.setText(String.valueOf(speed));
         rideSharingTextView.setText(String.valueOf(haveSharedRide));
         descriptionEditText.setText(description);
         seatsEditText.setText(seats);
@@ -427,6 +441,37 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(imageUrl).error(R.drawable.account_img)
                 .placeholder(R.drawable.account_img).into(pic_et);
 
+    }
+
+    private Boolean areEqualSpaceShips(SpaceShip spaceShip1, SpaceShip spaceShip2) {
+        if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
+            return false;
+        }
+        if (!(spaceShip1.getSpaceShipId().equals(spaceShip2.getSpaceShipId()))) {
+            return false;
+        }
+        if (!(spaceShip1.getBusyTime()==spaceShip2.getBusyTime())) {
+            return false;
+        }
+        if (!(spaceShip1.getPrice()==spaceShip2.getPrice())) {
+            return false;
+        }
+        if (!(spaceShip1.getRatings().equals(spaceShip2.getRatings()))) {
+            return false;
+        }
+        if (!(Objects.equals(spaceShip1.getSeatAvailability(), spaceShip2.getSeatAvailability()))) {
+            return false;
+        }
+        if (!(spaceShip1.getSpaceShipImageUrl().equals(spaceShip2.getSpaceShipImageUrl()))) {
+            return false;
+        }
+        if (!(spaceShip1.getDescription().equals(spaceShip2.getDescription()))) {
+            return false;
+        }
+        if (!(spaceShip1.getSpeed() == spaceShip2.getSpeed())) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.Adapter.SpaceShipAdapter;
+import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
@@ -40,7 +41,7 @@ public class SpaceShipList extends AppCompatActivity {
 
     private ArrayList<SpaceShip> spaceShipArrayList;
     private Spinner spinner;
-//    private SearchView searchCompany;
+    //    private SearchView searchCompany;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SpaceShipAdapter spaceShipAdapter;
@@ -48,7 +49,6 @@ public class SpaceShipList extends AppCompatActivity {
     SpaceShipAdapter.OnSpaceShipClickListener onSpaceShipClickListener;
     private FloatingActionButton floatingActionButton;
     private String imageUrl;
-
     private String name;
     private String description;
     private String ratings;
@@ -57,6 +57,10 @@ public class SpaceShipList extends AppCompatActivity {
     private String speed;
     private String busyTime;
     private Boolean haveSharedRide;
+    private String currentUserName;
+    private String currentUserEmail;
+    private String currentUserPic;
+    private String currentUserNumber;
     private String companyId;
     private String loginMode;
 
@@ -81,9 +85,11 @@ public class SpaceShipList extends AppCompatActivity {
 
         Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
 
-        if (loginMode.equals("user")) {
+        if (!loginMode.equals("owner")) {
             floatingActionButton.setVisibility(View.GONE);
         }
+
+        getUserData();
 
 
         // enable adding new spaceship if owner (move to editor activity)
@@ -92,7 +98,7 @@ public class SpaceShipList extends AppCompatActivity {
             public void onClick(View v) {
                 if (loginMode.equals("owner")) {
                     Intent intent1 = new Intent(SpaceShipList.this, SpaceShipEditorActivity.class);
-                    intent1.putExtra("companyID",companyId);
+                    intent1.putExtra("companyID", companyId);
                     startActivity(intent1);
                 } else {
                     Toast.makeText(SpaceShipList.this, "You are not authorised to add spaceships", Toast.LENGTH_SHORT).show();
@@ -115,18 +121,18 @@ public class SpaceShipList extends AppCompatActivity {
         onSpaceShipClickListener = new SpaceShipAdapter.OnSpaceShipClickListener() {
             @Override
             public void onSpaceShipsClicked(int position) {
-                Intent intent1 = new Intent(SpaceShipList.this,SpaceShipDetailsActivity.class);
+                Intent intent1 = new Intent(SpaceShipList.this, SpaceShipDetailsActivity.class);
                 intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
                 intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getRatings());
                 intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
                 intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
                 intent1.putExtra("picUrl_ss", spaceShipArrayList.get(position).getSpaceShipImageUrl());
-//                intent1.putExtra("speed_ss",spaceShipArrayList.get(position).getSp());
-                intent1.putExtra("busyTime_ss",String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
-                intent1.putExtra("seats_ss",spaceShipArrayList.get(position).getSeatAvailability());
-                intent1.putExtra("shared_ride_ss",spaceShipArrayList.get(position).isHaveRideSharing());
-                intent1.putExtra("loginMode",loginMode);
-                intent1.putExtra("companyID",companyId);
+                intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
+                intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
+                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatAvailability());
+                intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
+                intent1.putExtra("loginMode", loginMode);
+                intent1.putExtra("companyID", companyId);
                 startActivity(intent1);
             }
         };
@@ -178,11 +184,19 @@ public class SpaceShipList extends AppCompatActivity {
             // Sending data to profile activity if received.
             // Moving to respective profile activity as per loginMode.
             if (loginMode.equals("user")) {
-                Intent intent = new Intent(SpaceShipList.this, UserProfileActivity.class);
-                startActivity(intent);
+                Intent intent1 = new Intent(SpaceShipList.this, UserProfileActivity.class);
+                intent1.putExtra("update_from_allList", true);
+                intent1.putExtra("sender_pic", currentUserPic);
+                intent1.putExtra("sender_name", currentUserName);
+                intent1.putExtra("sender_number", currentUserEmail);
+                startActivity(intent1);
             } else if (loginMode.equals("owner")) {
-                Intent intent = new Intent(SpaceShipList.this, CompanyProfileActivity.class);
-                startActivity(intent);
+                Intent intent1 = new Intent(SpaceShipList.this, CompanyProfileActivity.class);
+                intent1.putExtra("update_from_allList", true);
+                intent1.putExtra("sender_pic", currentUserPic);
+                intent1.putExtra("sender_name", currentUserName);
+                intent1.putExtra("sender_number", currentUserNumber);
+                startActivity(intent1);
             } else {
 
             }
@@ -203,61 +217,48 @@ public class SpaceShipList extends AppCompatActivity {
     }
 
     private void getUserData() {
-//        try {
-//
-//            Toast.makeText(this, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
+        try {
+            String key = "";
+            if (loginMode.equals("admin")) {
+                key = "admin";
+            } else if (loginMode.equals("owner")) {
+                key = "company";
+            } else if (loginMode.equals("user")) {
+                key = "users";
+            }
 
-//            // Getting data about user from database.
-//            FirebaseDatabase.getInstance().getReference("users/" +
-//                            FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                    .addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                            senderName = snapshot.getValue(Customer.class).getName();
-////                            senderEmail = snapshot.getValue(Customer.class).getEmail();
-////                            senderPic = snapshot.getValue(Customer.class).getProfilePic();
-////                            senderNumber = snapshot.getValue(Customer.class).getNumber();
-////                            Toast.makeText(CompanyList.this, senderName, Toast.LENGTH_SHORT).show();
-//                            Customer customer = snapshot.getValue(Customer.class);
-//                            Log.e("---------------", customer.getEmail());
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toast.makeText(getApplicationContext(), "Slow Internet Connection",
-//                    Toast.LENGTH_SHORT).show();
-//        }
+            // Getting data about user from database.
+            FirebaseDatabase.getInstance().getReference(key + "/" +
+                            FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (loginMode.equals("admin")) {
+                                currentUserName = snapshot.getValue(Admin.class).getName();
+                                currentUserEmail = snapshot.getValue(Admin.class).getEmail();
+                                currentUserNumber = snapshot.getValue(Admin.class).getNumber();
+                            } else if (loginMode.equals("owner")) {
+                                currentUserName = snapshot.getValue(Company.class).getName();
+                                currentUserEmail = snapshot.getValue(Company.class).getEmail();
+                                currentUserPic = snapshot.getValue(Company.class).getImageUrl();
+                                currentUserNumber = snapshot.getValue(Company.class).getNumber();
+                            } else if (loginMode.equals("user")) {
+                                currentUserName = snapshot.getValue(Customer.class).getName();
+                                currentUserEmail = snapshot.getValue(Customer.class).getEmail();
+                                currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
+                                currentUserNumber = snapshot.getValue(Customer.class).getNumber();
+                            }
+                        }
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null) {
-            String currentUserId = currentUser.getUid();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-            // Create a reference to the current user's data
-            DatabaseReference currentUserReference = FirebaseDatabase.getInstance().getReference("users").child(currentUserId);
-
-            // Add a ValueEventListener to retrieve the user data
-            currentUserReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Retrieve user data from the snapshot
-                    if (dataSnapshot.exists()) {
-                            Customer currentCustomer = dataSnapshot.getValue(Customer.class);
-//                            Toast.makeText(CompanyList.this, currentCustomer.getName(), Toast.LENGTH_SHORT).show();
-                    } else {
-
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Slow Internet Connection",
+                    Toast.LENGTH_SHORT).show();
         }
 
     }

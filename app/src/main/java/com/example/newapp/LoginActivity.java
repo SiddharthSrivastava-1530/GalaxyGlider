@@ -45,6 +45,26 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
 
+        if(loginMode.equals("admin")){
+            signup.setVisibility(View.GONE);
+        }
+
+        // If already logged in then open the specific activity.
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Intent intent1 = null;
+            if (loginMode.equals("owner")) {
+
+                String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
+                intent1.putExtra("companyID", companyId);
+            } else {
+                intent1 = new Intent(LoginActivity.this, CompanyList.class);
+            }
+            intent1.putExtra("loginMode", loginMode);
+            startActivity(intent1);
+            finish();
+        }
+
         psw_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

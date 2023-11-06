@@ -13,6 +13,9 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
+            android:name=".CompanyDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SpaceShipDetailsActivity"
             android:exported="false" />
         <activity

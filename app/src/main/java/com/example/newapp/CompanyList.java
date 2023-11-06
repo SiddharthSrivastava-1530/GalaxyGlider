@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.CompanyAdapter;
+import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -43,10 +44,10 @@ public class CompanyList extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
-    private String senderName;
-    private String senderEmail;
-    private String senderPic;
-    private String senderNumber;
+    private String currentUserName;
+    private String currentUserEmail;
+    private String currentUserPic;
+    private String currentUserNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,7 @@ public class CompanyList extends AppCompatActivity {
 
         Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
 
-//        getUserData();
+        getUserData();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -84,10 +85,12 @@ public class CompanyList extends AppCompatActivity {
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
             public void onCompaniesClicked(int position) {
-                Intent intent = new Intent(CompanyList.this, SpaceShipList.class);
-                String companyId = companyArrayList.get(position).getCompanyId();
-                intent.putExtra("companyID", companyId);
+                Intent intent = new Intent(CompanyList.this, CompanyDetailsActivity.class);
                 intent.putExtra("loginMode", loginMode);
+                intent.putExtra("companyID", companyArrayList.get(position).getCompanyId());
+                intent.putExtra("company_name", companyArrayList.get(position).getName());
+                intent.putExtra("company_desc", companyArrayList.get(position).getDescription());
+                intent.putExtra("company_img", companyArrayList.get(position).getImageUrl());
                 startActivity(intent);
             }
         };
@@ -145,9 +148,17 @@ public class CompanyList extends AppCompatActivity {
             // Moving to respective profile activity as per loginMode.
             if (loginMode.equals("user")) {
                 Intent intent = new Intent(CompanyList.this, UserProfileActivity.class);
+                intent.putExtra("update_from_allList", true);
+                intent.putExtra("sender_pic", currentUserPic);
+                intent.putExtra("sender_name", currentUserName);
+                intent.putExtra("sender_number", currentUserEmail);
                 startActivity(intent);
             } else if (loginMode.equals("owner")) {
                 Intent intent = new Intent(CompanyList.this, CompanyProfileActivity.class);
+                intent.putExtra("update_from_allList", false);
+                intent.putExtra("sender_pic", currentUserPic);
+                intent.putExtra("sender_name", currentUserName);
+                intent.putExtra("sender_number", currentUserNumber);
                 startActivity(intent);
             } else {
 
@@ -157,61 +168,48 @@ public class CompanyList extends AppCompatActivity {
     }
 
     private void getUserData() {
-//        try {
-//
-//            Toast.makeText(this, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_SHORT).show();
+        try {
+            String key = "";
+            if(loginMode.equals("admin")) {
+                key = "admin";
+            } else if(loginMode.equals("owner")){
+                key = "company";
+            } else if(loginMode.equals("user")){
+                key = "users";
+            }
 
-//            // Getting data about user from database.
-//            FirebaseDatabase.getInstance().getReference("users/" +
-//                            FirebaseAuth.getInstance().getCurrentUser().getUid())
-//                    .addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                            senderName = snapshot.getValue(Customer.class).getName();
-////                            senderEmail = snapshot.getValue(Customer.class).getEmail();
-////                            senderPic = snapshot.getValue(Customer.class).getProfilePic();
-////                            senderNumber = snapshot.getValue(Customer.class).getNumber();
-////                            Toast.makeText(CompanyList.this, senderName, Toast.LENGTH_SHORT).show();
-//                            Customer customer = snapshot.getValue(Customer.class);
-//                            Log.e("---------------", customer.getEmail());
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(@NonNull DatabaseError error) {
-//
-//                        }
-//                    });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            Toast.makeText(getApplicationContext(), "Slow Internet Connection",
-//                    Toast.LENGTH_SHORT).show();
-//        }
+            // Getting data about user from database.
+            FirebaseDatabase.getInstance().getReference(key + "/" +
+                            FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(loginMode.equals("admin")) {
+                                currentUserName = snapshot.getValue(Admin.class).getName();
+                                currentUserEmail = snapshot.getValue(Admin.class).getEmail();
+                                currentUserNumber = snapshot.getValue(Admin.class).getNumber();
+                            } else if(loginMode.equals("owner")){
+                                currentUserName = snapshot.getValue(Company.class).getName();
+                                currentUserEmail = snapshot.getValue(Company.class).getEmail();
+                                currentUserPic = snapshot.getValue(Company.class).getImageUrl();
+                                currentUserNumber = snapshot.getValue(Company.class).getNumber();
+                            } else if(loginMode.equals("user")){
+                                currentUserName = snapshot.getValue(Customer.class).getName();
+                                currentUserEmail = snapshot.getValue(Customer.class).getEmail();
+                                currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
+                                currentUserNumber = snapshot.getValue(Customer.class).getNumber();
+                            }
+                        }
 
-            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            if (currentUser != null) {
-                String currentUserId = currentUser.getUid();
-
-                // Create a reference to the current user's data
-                DatabaseReference currentUserReference = FirebaseDatabase.getInstance().getReference("users").child(currentUserId);
-
-                // Add a ValueEventListener to retrieve the user data
-                currentUserReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Retrieve user data from the snapshot
-                        if (dataSnapshot.exists()) {
-                            Customer currentCustomer = dataSnapshot.getValue(Customer.class);
-//                            Toast.makeText(CompanyList.this, currentCustomer.getName(), Toast.LENGTH_SHORT).show();
-                        } else {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                    });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Slow Internet Connection",
+                        Toast.LENGTH_SHORT).show();
             }
 
         }

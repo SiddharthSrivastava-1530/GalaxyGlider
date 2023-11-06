@@ -6,6 +6,7 @@ public class Company {
 
     private String name;
     private String email;
+    private String number;
     private String loginMode;
     private String companyId;
     private String description;
@@ -13,9 +14,11 @@ public class Company {
     private Boolean isOperational;
     private ArrayList<SpaceShip> spaceShips;
 
-    public Company(String name, String email, String loginMode, String companyId, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
+
+    public Company(String name, String email, String number, String loginMode, String companyId, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
         this.name = name;
         this.email = email;
+        this.number = number;
         this.loginMode = loginMode;
         this.companyId = companyId;
         this.description = description;
@@ -44,6 +47,30 @@ public class Company {
         this.email = email;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getLoginMode() {
+        return loginMode;
+    }
+
+    public void setLoginMode(String loginMode) {
+        this.loginMode = loginMode;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -58,22 +85,6 @@ public class Company {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getLoginMode() {
-        return loginMode;
-    }
-
-    public void setLoginMode(String loginMode) {
-        this.loginMode = loginMode;
     }
 
     public Boolean getOperational() {
@@ -91,5 +102,4 @@ public class Company {
     public void setSpaceShips(ArrayList<SpaceShip> spaceShips) {
         this.spaceShips = spaceShips;
     }
-
 }

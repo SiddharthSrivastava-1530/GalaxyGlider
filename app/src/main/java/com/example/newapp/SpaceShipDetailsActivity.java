@@ -28,7 +28,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
     private String ratings;
     private String seats;
     private String price;
-    private String speed;
+    private float speed;
     private String busyTime;
     private Boolean haveSharedRide;
     private String companyId;
@@ -58,7 +58,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
         imageUrl = intent.getStringExtra("picUrl_ss");
-        speed = intent.getStringExtra("speed_ss");
+        speed = intent.getFloatExtra("speed_ss",0);
         busyTime = intent.getStringExtra("busyTime_ss");
         seats = intent.getStringExtra("seats_ss");
         haveSharedRide = intent.getBooleanExtra("shared_ride_ss",false);
@@ -68,7 +68,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         setViewData();
 
 
-        if(loginMode.equals("user")){
+        if(!loginMode.equals("owner")){
             fab.setVisibility(View.GONE);
         }
 
@@ -102,7 +102,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
         nameTextview.setText(name);
         priceTextview.setText(price);
-        speedTextview.setText(speed);
+        speedTextview.setText(String.valueOf(speed));
         sharedRideTextview.setText(String.valueOf(haveSharedRide));
         descriptionTextview.setText(description);
         seatAvailableTextview.setText(seats);

@@ -61,12 +61,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
         updateFromAllList = intent.getBooleanExtra("update_from_allList", false);
 
-//        if(updateFromAllList){
-//            userPic = intent.getStringExtra("sender_pic");
-//            name_tv.setText(intent.getStringExtra("sender_name"));
-//            email_tv.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-//            number_tv.setText(intent.getStringExtra("sender_number"));
-//        }
+        if(updateFromAllList){
+            userPic = intent.getStringExtra("sender_pic");
+            name_tv.setText(intent.getStringExtra("sender_name"));
+            email_tv.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            number_tv.setText(intent.getStringExtra("sender_number"));
+        }
 
         CircularProgressDrawable circularProgressDrawable =
                 new CircularProgressDrawable(CompanyProfileActivity.this);
@@ -74,9 +74,9 @@ public class CompanyProfileActivity extends AppCompatActivity {
         circularProgressDrawable.setCenterRadius(30f);
         circularProgressDrawable.start();
 
-//        Glide.with(getApplicationContext()).load(userPic).error(R.drawable.account_img)
-//                .placeholder(circularProgressDrawable)
-//                .into(imgProfile);
+        Glide.with(getApplicationContext()).load(userPic).error(R.drawable.account_img)
+                .placeholder(circularProgressDrawable)
+                .into(imgProfile);
 
         progressBar.setVisibility(View.GONE);
 
@@ -216,7 +216,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_profile_save) {
             if (!userPic.isEmpty()) {
-                startActivity(new Intent(CompanyProfileActivity.this, CompanyList.class));
+                startActivity(new Intent(CompanyProfileActivity.this, SpaceShipList.class));
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Please add a profile picture.", Toast.LENGTH_SHORT).show();

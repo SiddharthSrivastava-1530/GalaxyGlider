@@ -1,21 +1,19 @@
 package com.example.newapp.DataModel;
 
-public class Customer {
-
+public class Admin {
     private String name;
-    private String number;
     private String email;
-    private String profilePic;
+    private String number;
     private String loginMode;
 
-    public Customer(){
+    public Admin(){
 
     }
-    public Customer(String name, String number, String email, String profilePic, String loginMode) {
+
+    public Admin(String name, String email, String number, String loginMode) {
         this.name = name;
-        this.number = number;
         this.email = email;
-        this.profilePic = profilePic;
+        this.number = number;
         this.loginMode = loginMode;
     }
 
@@ -27,14 +25,6 @@ public class Customer {
         this.name = name;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -43,12 +33,12 @@ public class Customer {
         this.email = email;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getNumber() {
+        return number;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getLoginMode() {
@@ -59,4 +49,3 @@ public class Customer {
         this.loginMode = loginMode;
     }
 }
-
