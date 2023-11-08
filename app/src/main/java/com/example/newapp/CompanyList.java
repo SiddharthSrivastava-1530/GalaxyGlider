@@ -91,6 +91,7 @@ public class CompanyList extends AppCompatActivity {
                 intent.putExtra("company_name", companyArrayList.get(position).getName());
                 intent.putExtra("company_desc", companyArrayList.get(position).getDescription());
                 intent.putExtra("company_img", companyArrayList.get(position).getImageUrl());
+                intent.putExtra("company_license",companyArrayList.get(position).getLicenseUrl());
                 startActivity(intent);
             }
         };

@@ -9,26 +9,28 @@ public class Company {
     private String number;
     private String loginMode;
     private String companyId;
+    private String licenseUrl;
     private String description;
     private String imageUrl;
     private Boolean isOperational;
     private ArrayList<SpaceShip> spaceShips;
 
 
-    public Company(String name, String email, String number, String loginMode, String companyId, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
+    public Company(){
+
+    }
+
+    public Company(String name, String email, String number, String loginMode, String companyId, String licenseUrl, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
         this.name = name;
         this.email = email;
         this.number = number;
         this.loginMode = loginMode;
         this.companyId = companyId;
+        this.licenseUrl = licenseUrl;
         this.description = description;
         this.imageUrl = imageUrl;
         this.isOperational = isOperational;
         this.spaceShips = spaceShips;
-    }
-
-    public Company(){
-
     }
 
     public String getName() {
@@ -69,6 +71,14 @@ public class Company {
 
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
     }
 
     public String getDescription() {

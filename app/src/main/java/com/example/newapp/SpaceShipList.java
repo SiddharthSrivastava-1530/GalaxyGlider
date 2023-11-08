@@ -61,8 +61,10 @@ public class SpaceShipList extends AppCompatActivity {
     private String currentUserEmail;
     private String currentUserPic;
     private String currentUserNumber;
+    private String currentLicenseUrl;
     private String companyId;
     private String loginMode;
+    private String currentUserDescription;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -90,7 +92,6 @@ public class SpaceShipList extends AppCompatActivity {
         }
 
         getUserData();
-
 
         // enable adding new spaceship if owner (move to editor activity)
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +197,8 @@ public class SpaceShipList extends AppCompatActivity {
                 intent1.putExtra("sender_pic", currentUserPic);
                 intent1.putExtra("sender_name", currentUserName);
                 intent1.putExtra("sender_number", currentUserNumber);
+                intent1.putExtra("sender_desc", currentUserDescription);
+                intent1.putExtra("licenseUrl", currentLicenseUrl);
                 startActivity(intent1);
             } else {
 
@@ -242,6 +245,8 @@ public class SpaceShipList extends AppCompatActivity {
                                 currentUserEmail = snapshot.getValue(Company.class).getEmail();
                                 currentUserPic = snapshot.getValue(Company.class).getImageUrl();
                                 currentUserNumber = snapshot.getValue(Company.class).getNumber();
+                                currentUserDescription = snapshot.getValue(Company.class).getDescription();
+                                currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
                             } else if (loginMode.equals("user")) {
                                 currentUserName = snapshot.getValue(Customer.class).getName();
                                 currentUserEmail = snapshot.getValue(Customer.class).getEmail();

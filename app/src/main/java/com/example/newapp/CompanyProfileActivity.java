@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -37,8 +38,11 @@ public class CompanyProfileActivity extends AppCompatActivity {
     private TextView name_tv;
     private TextView email_tv;
     private TextView number_tv;
+    private TextView editLicense;
+    private EditText description_et;
     private ImageView imgProfile;
     private ProgressBar progressBar;
+    private String licenseUrl;
     private String userPic;
     private Boolean updateFromAllList;
     private Uri imagePath;
@@ -53,6 +57,8 @@ public class CompanyProfileActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.uploadImage_b_company_profile);
         progressBar = findViewById(R.id.progressBar_profile_company_profile);
         number_tv = findViewById(R.id.number_profile_et_company_profile);
+        editLicense = findViewById(R.id.edit_license_tv);
+        description_et = findViewById(R.id.description_et_profile);
 
         name_tv = findViewById(R.id.name_profile_et_company_profile);
         email_tv = findViewById(R.id.email_profile_et_company_profile);
@@ -60,12 +66,14 @@ public class CompanyProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         updateFromAllList = intent.getBooleanExtra("update_from_allList", false);
+        licenseUrl = intent.getStringExtra("licenseUrl");
 
-        if(updateFromAllList){
+        if (updateFromAllList) {
             userPic = intent.getStringExtra("sender_pic");
             name_tv.setText(intent.getStringExtra("sender_name"));
             email_tv.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
             number_tv.setText(intent.getStringExtra("sender_number"));
+            description_et.setText(intent.getStringExtra("sender_desc"));
         }
 
         CircularProgressDrawable circularProgressDrawable =
@@ -104,6 +112,16 @@ public class CompanyProfileActivity extends AppCompatActivity {
                 startActivityForResult(photoIntent, 1);
             }
         });
+
+        editLicense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(CompanyProfileActivity.this, LicenseDetailsActivity.class);
+                intent1.putExtra("licenseUrl", licenseUrl);
+                startActivity(intent1);
+            }
+        });
+
     }
 
     @Override
@@ -212,10 +230,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    //Setting what happens when any menu item is clicked.
+    // Setting what happens when any menu item is clicked.
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_profile_save) {
             if (!userPic.isEmpty()) {
+                FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
+                        .getUid() + "/description").setValue(description_et.getText().toString());
                 startActivity(new Intent(CompanyProfileActivity.this, SpaceShipList.class));
                 finish();
             } else {
@@ -225,4 +245,5 @@ public class CompanyProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

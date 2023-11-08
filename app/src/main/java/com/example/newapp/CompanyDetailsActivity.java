@@ -3,6 +3,7 @@ package com.example.newapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,12 +17,14 @@ public class CompanyDetailsActivity extends AppCompatActivity {
     private TextView nameTextView;
     private TextView descriptionTextView;
     private TextView allTextView;
+    private TextView seeLicenseTextView;
     private ImageView compImageView;
     private String companyId;
     private String loginMode;
     private String companyName;
     private String companyDesc;
     private String companyImageUrl;
+    private String companyLicenseUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         descriptionTextView = findViewById(R.id.desc_company_details);
         allTextView = findViewById(R.id.seeAllSpaceShips_tv_company_details);
         compImageView = findViewById(R.id.img_company_details);
+        seeLicenseTextView = findViewById(R.id.seePdf_tv_details);
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -39,8 +43,13 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         companyName = intent.getStringExtra("company_name");
         companyDesc = intent.getStringExtra("company_desc");
         companyImageUrl = intent.getStringExtra("company_img");
+        companyLicenseUrl = intent.getStringExtra("company_license");
 
         Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
+
+        if(!(loginMode.equals("admin"))){
+            seeLicenseTextView.setVisibility(View.GONE);
+        }
 
         setViewData();
 
@@ -51,6 +60,15 @@ public class CompanyDetailsActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(CompanyDetailsActivity.this, SpaceShipList.class);
                 intent1.putExtra("companyID", companyId);
                 intent1.putExtra("loginMode", loginMode);
+                startActivity(intent1);
+            }
+        });
+
+        seeLicenseTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Intent.ACTION_VIEW);
+                intent1.setDataAndType(Uri.parse(companyLicenseUrl),"application/pdf");
                 startActivity(intent1);
             }
         });

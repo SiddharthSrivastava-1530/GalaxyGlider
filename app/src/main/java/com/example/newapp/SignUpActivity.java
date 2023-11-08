@@ -18,11 +18,16 @@ import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.datepicker.SingleDateSelector;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -40,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String usernumber;
     private String loginMode;
     private TextView loginView;
+    private boolean isCorrectLoginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +64,23 @@ public class SignUpActivity extends AppCompatActivity {
 
         // If already logged in then open the specific activity.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+
+            getCurrentUserLoginMode();
+
             Intent intent = null;
             if (loginMode.equals("owner")) {
 
                 String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 intent = new Intent(SignUpActivity.this, SpaceShipList.class);
                 intent.putExtra("companyID", companyId);
+
             } else {
                 intent = new Intent(SignUpActivity.this, CompanyList.class);
             }
-            intent.putExtra("loginMode", loginMode);
-            startActivity(intent);
+            if (intent != null) {
+                intent.putExtra("loginMode", loginMode);
+                startActivity(intent);
+            }
             finish();
         }
 
@@ -198,8 +210,9 @@ public class SignUpActivity extends AppCompatActivity {
                             String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             FirebaseDatabase.getInstance().getReference("company/" + key)
                                     .setValue(new Company(name.getText().toString(),
-                                            email.getText().toString(),number.getText().toString(),
-                                            loginMode, key, "", "", false, spaceShips))
+                                            email.getText().toString(), number.getText().toString(),
+                                            loginMode, key,"", "", "",
+                                            false, spaceShips))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -303,6 +316,39 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+
+    private void getCurrentUserLoginMode() {
+        try {
+            String key = "";
+            if (loginMode.equals("owner")) {
+                key = "company/";
+            } else if (loginMode.equals("user")) {
+                key = "users/";
+            }
+            FirebaseDatabase.getInstance().getReference(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                        isCorrectLoginMode = true;
+                    } else {
+                        isCorrectLoginMode = false;
+                        Toast.makeText(getApplicationContext(), "You have attempted logging in wrong mode. " +
+                                        "Please choose correct mode", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Slow internet connection...", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
