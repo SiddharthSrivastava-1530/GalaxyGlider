@@ -1,14 +1,13 @@
 package com.example.newapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class SpaceShipDetailsActivity extends AppCompatActivity {
@@ -40,17 +39,26 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_details);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        getSupportActionBar().hide();
+
+
         nameTextview = findViewById(R.id.spaceShipName_details_activity);
         priceTextview = findViewById(R.id.spaceShip_price_details_activity);
         speedTextview = findViewById(R.id.spaceShip_speed_details_activity);
-        sharedRideTextview = findViewById(R.id.spaceShip_rideSharing_details_activity);
+//        sharedRideTextview = findViewById(R.id.spaceShip_rideSharing_details_activity);
         descriptionTextview = findViewById(R.id.desc_details_activity);
-        shipImageView = findViewById(R.id.img_SpaceShip_details_activity);
+//        shipImageView = findViewById(R.id.img_SpaceShip_details_activity);
         seatAvailableTextview = findViewById(R.id.seats_spaceShip_details_activity);
-        ratingTextview = findViewById(R.id.spaceShip_rating_details_activity);
-        busyTimeTextview = findViewById(R.id.spaceShip_busyTime_details_activity);
+//        ratingTextview = findViewById(R.id.spaceShip_rating_details_activity);
+//        busyTimeTextview = findViewById(R.id.spaceShip_busyTime_details_activity);
 
-        fab = findViewById(R.id.fab_details_activity);
+//        fab = findViewById(R.id.fab_details_activity);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
@@ -103,14 +111,14 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         nameTextview.setText(name);
         priceTextview.setText(price);
         speedTextview.setText(String.valueOf(speed));
-        sharedRideTextview.setText(String.valueOf(haveSharedRide));
+//        sharedRideTextview.setText(String.valueOf(haveSharedRide));
         descriptionTextview.setText(description);
         seatAvailableTextview.setText(seats);
-        ratingTextview.setText(ratings);
-        busyTimeTextview.setText(busyTime);
+//        ratingTextview.setText(ratings);
+//        busyTimeTextview.setText(busyTime);
 
-        Glide.with(getApplicationContext()).load(imageUrl).error(R.drawable.account_img)
-                .placeholder(R.drawable.account_img).into(shipImageView);
+//        Glide.with(getApplicationContext()).load(imageUrl).error(R.drawable.account_img)
+//                .placeholder(R.drawable.account_img).into(shipImageView);
 
     }
 }

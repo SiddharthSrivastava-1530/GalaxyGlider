@@ -13,7 +13,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +46,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SpaceShipEditorActivity extends AppCompatActivity {
 
@@ -54,6 +58,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private EditText speedEditText;
     private EditText busyTimeEditText;
     private EditText seatsEditText;
+    private  TextView addSpaceShipTextView;
     private ImageView pic_et;
     private Uri imagePath;
     private String spaceShipPicUrl;
@@ -78,15 +83,24 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_editor);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        getSupportActionBar().hide();
+
 
         nameEditText = findViewById(R.id.spaceshipName_et);
         seatsEditText = findViewById(R.id.spaceship_seats_et);
         priceEditText = findViewById(R.id.spaceship_price_et);
-        pic_et = findViewById(R.id.img_SpaceShip_editor);
-        rideSharingTextView = findViewById(R.id.spaceShip_rideSharing_edit);
+//        pic_et = findViewById(R.id.img_SpaceShip_editor);
+//        rideSharingTextView = findViewById(R.id.spaceShip_rideSharing_edit);
         descriptionEditText = findViewById(R.id.spaceship_desc_et);
-        busyTimeEditText = findViewById(R.id.spaceship_busyTime_et);
+//        busyTimeEditText = findViewById(R.id.spaceship_busyTime_et);
         speedEditText = findViewById(R.id.spaceShip_speed_editor);
+        addSpaceShipTextView = findViewById(R.id.spaceShip_add);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
@@ -117,12 +131,19 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         }
 
         //Select the picture from internal storage that you want to upload.
-        pic_et.setOnClickListener(new View.OnClickListener() {
+//        pic_et.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent photoIntent = new Intent(Intent.ACTION_PICK);
+//                photoIntent.setType("image/*");
+//                startActivityForResult(photoIntent, 1);
+//            }
+//        });
+
+        addSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoIntent = new Intent(Intent.ACTION_PICK);
-                photoIntent.setType("image/*");
-                startActivityForResult(photoIntent, 1);
+                saveSpaceShipsData();
             }
         });
 
@@ -149,7 +170,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        pic_et.setImageBitmap(bitmap);
+//        pic_et.setImageBitmap(bitmap);
         uploadImage();
     }
 
@@ -433,13 +454,13 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         nameEditText.setText(name);
         priceEditText.setText(price);
         speedEditText.setText(String.valueOf(speed));
-        rideSharingTextView.setText(String.valueOf(haveSharedRide));
+//        rideSharingTextView.setText(String.valueOf(haveSharedRide));
         descriptionEditText.setText(description);
         seatsEditText.setText(seats);
-        busyTimeEditText.setText(busyTime);
+//        busyTimeEditText.setText(busyTime);
 
-        Glide.with(getApplicationContext()).load(imageUrl).error(R.drawable.account_img)
-                .placeholder(R.drawable.account_img).into(pic_et);
+//        Glide.with(getApplicationContext()).load(imageUrl).error(R.drawable.account_img)
+//                .placeholder(R.drawable.account_img).into(pic_et);
 
     }
 

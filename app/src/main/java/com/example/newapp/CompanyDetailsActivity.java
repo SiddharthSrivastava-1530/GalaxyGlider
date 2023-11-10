@@ -42,7 +42,15 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         compImageView = findViewById(R.id.img_company_details);
         seeLicenseTextView = findViewById(R.id.seePdf_tv_details);
         authorizeTextView = findViewById(R.id.verify_company_details_activity_tv);
-        statusAuthorization = findViewById(R.id.authorization_status_details_activity);
+//        statusAuthorization = findViewById(R.id.authorization_status_details_activity);
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        getSupportActionBar().hide();
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -115,13 +123,13 @@ public class CompanyDetailsActivity extends AppCompatActivity {
     private void setAuthorizationViews(){
         if (isCompanyAuthorised) {
             authorizeTextView.setText(R.string.unauthorize_company);
-            statusAuthorization.setText(R.string.status_operational);
+//            statusAuthorization.setText(R.string.status_operational);
             if(loginMode.equals("user")) {
                 allTextView.setVisibility(View.VISIBLE);
             }
         } else {
             authorizeTextView.setText(R.string.authorise_company);
-            statusAuthorization.setText(R.string.status_unoperational);
+//            statusAuthorization.setText(R.string.status_unoperational);
             if(loginMode.equals("user")) {
                 allTextView.setVisibility(View.GONE);
             }

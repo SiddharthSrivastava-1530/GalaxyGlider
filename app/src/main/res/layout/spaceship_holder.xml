@@ -1,71 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="390dp"
-    android:layout_height="650dp"
+    android:layout_width="350dp"
+    android:layout_height="470dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginHorizontal="10dp"
+    android:layout_marginHorizontal="29dp"
     android:layout_marginTop="10dp"
-    app:cardCornerRadius="29dp">
+    app:cardCornerRadius="15dp">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="17dp"
-        android:background="@drawable/holder3">
+        android:background="@drawable/holder"
+        android:padding="17dp">
 
         <TextView
             android:id="@+id/spaceShipName_SpaceShipList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="350dp"
-            android:inputType="text"
+            android:layout_height="0dp"
             android:text="Luna"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline50"
+            app:layout_constraintStart_toStartOf="@+id/guideline53"
+            app:layout_constraintTop_toTopOf="@+id/guideline47" />
 
         <TextView
             android:id="@+id/spaceShip_speed_SpaceShipList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="220dp"
-            android:layout_marginLeft="234dp"
-            android:layout_marginTop="460dp"
-            android:inputType="text"
+            android:layout_height="0dp"
             android:text="18"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline51"
+            app:layout_constraintStart_toStartOf="@+id/guideline54"
+            app:layout_constraintTop_toTopOf="@+id/guideline48" />
 
         <TextView
             android:id="@+id/seats_spaceShip_SpaceShipList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="220dp"
-            android:layout_marginTop="350dp"
-            android:inputType="text"
-            android:text="10"
+            android:layout_height="0dp"
+            android:text="10/15"
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline50"
+            app:layout_constraintStart_toStartOf="@+id/guideline54"
+            app:layout_constraintTop_toTopOf="@+id/guideline47" />
 
         <TextView
             android:id="@+id/spaceShip_price_SpaceShipList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="460dp"
-            android:inputType="text"
+            android:layout_height="0dp"
             android:text="200"
             android:textColor="@color/white"
-            android:textSize="30sp" />
-    </RelativeLayout>
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline51"
+            app:layout_constraintStart_toStartOf="@+id/guideline53"
+            app:layout_constraintTop_toTopOf="@+id/guideline48" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline47"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.52" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline53"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline54"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline52"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.99" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.71" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline49"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.89" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline50"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.62" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline51"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.81" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
