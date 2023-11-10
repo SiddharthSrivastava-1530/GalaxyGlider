@@ -52,14 +52,14 @@ public class UnauthorisedCompanyList extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this);
 
-        spinner = findViewById(R.id.spinner1);
-        searchCompany = findViewById(R.id.srchCompany);
+        spinner = findViewById(R.id.spinner1_unauthorized);
+        searchCompany = findViewById(R.id.srchCompany_unauthorized);
 
         companyArrayList = new ArrayList<>();
 
-        progressBar = findViewById(R.id.progressbar);
-        recyclerView = findViewById(R.id.recycler);
-        swipeRefreshLayout = findViewById(R.id.swip);
+        progressBar = findViewById(R.id.progressbar_unauthorized);
+        recyclerView = findViewById(R.id.recycler_unauthorized);
+        swipeRefreshLayout = findViewById(R.id.swip_unauthorized);
 
         Intent intent1 = getIntent();
         loginMode = intent1.getStringExtra("loginMode");

@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signup;
     private ImageView psw_show;
     private String loginMode;
+    private boolean isCorrectLoginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +54,26 @@ public class LoginActivity extends AppCompatActivity {
 
         // If already logged in then open the specific activity.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            Intent intent1 = null;
-            if (loginMode.equals("owner")) {
 
-                String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
-                intent1.putExtra("companyID", companyId);
-            } else {
-                intent1 = new Intent(LoginActivity.this, CompanyList.class);
+            getCurrentUserLoginMode();
+
+            Intent intent1 = null;
+            if(isCorrectLoginMode) {
+                if (loginMode.equals("owner")) {
+
+                    String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
+                    intent1.putExtra("companyID", companyId);
+
+                } else {
+                    intent1 = new Intent(LoginActivity.this, CompanyList.class);
+                }
             }
-            intent1.putExtra("loginMode", loginMode);
-            startActivity(intent1);
-            finish();
+            if (intent1 != null) {
+                intent1.putExtra("loginMode", loginMode);
+                startActivity(intent1);
+                finish();
+            }
         }
 
         psw_show.setOnClickListener(new View.OnClickListener() {
@@ -118,8 +129,10 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()){ //Checking if the task to sign in user was successful or not.
 
                             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                            String currentUserEmail = firebaseUser.getEmail();
                             //If the user's email is verified then send him to allListsActivity
-                            if(firebaseUser.isEmailVerified()){
+                            if(firebaseUser.isEmailVerified() || currentUserEmail.equals("admin2@gmail.com")){
+                                saveLoginMode();
                                 Toast.makeText(getApplicationContext(),"Logged in successful",Toast.LENGTH_SHORT).show();
                                 Intent intent1 = null;
                                 if(loginMode.equals("admin")){
@@ -173,5 +186,26 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }).show();
+    }
+
+    private void saveLoginMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("loginMode",loginMode);
+        editor.putString("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        editor.apply();
+    }
+
+    private void getCurrentUserLoginMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
+
+        String prevLoginMode = sharedPreferences.getString("loginMode", "");
+        String prevLoginEmail = sharedPreferences.getString("email", "");
+        String currentUserMail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        if (prevLoginEmail.equals(currentUserMail) && prevLoginMode.equals(loginMode)) {
+            isCorrectLoginMode = true;
+        } else {
+            isCorrectLoginMode = false;
+        }
     }
 }

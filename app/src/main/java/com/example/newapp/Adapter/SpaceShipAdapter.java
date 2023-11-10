@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,16 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
+import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
+import com.example.newapp.SpaceShipList;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.SpaceShipHolder> {
+public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.SpaceShipHolder> implements Filterable{
 
     private ArrayList<SpaceShip> spaceships;
+    private ArrayList<SpaceShip> spaceshipsBackupList;
     private Context context;
     private OnSpaceShipClickListener onSpaceshipClickListener;
 
@@ -29,7 +34,44 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
         this.spaceships = spaceships;
         this.context = context;
         this.onSpaceshipClickListener = onSpaceshipClickListener;
+        spaceshipsBackupList = new ArrayList<>(spaceships);
     }
+
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<SpaceShip> filteredSpaceships = new ArrayList<>();
+
+            if(constraint.toString().isEmpty()){
+                filteredSpaceships.addAll(spaceshipsBackupList);
+            }
+            else {
+                for (SpaceShip spaceShip : spaceshipsBackupList){
+                    if(spaceShip.getSpaceShipName().toLowerCase().trim().contains(constraint.toString().toLowerCase())) {
+                        filteredSpaceships.add(spaceShip);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredSpaceships;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            spaceships.clear();
+            spaceships.addAll((ArrayList<SpaceShip>)results.values);
+            notifyDataSetChanged();
+        }
+    };
+
 
 
     public interface OnSpaceShipClickListener {

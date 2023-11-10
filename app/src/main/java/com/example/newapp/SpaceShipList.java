@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Space;
@@ -41,7 +42,7 @@ public class SpaceShipList extends AppCompatActivity {
 
     private ArrayList<SpaceShip> spaceShipArrayList;
     private Spinner spinner;
-    //    private SearchView searchCompany;
+    private SearchView searchSpaceship;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SpaceShipAdapter spaceShipAdapter;
@@ -62,6 +63,7 @@ public class SpaceShipList extends AppCompatActivity {
     private String currentUserPic;
     private String currentUserNumber;
     private String currentLicenseUrl;
+    private boolean currentUserAuthStatus;
     private String companyId;
     private String loginMode;
     private String currentUserDescription;
@@ -74,6 +76,7 @@ public class SpaceShipList extends AppCompatActivity {
 
         spinner = findViewById(R.id.spinner1_spaceship);
 
+        searchSpaceship = findViewById(R.id.srchCompany_spaceship);
         spaceShipArrayList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progressbar_spaceship);
@@ -97,12 +100,15 @@ public class SpaceShipList extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (loginMode.equals("owner")) {
-                    Intent intent1 = new Intent(SpaceShipList.this, SpaceShipEditorActivity.class);
-                    intent1.putExtra("companyID", companyId);
-                    startActivity(intent1);
+                if(currentUserAuthStatus) {
+                    if (loginMode.equals("owner")) {
+                        Intent intent1 = new Intent(SpaceShipList.this, SpaceShipEditorActivity.class);
+                        intent1.putExtra("companyID", companyId);
+                        startActivity(intent1);
+                    }
                 } else {
-                    Toast.makeText(SpaceShipList.this, "You are not authorised to add spaceships", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SpaceShipList.this, "You are not authorised to add spaceships. " +
+                            "Please upload your license and wait for admin authorisation.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -138,6 +144,24 @@ public class SpaceShipList extends AppCompatActivity {
             }
         };
 
+        searchSpaceship.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                spaceShipAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUserData();
     }
 
     private void getSpaceShips() {
@@ -199,6 +223,7 @@ public class SpaceShipList extends AppCompatActivity {
                 intent1.putExtra("sender_number", currentUserNumber);
                 intent1.putExtra("sender_desc", currentUserDescription);
                 intent1.putExtra("licenseUrl", currentLicenseUrl);
+                intent1.putExtra("loginMode", loginMode);
                 startActivity(intent1);
             } else {
 
@@ -211,7 +236,7 @@ public class SpaceShipList extends AppCompatActivity {
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<SpaceShip> arrayList) {
         spaceShipAdapter = new SpaceShipAdapter(arrayList, SpaceShipList.this, onSpaceShipClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipList.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipList.this, LinearLayoutManager.HORIZONTAL,false));
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(spaceShipAdapter);
@@ -247,6 +272,7 @@ public class SpaceShipList extends AppCompatActivity {
                                 currentUserNumber = snapshot.getValue(Company.class).getNumber();
                                 currentUserDescription = snapshot.getValue(Company.class).getDescription();
                                 currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
+                                currentUserAuthStatus = snapshot.getValue(Company.class).getOperational();
                             } else if (loginMode.equals("user")) {
                                 currentUserName = snapshot.getValue(Customer.class).getName();
                                 currentUserEmail = snapshot.getValue(Customer.class).getEmail();

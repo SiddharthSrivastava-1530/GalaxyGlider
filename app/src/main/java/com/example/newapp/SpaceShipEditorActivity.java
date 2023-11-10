@@ -63,6 +63,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private String spaceShipKey;
     private String imageUrl;
     private String name;
+    private String rating;
     private String description;
     private String seats;
     private String price;
@@ -89,6 +90,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
+        rating = intent.getStringExtra("rating_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
         imageUrl = intent.getStringExtra("picUrl_ss");
@@ -273,12 +275,11 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     // deleting the spaceships
     private void deleteSpaceShipsData() {
 
-        SpaceShip spaceShipToDelete = new SpaceShip(name, description, imageUrl, "", "",
+        SpaceShip spaceShipToDelete = new SpaceShip(name, description, imageUrl, "", rating,
                 "", seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
         builder.setTitle("Delete spaceship")
-                .setIcon(R.drawable.delete_icon1)
                 .setMessage("Do you want to delete this spaceship?")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -330,11 +331,11 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private void updateSpaceShipsData() {
 
         SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                spaceShipPicUrl, "", "", "", seatsEditText.getText().toString(), haveSharedRide,
+                spaceShipPicUrl, "", rating, "", seatsEditText.getText().toString(), haveSharedRide,
                 Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 
-        SpaceShip originalSpaceShip = new SpaceShip(name, description, imageUrl, "", "",
+        SpaceShip originalSpaceShip = new SpaceShip(name, description, imageUrl, "", rating,
                 "", seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed);
 
 
@@ -394,7 +395,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
         spaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                spaceShipPicUrl, "", "", "", seatsEditText.getText().toString(), haveSharedRide,
+                spaceShipPicUrl, "", "0.0", "", seatsEditText.getText().toString(), haveSharedRide,
                 Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 

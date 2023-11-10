@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,19 +16,27 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
@@ -38,7 +48,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
     private TextView name_tv;
     private TextView email_tv;
     private TextView number_tv;
-    private TextView editLicense;
+    private TextView uploadButton;
     private EditText description_et;
     private ImageView imgProfile;
     private ProgressBar progressBar;
@@ -46,6 +56,8 @@ public class CompanyProfileActivity extends AppCompatActivity {
     private String userPic;
     private Boolean updateFromAllList;
     private Uri imagePath;
+    private String loginMode;
+    TextView downloadPdf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +69,9 @@ public class CompanyProfileActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.uploadImage_b_company_profile);
         progressBar = findViewById(R.id.progressBar_profile_company_profile);
         number_tv = findViewById(R.id.number_profile_et_company_profile);
-        editLicense = findViewById(R.id.edit_license_tv);
         description_et = findViewById(R.id.description_et_profile);
+        uploadButton = findViewById(R.id.uploadPDF_btn);
+        downloadPdf = findViewById(R.id.license_pdf_view_);
 
         name_tv = findViewById(R.id.name_profile_et_company_profile);
         email_tv = findViewById(R.id.email_profile_et_company_profile);
@@ -67,6 +80,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
         updateFromAllList = intent.getBooleanExtra("update_from_allList", false);
         licenseUrl = intent.getStringExtra("licenseUrl");
+        loginMode = intent.getStringExtra("loginMode");
 
         if (updateFromAllList) {
             userPic = intent.getStringExtra("sender_pic");
@@ -92,6 +106,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                eraseLoginMode();
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(CompanyProfileActivity.this, MainActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -113,12 +128,19 @@ public class CompanyProfileActivity extends AppCompatActivity {
             }
         });
 
-        editLicense.setOnClickListener(new View.OnClickListener() {
+        uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(CompanyProfileActivity.this, LicenseDetailsActivity.class);
-                intent1.putExtra("licenseUrl", licenseUrl);
-                startActivity(intent1);
+                selectFiles();
+            }
+        });
+
+        downloadPdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(licenseUrl), "application/pdf");
+                startActivity(intent);
             }
         });
 
@@ -131,10 +153,15 @@ public class CompanyProfileActivity extends AppCompatActivity {
         //Get the image selected in gallery on icon
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
 
-            // Store image file in form of Uri type data
-            imagePath = data.getData();
+            Uri selectedData = data.getData();
+            String mimeType = getContentResolver().getType(selectedData);
             try {
-                getImageInImageView();
+                if (mimeType.startsWith("image/")) {
+                    imagePath = selectedData;
+                    getImageInImageView();
+                } else if (mimeType.startsWith("application/pdf")) {
+                    uploadFiles(selectedData);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -234,16 +261,81 @@ public class CompanyProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_profile_save) {
             if (!userPic.isEmpty()) {
-                FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
-                        .getUid() + "/description").setValue(description_et.getText().toString());
-                startActivity(new Intent(CompanyProfileActivity.this, SpaceShipList.class));
-                finish();
+                updateDescription();
             } else {
-                Toast.makeText(getApplicationContext(), "Please add a profile picture.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Please add a profile picture..", Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateDescription(){
+        String description = "";
+        if(description_et != null){
+            description = description_et.getText().toString();
+        }
+        DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
+                .getUid() + "/description");
+        databaseReference.setValue(description).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                finish();
+            }
+        });
+    }
+
+    private void eraseLoginMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("loginMode","");
+        editor.putString("email","");
+        editor.apply();
+    }
+
+    private void selectFiles() {
+
+        Intent intent = new Intent();
+        intent.setType("application/pdf");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select PDF files..."), 1);
+    }
+
+    private void uploadFiles(Uri data) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+
+        StorageReference reference = FirebaseStorage.getInstance().getReference("License/" +
+                UUID.randomUUID().toString() + ".pdf");
+
+        reference.putFile(data)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isComplete()) ;
+                        Uri url = uriTask.getResult();
+
+                        FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
+                                .getUid() + "/licenseUrl").setValue(url.toString());
+
+                        licenseUrl = url.toString();
+
+                        Toast.makeText(CompanyProfileActivity.this, "License Uploaded for verification.. ",
+                                Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        progressDialog.show();
+                    }
+                });
     }
 
 }

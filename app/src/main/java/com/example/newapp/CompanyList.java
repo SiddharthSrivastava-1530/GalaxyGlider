@@ -37,7 +37,6 @@ import java.util.ArrayList;
 public class CompanyList extends AppCompatActivity {
 
     private ArrayList<Company> companyArrayList;
-    private Spinner spinner;
     private SearchView searchCompany;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -59,7 +58,6 @@ public class CompanyList extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this);
 
-        spinner = findViewById(R.id.spinner1);
         searchCompany = findViewById(R.id.srchCompany);
 
         companyArrayList = new ArrayList<>();
@@ -117,6 +115,18 @@ public class CompanyList extends AppCompatActivity {
                 Intent intent1 = new Intent(CompanyList.this,LowRatedCompanyList.class);
                 intent1.putExtra("loginMode",loginMode);
                 startActivity(intent1);
+            }
+        });
+
+        searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                companyAdapter.getFilter().filter(newText);
+                return false;
             }
         });
 

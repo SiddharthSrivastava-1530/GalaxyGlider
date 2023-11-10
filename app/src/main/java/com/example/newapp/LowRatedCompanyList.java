@@ -53,14 +53,14 @@ public class LowRatedCompanyList extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this);
 
-        spinner = findViewById(R.id.spinner1);
-        searchCompany = findViewById(R.id.srchCompany);
+        spinner = findViewById(R.id.spinner1_lowRated);
+        searchCompany = findViewById(R.id.srchCompany_lowRated);
 
         companyArrayList = new ArrayList<>();
 
-        progressBar = findViewById(R.id.progressbar);
-        recyclerView = findViewById(R.id.recycler);
-        swipeRefreshLayout = findViewById(R.id.swip);
+        progressBar = findViewById(R.id.progressbar_lowRated);
+        recyclerView = findViewById(R.id.recycler_lowRated);
+        swipeRefreshLayout = findViewById(R.id.swip_lowRated);
 
         Intent intent1 = getIntent();
         loginMode = intent1.getStringExtra("loginMode");
@@ -107,7 +107,8 @@ public class LowRatedCompanyList extends AppCompatActivity {
                         boolean isLowRated = false;
                         if (spaceShipArrayList != null) {
                             for (SpaceShip spaceShip : spaceShipArrayList) {
-                                if (Float.parseFloat(spaceShip.getRatings()) <= 1.0) {
+                                Float shipRating = Float.parseFloat(spaceShip.getRatings());
+                                if (shipRating <= 1 && shipRating > 0) {
                                     isLowRated = true;
                                 }
                             }

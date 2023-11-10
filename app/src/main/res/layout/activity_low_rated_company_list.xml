@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swip"
+    android:id="@+id/swip_lowRated"
     tools:context="LowRatedCompanyList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <ProgressBar
-            android:id="@+id/progressbar"
+            android:id="@+id/progressbar_lowRated"
             android:layout_width="200dp"
             android:layout_height="200dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -22,17 +22,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+            android:id="@+id/recycler_lowRated"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView2_lowRated" />
 
         <RelativeLayout
-            android:id="@+id/cardView2"
+            android:id="@+id/cardView2_lowRated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,12 +45,12 @@
                 android:paddingTop="5dp">
 
                 <SearchView
-                    android:id="@+id/srchCompany"
+                    android:id="@+id/srchCompany_lowRated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:layout_marginStart="5dp"
-                    android:queryHint="Search breed here..."
+                    android:queryHint="Search company here..."
                     android:layout_gravity="center_vertical"
                     android:visibility="visible"
                     android:iconifiedByDefault="false" />
@@ -61,7 +61,7 @@
                     android:layout_weight="1" />
 
                 <Spinner
-                    android:id="@+id/spinner1"
+                    android:id="@+id/spinner1_lowRated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />

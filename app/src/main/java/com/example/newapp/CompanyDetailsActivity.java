@@ -104,12 +104,10 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         if(!isCompanyAuthorised) {
             FirebaseDatabase.getInstance().getReference("company/" + companyId + "/operational").setValue(true);
             isCompanyAuthorised = true;
-            authorizeTextView.setText(R.string.unauthorize_company);
         }
         else {
             FirebaseDatabase.getInstance().getReference("company/" + companyId + "/operational").setValue(false);
             isCompanyAuthorised = false;
-            authorizeTextView.setText(R.string.authorise_company);
         }
         setAuthorizationViews();
     }
@@ -117,11 +115,13 @@ public class CompanyDetailsActivity extends AppCompatActivity {
     private void setAuthorizationViews(){
         if (isCompanyAuthorised) {
             authorizeTextView.setText(R.string.unauthorize_company);
+            statusAuthorization.setText(R.string.status_operational);
             if(loginMode.equals("user")) {
                 allTextView.setVisibility(View.VISIBLE);
             }
         } else {
             authorizeTextView.setText(R.string.authorise_company);
+            statusAuthorization.setText(R.string.status_unoperational);
             if(loginMode.equals("user")) {
                 allTextView.setVisibility(View.GONE);
             }

@@ -3,7 +3,9 @@ package com.example.newapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -68,20 +70,22 @@ public class SignUpActivity extends AppCompatActivity {
             getCurrentUserLoginMode();
 
             Intent intent = null;
-            if (loginMode.equals("owner")) {
+            if(isCorrectLoginMode) {
+                if (loginMode.equals("owner")) {
 
-                String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                intent = new Intent(SignUpActivity.this, SpaceShipList.class);
-                intent.putExtra("companyID", companyId);
+                    String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    intent = new Intent(SignUpActivity.this, SpaceShipList.class);
+                    intent.putExtra("companyID", companyId);
 
-            } else {
-                intent = new Intent(SignUpActivity.this, CompanyList.class);
+                } else {
+                    intent = new Intent(SignUpActivity.this, CompanyList.class);
+                }
             }
             if (intent != null) {
                 intent.putExtra("loginMode", loginMode);
                 startActivity(intent);
+                finish();
             }
-            finish();
         }
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +208,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                             firebaseUser.updateProfile(profileChangeRequest);
 
+                            saveLoginMode();
 
                             // Setting data into the database.
                             ArrayList<SpaceShip> spaceShips = new ArrayList<>();
@@ -211,7 +216,7 @@ public class SignUpActivity extends AppCompatActivity {
                             FirebaseDatabase.getInstance().getReference("company/" + key)
                                     .setValue(new Company(name.getText().toString(),
                                             email.getText().toString(), number.getText().toString(),
-                                            loginMode, key,"", "", "",
+                                            loginMode, key, "", "", "",
                                             false, spaceShips))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -273,6 +278,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                             firebaseUser.updateProfile(profileChangeRequest);
 
+                            saveLoginMode();
 
                             // Setting data into the database.
                             FirebaseDatabase.getInstance().getReference("users/" +
@@ -320,36 +326,24 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     private void getCurrentUserLoginMode() {
-        try {
-            String key = "";
-            if (loginMode.equals("owner")) {
-                key = "company/";
-            } else if (loginMode.equals("user")) {
-                key = "users/";
-            }
-            FirebaseDatabase.getInstance().getReference(key).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-                        isCorrectLoginMode = true;
-                    } else {
-                        isCorrectLoginMode = false;
-                        Toast.makeText(getApplicationContext(), "You have attempted logging in wrong mode. " +
-                                        "Please choose correct mode", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
 
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Slow internet connection...", Toast.LENGTH_SHORT).show();
+        String prevLoginMode = sharedPreferences.getString("loginMode", "");
+        String prevLoginEmail = sharedPreferences.getString("email", "");
+        String currentUserMail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        if (prevLoginEmail.equals(currentUserMail) && prevLoginMode.equals(loginMode)) {
+            isCorrectLoginMode = true;
+        } else {
+            isCorrectLoginMode = false;
         }
-
     }
 
+    private void saveLoginMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("loginMode",loginMode);
+        editor.putString("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        editor.apply();
+    }
 
 }
