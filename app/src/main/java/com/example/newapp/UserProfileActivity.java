@@ -54,10 +54,18 @@ public class UserProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout_tv);
         imgProfile = findViewById(R.id.uploadImage_b);
         progressBar = findViewById(R.id.progressBar_profile);
-        number_tv = findViewById(R.id.number_profile_et);
+//        number_tv = findViewById(R.id.number_profile_et);
 
         name_tv = findViewById(R.id.name_profile_et);
         email_tv = findViewById(R.id.email_profile_et);
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        getSupportActionBar().hide();
 
         Intent intent = getIntent();
 
@@ -67,7 +75,7 @@ public class UserProfileActivity extends AppCompatActivity {
             userPic = intent.getStringExtra("sender_pic");
             name_tv.setText(intent.getStringExtra("sender_name"));
             email_tv.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-            number_tv.setText(intent.getStringExtra("sender_number"));
+//            number_tv.setText(intent.getStringExtra("sender_number"));
         }
 
         CircularProgressDrawable circularProgressDrawable =

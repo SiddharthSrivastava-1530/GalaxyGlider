@@ -39,6 +39,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        getSupportActionBar().hide();
+
         email = findViewById(R.id.email_login_et);
         pass = findViewById(R.id.password_login_et);
         sub = findViewById(R.id.submit_login_tv);

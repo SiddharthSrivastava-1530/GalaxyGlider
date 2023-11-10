@@ -61,6 +61,14 @@ public class SignUpActivity extends AppCompatActivity {
         submit = findViewById(R.id.submit_tv);
         loginView = findViewById(R.id.login_sign_up_activity_tv);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        getSupportActionBar().hide();
+
         Intent intent1 = getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 

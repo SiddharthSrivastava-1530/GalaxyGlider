@@ -74,6 +74,8 @@ public class SpaceShipList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_list);
 
+        getSupportActionBar().hide();
+
         spinner = findViewById(R.id.spinner1_spaceship);
 
         searchSpaceship = findViewById(R.id.srchCompany_spaceship);
