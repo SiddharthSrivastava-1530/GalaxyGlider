@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         enterAsOwner = findViewById(R.id.textView_as_owner);
         enterAsAdmin = findViewById(R.id.textView_as_admin);
 
-
         enterAsUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

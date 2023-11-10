@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/swip"
-    tools:context="CompanyList">
+    tools:context="LowRatedCompanyList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/companies_constraint"
@@ -34,15 +34,14 @@
         <RelativeLayout
             android:id="@+id/cardView2"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
 
             <LinearLayout
-                android:id="@+id/linear_layout_101"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="5dp">
 
                 <SearchView
@@ -68,35 +67,6 @@
                     android:layout_gravity="center_vertical" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/move_to_pending_req_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="4dp"
-                android:layout_below="@+id/linear_layout_101"
-                android:background="#95F67952"
-                android:textSize="16sp"
-                android:text="Pending request" />
-
-            <TextView
-                android:id="@+id/move_to_low_rated_companies_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/move_to_pending_req_tv"
-                android:layout_below="@+id/linear_layout_101"
-                android:layout_marginStart="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="4dp"
-                android:textSize="16sp"
-                android:background="#95F67952"
-                android:text="Low Rated Companies" />
 
         </RelativeLayout>
 

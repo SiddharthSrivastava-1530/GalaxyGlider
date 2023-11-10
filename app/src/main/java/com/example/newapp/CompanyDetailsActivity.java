@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class CompanyDetailsActivity extends AppCompatActivity {
 
@@ -25,6 +27,9 @@ public class CompanyDetailsActivity extends AppCompatActivity {
     private String companyDesc;
     private String companyImageUrl;
     private String companyLicenseUrl;
+    private boolean isCompanyAuthorised;
+    private TextView authorizeTextView;
+    private TextView statusAuthorization;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +41,8 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         allTextView = findViewById(R.id.seeAllSpaceShips_tv_company_details);
         compImageView = findViewById(R.id.img_company_details);
         seeLicenseTextView = findViewById(R.id.seePdf_tv_details);
+        authorizeTextView = findViewById(R.id.verify_company_details_activity_tv);
+        statusAuthorization = findViewById(R.id.authorization_status_details_activity);
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -44,13 +51,16 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         companyDesc = intent.getStringExtra("company_desc");
         companyImageUrl = intent.getStringExtra("company_img");
         companyLicenseUrl = intent.getStringExtra("company_license");
+        isCompanyAuthorised = intent.getBooleanExtra("isAuthorised", false);
 
         Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
 
-        if(!(loginMode.equals("admin"))){
+        if (!(loginMode.equals("admin"))) {
+            authorizeTextView.setVisibility(View.GONE);
             seeLicenseTextView.setVisibility(View.GONE);
         }
 
+        setAuthorizationViews();
         setViewData();
 
 
@@ -68,11 +78,17 @@ public class CompanyDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(Intent.ACTION_VIEW);
-                intent1.setDataAndType(Uri.parse(companyLicenseUrl),"application/pdf");
+                intent1.setDataAndType(Uri.parse(companyLicenseUrl), "application/pdf");
                 startActivity(intent1);
             }
         });
 
+        authorizeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                authorizeCompany();
+            }
+        });
     }
 
     private void setViewData() {
@@ -82,5 +98,33 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         Glide.with(getApplicationContext()).load(companyImageUrl).error(R.drawable.account_img)
                 .placeholder(R.drawable.account_img).into(compImageView);
 
+    }
+
+    private void authorizeCompany() {
+        if(!isCompanyAuthorised) {
+            FirebaseDatabase.getInstance().getReference("company/" + companyId + "/operational").setValue(true);
+            isCompanyAuthorised = true;
+            authorizeTextView.setText(R.string.unauthorize_company);
+        }
+        else {
+            FirebaseDatabase.getInstance().getReference("company/" + companyId + "/operational").setValue(false);
+            isCompanyAuthorised = false;
+            authorizeTextView.setText(R.string.authorise_company);
+        }
+        setAuthorizationViews();
+    }
+
+    private void setAuthorizationViews(){
+        if (isCompanyAuthorised) {
+            authorizeTextView.setText(R.string.unauthorize_company);
+            if(loginMode.equals("user")) {
+                allTextView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            authorizeTextView.setText(R.string.authorise_company);
+            if(loginMode.equals("user")) {
+                allTextView.setVisibility(View.GONE);
+            }
+        }
     }
 }

@@ -144,7 +144,7 @@ public class SpaceShipList extends AppCompatActivity {
         spaceShipArrayList.clear();
         try {
 
-            DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId).child("spaceships");
+            DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId).child("spaceShips");
 
             companyRef.addValueEventListener(new ValueEventListener() {
                 @Override

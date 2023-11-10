@@ -53,4 +53,8 @@
     <string name="animal_text_pet_Holder">animal</string>
 
     <string name="flag_Val">flag_Val</string>
+    <string name="unauthorize_company">Unauthorize Company</string>
+    <string name="authorise_company">Authorise Company</string>
+    <string name="status_operational">Status: Operational</string>
+    <string name="status_unoperational">Status: Non-operational</string>
 </resources>

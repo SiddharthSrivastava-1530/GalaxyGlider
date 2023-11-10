@@ -166,7 +166,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
-                                        //task.getResult().toString() Contains the url of the pet picture
                                         spaceShipPicUrl = task.getResult().toString();
                                     }
                                 }
@@ -287,7 +286,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
-                                .child(companyId).child("spaceships");
+                                .child(companyId).child("spaceShips");
                         // Fetch the existing spaceShips
                         companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -320,7 +319,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                 // Handle any errors here
                             }
                         });
-//                        startActivity(new Intent(SpaceShipEditorActivity.this, SpaceShipList.class));
+
                     }
                 }).show();
 
@@ -348,7 +347,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
-                                .child(companyId).child("spaceships");
+                                .child(companyId).child("spaceShips");
                         // Fetch the existing spaceShips
                         companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -399,7 +398,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                 Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
                 Float.parseFloat(speedEditText.getText().toString()));
 
-        companyRef.child("spaceships").addListenerForSingleValueEvent(new ValueEventListener() {
+        companyRef.child("spaceShips").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<SpaceShip> spaceShips = new ArrayList<>();
@@ -415,7 +414,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                 spaceShips.add(spaceShip);
 
                 // Set the updated spaceShips ArrayList back to the company reference
-                companyRef.child("spaceships").setValue(spaceShips);
+                companyRef.child("spaceShips").setValue(spaceShips);
             }
 
             @Override

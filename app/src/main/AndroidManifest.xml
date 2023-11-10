@@ -16,6 +16,12 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
+            android:name=".LowRatedCompanyList"
+            android:exported="false" />
+        <activity
+            android:name=".UnauthorisedCompanyList"
+            android:exported="false" />
+        <activity
             android:name=".LicenseDetailsActivity"
             android:exported="false" />
         <activity

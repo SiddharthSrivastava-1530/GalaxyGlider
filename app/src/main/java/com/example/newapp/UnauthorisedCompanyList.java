@@ -8,33 +8,28 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class CompanyList extends AppCompatActivity {
+public class UnauthorisedCompanyList extends AppCompatActivity {
 
     private ArrayList<Company> companyArrayList;
     private Spinner spinner;
@@ -49,13 +44,11 @@ public class CompanyList extends AppCompatActivity {
     private String currentUserEmail;
     private String currentUserPic;
     private String currentUserNumber;
-    private TextView moveToLowRated;
-    private TextView moveToPendingReq;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_companies_list);
+        setContentView(R.layout.activity_unauthorised_company_list);
 
         FirebaseApp.initializeApp(this);
 
@@ -67,8 +60,6 @@ public class CompanyList extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar);
         recyclerView = findViewById(R.id.recycler);
         swipeRefreshLayout = findViewById(R.id.swip);
-        moveToLowRated = findViewById(R.id.move_to_low_rated_companies_tv);
-        moveToPendingReq = findViewById(R.id.move_to_pending_req_tv);
 
         Intent intent1 = getIntent();
         loginMode = intent1.getStringExtra("loginMode");
@@ -80,17 +71,17 @@ public class CompanyList extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getCompanies();
+                getUnauthorizedCompanies();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        getCompanies();
+        getUnauthorizedCompanies();
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
             public void onCompaniesClicked(int position) {
-                Intent intent = new Intent(CompanyList.this, CompanyDetailsActivity.class);
+                Intent intent = new Intent(UnauthorisedCompanyList.this, CompanyDetailsActivity.class);
                 intent.putExtra("loginMode", loginMode);
                 intent.putExtra("companyID", companyArrayList.get(position).getCompanyId());
                 intent.putExtra("company_name", companyArrayList.get(position).getName());
@@ -102,27 +93,9 @@ public class CompanyList extends AppCompatActivity {
             }
         };
 
-        moveToPendingReq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(CompanyList.this,UnauthorisedCompanyList.class);
-                intent1.putExtra("loginMode",loginMode);
-                startActivity(intent1);
-            }
-        });
-
-        moveToLowRated.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(CompanyList.this,LowRatedCompanyList.class);
-                intent1.putExtra("loginMode",loginMode);
-                startActivity(intent1);
-            }
-        });
-
     }
 
-    private void getCompanies() {
+    private void getUnauthorizedCompanies() {
         companyArrayList.clear();
         try {
             FirebaseDatabase.getInstance().getReference("company").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -130,7 +103,7 @@ public class CompanyList extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Company company = dataSnapshot.getValue(Company.class);
-                        if(company!=null && company.getOperational()){
+                        if (company != null && !company.getLicenseUrl().isEmpty() && !company.getOperational()) {
                             companyArrayList.add(company);
                         }
                     }
@@ -144,15 +117,15 @@ public class CompanyList extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(CompanyList.this, "Slow Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(UnauthorisedCompanyList.this, "Slow Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<Company> arrayList) {
-        companyAdapter = new CompanyAdapter(arrayList, CompanyList.this, onCompanyClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(CompanyList.this));
+        companyAdapter = new CompanyAdapter(arrayList, UnauthorisedCompanyList.this, onCompanyClickListener);
+        recyclerView.setLayoutManager(new LinearLayoutManager(UnauthorisedCompanyList.this));
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(companyAdapter);
@@ -175,14 +148,14 @@ public class CompanyList extends AppCompatActivity {
             // Sending data to profile activity if received.
             // Moving to respective profile activity as per loginMode.
             if (loginMode.equals("user")) {
-                Intent intent = new Intent(CompanyList.this, UserProfileActivity.class);
+                Intent intent = new Intent(UnauthorisedCompanyList.this, UserProfileActivity.class);
                 intent.putExtra("update_from_allList", true);
                 intent.putExtra("sender_pic", currentUserPic);
                 intent.putExtra("sender_name", currentUserName);
                 intent.putExtra("sender_number", currentUserEmail);
                 startActivity(intent);
             } else if (loginMode.equals("owner")) {
-                Intent intent = new Intent(CompanyList.this, CompanyProfileActivity.class);
+                Intent intent = new Intent(UnauthorisedCompanyList.this, CompanyProfileActivity.class);
                 intent.putExtra("update_from_allList", false);
                 intent.putExtra("sender_pic", currentUserPic);
                 intent.putExtra("sender_name", currentUserName);

@@ -12,7 +12,7 @@
         android:layout_height="140dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:layout_marginVertical="50dp"
         app:cardCornerRadius="120dp">
@@ -36,8 +36,8 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:textSize="32sp"
-        tools:text="Company Name" />
+        tools:text="Company Name"
+        android:textSize="32sp" />
 
     <TextView
         android:id="@+id/desc_company_details"
@@ -51,6 +51,24 @@
         android:layout_marginBottom="16dp"
         android:textSize="32sp"
         tools:text="company description here..." />
+
+    <TextView
+        android:id="@+id/authorization_status_details_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/verify_company_details_activity_tv"
+        android:layout_centerInParent="true"
+        android:textSize="24sp"
+        tools:text="Status: Unauthorized" />
+
+    <TextView
+        android:id="@+id/verify_company_details_activity_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seePdf_tv_details"
+        android:layout_centerInParent="true"
+        android:text="Authorize company"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/seePdf_tv_details"
