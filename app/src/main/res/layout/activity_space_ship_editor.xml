@@ -29,23 +29,24 @@
 
     <EditText
         android:id="@+id/spaceshipName_et"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
         android:inputType="text"
-        android:text="Lunar SpaceRover"
         android:textColor="#fff"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline34"
+        app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
-        app:layout_constraintTop_toTopOf="@+id/guideline33" />
+        app:layout_constraintTop_toTopOf="@+id/guideline33"
+        tools:text="Lunar SpaceRover" />
 
     <EditText
         android:id="@+id/spaceship_desc_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
-        android:text="The fastest space ship with high tenacity. Harm free and can take you the most farthest."
+        tools:text="The fastest space ship with high tenacity. Harm free and can take you the most farthest."
         android:textColor="#ACA9A9"
         android:gravity="start|top"
         android:layout_marginTop="6dp"
@@ -59,30 +60,32 @@
 
     <EditText
         android:id="@+id/spaceship_seats_et"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
         android:inputType="number"
-        android:text="15"
+        tools:text="15"
         android:textColor="#fff"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline41"
+        app:layout_constraintEnd_toStartOf="@+id/guideline45"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
         app:layout_constraintTop_toTopOf="@+id/guideline36"
         app:layout_constraintVertical_bias="0.555" />
 
     <EditText
         android:id="@+id/spaceShip_speed_editor"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:background="@null"
         android:inputType="number"
-        android:text="28"
+        tools:text="28"
         android:textColor="#fff"
         android:textSize="32sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline43"
+        app:layout_constraintEnd_toStartOf="@+id/guideline45"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
         app:layout_constraintTop_toTopOf="@+id/guideline38"
         app:layout_constraintVertical_bias="0.444" />
@@ -99,14 +102,15 @@
 
     <EditText
         android:id="@+id/spaceship_price_et"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
         android:inputType="number"
-        android:text="1200"
+        tools:text="1200"
         android:textColor="#fff"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline41"
+        app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="@+id/guideline45"
         app:layout_constraintTop_toTopOf="@+id/guideline36" />
 

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.DataModel.Customer;
+import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,30 +44,25 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpaceShipEditorActivity extends AppCompatActivity {
+public class SpaceShipEditorActivity extends AppCompatActivity implements Serializable {
 
     private EditText nameEditText;
     private EditText descriptionEditText;
     private EditText priceEditText;
     private TextView rideSharingTextView;
     private EditText speedEditText;
-    private EditText busyTimeEditText;
     private EditText seatsEditText;
     private  TextView addSpaceShipTextView;
-    private ImageView pic_et;
-    private Uri imagePath;
-    private String spaceShipPicUrl;
     private Boolean booleanUpdate;
-    private String mKey;
     private SpaceShip spaceShip;
     private String spaceShipKey;
-    private String imageUrl;
     private String name;
     private String rating;
     private String description;
@@ -77,6 +73,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private Boolean haveSharedRide;
     private String companyId;
     private String loginMode;
+    ArrayList<Review> reviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +86,12 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         // Remember that you should never show the action bar if the
         // status bar is hidden, so hide that too if necessary.
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
 
 
         nameEditText = findViewById(R.id.spaceshipName_et);
         seatsEditText = findViewById(R.id.spaceship_seats_et);
         priceEditText = findViewById(R.id.spaceship_price_et);
-//        pic_et = findViewById(R.id.img_SpaceShip_editor);
 //        rideSharingTextView = findViewById(R.id.spaceShip_rideSharing_edit);
         descriptionEditText = findViewById(R.id.spaceship_desc_et);
 //        busyTimeEditText = findViewById(R.id.spaceship_busyTime_et);
@@ -107,7 +103,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         rating = intent.getStringExtra("rating_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
-        imageUrl = intent.getStringExtra("picUrl_ss");
         speed = intent.getFloatExtra("speed_ss", 0);
         busyTime = intent.getStringExtra("busyTime_ss");
         seats = intent.getStringExtra("seats_ss");
@@ -115,6 +110,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
         booleanUpdate = intent.getBooleanExtra("update_spaceship", false);
+        reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
 
         spaceShipKey = UUID.randomUUID().toString();
 
@@ -126,19 +122,8 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
 
         if (booleanUpdate) {
-            spaceShipPicUrl = imageUrl;
             setViewData();
         }
-
-        //Select the picture from internal storage that you want to upload.
-//        pic_et.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent photoIntent = new Intent(Intent.ACTION_PICK);
-//                photoIntent.setType("image/*");
-//                startActivityForResult(photoIntent, 1);
-//            }
-//        });
 
         addSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,71 +136,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     }
 
 
-    //Getting mobile path for image you have uploaded.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            imagePath = data.getData();
-            getImageInImageView();
-        }
-    }
-
-    //Putting image in imageView and uploading to Firebase Storage.
-    private void getImageInImageView() {
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        pic_et.setImageBitmap(bitmap);
-        uploadImage();
-    }
-
-    private void uploadImage() {
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle(" Uploading... ");
-        progressDialog.show();
-
-        //Put image in Firebase storage.
-        FirebaseStorage.getInstance().getReference("spaceShipImages/" + UUID.randomUUID().toString())
-                .putFile(imagePath).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        spaceShipPicUrl = task.getResult().toString();
-                                    }
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage()
-                                    , Toast.LENGTH_SHORT).show();
-                        }
-                        progressDialog.dismiss();
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    //Shows the progress of upload.
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progress = 100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
-                        progressDialog.setMessage(" Uploaded " + (int) progress + "%");
-                    }
-                });
-    }
-
-
     private boolean checkData() {
-        if (spaceShipPicUrl.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please upload space ship picture.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
         if (nameEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter name",
                     Toast.LENGTH_SHORT).show();
@@ -228,11 +149,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         }
         if (priceEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter price.",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (busyTimeEditText.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please enter busyTime (if no time write 00:00)",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -296,8 +212,8 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     // deleting the spaceships
     private void deleteSpaceShipsData() {
 
-        SpaceShip spaceShipToDelete = new SpaceShip(name, description, imageUrl, "", rating,
-                "", seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed);
+        SpaceShip spaceShipToDelete = new SpaceShip(name, description, "", rating
+                , seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
         builder.setTitle("Delete spaceship")
@@ -352,12 +268,12 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private void updateSpaceShipsData() {
 
         SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                spaceShipPicUrl, "", rating, "", seatsEditText.getText().toString(), haveSharedRide,
-                Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
-                Float.parseFloat(speedEditText.getText().toString()));
+                "", rating, seatsEditText.getText().toString(), haveSharedRide,
+                Long.parseLong(busyTime), Float.parseFloat(priceEditText.getText().toString()),
+                Float.parseFloat(speedEditText.getText().toString()),reviews);
 
-        SpaceShip originalSpaceShip = new SpaceShip(name, description, imageUrl, "", rating,
-                "", seats, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed);
+        SpaceShip originalSpaceShip = new SpaceShip(name, description, "", rating, seats,
+                haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
@@ -415,10 +331,11 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private void saveSpaceShipsData() {
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
+        ArrayList<Review> reviews = new ArrayList<>();
         spaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                spaceShipPicUrl, "", "0.0", "", seatsEditText.getText().toString(), haveSharedRide,
-                Long.parseLong(busyTimeEditText.getText().toString()), Float.parseFloat(priceEditText.getText().toString()),
-                Float.parseFloat(speedEditText.getText().toString()));
+                "", "0.0", seatsEditText.getText().toString(), haveSharedRide,
+                0, Float.parseFloat(priceEditText.getText().toString()),
+                Float.parseFloat(speedEditText.getText().toString()), reviews);
 
         companyRef.child("spaceShips").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -457,11 +374,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 //        rideSharingTextView.setText(String.valueOf(haveSharedRide));
         descriptionEditText.setText(description);
         seatsEditText.setText(seats);
-//        busyTimeEditText.setText(busyTime);
-
-//        Glide.with(getApplicationContext()).load(imageUrl).error(R.drawable.account_img)
-//                .placeholder(R.drawable.account_img).into(pic_et);
-
     }
 
     private Boolean areEqualSpaceShips(SpaceShip spaceShip1, SpaceShip spaceShip2) {
@@ -477,13 +389,10 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         if (!(spaceShip1.getPrice()==spaceShip2.getPrice())) {
             return false;
         }
-        if (!(spaceShip1.getRatings().equals(spaceShip2.getRatings()))) {
+        if (!(spaceShip1.getSpaceShipRating().equals(spaceShip2.getSpaceShipRating()))) {
             return false;
         }
         if (!(Objects.equals(spaceShip1.getSeatAvailability(), spaceShip2.getSeatAvailability()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpaceShipImageUrl().equals(spaceShip2.getSpaceShipImageUrl()))) {
             return false;
         }
         if (!(spaceShip1.getDescription().equals(spaceShip2.getDescription()))) {

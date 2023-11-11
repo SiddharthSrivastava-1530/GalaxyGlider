@@ -9,20 +9,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.Adapter.SpaceShipAdapter;
 import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
@@ -36,6 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -65,15 +63,12 @@ public class SpaceShipList extends AppCompatActivity {
     private String currentUserName;
     private String currentUserEmail;
     private String currentUserPic;
-    private String currentUserNumber;
     private String currentLicenseUrl;
     private boolean currentUserAuthStatus;
     private String companyId;
     private String loginMode;
     private String currentUserDescription;
-    private ArrayList<SpaceShip> backUpSpaceShipList;
     final private String filtersUsed[] = {"Sort By", "Rating" , "Price"};
-    final private float EPSILON = 1e-9f;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -81,13 +76,12 @@ public class SpaceShipList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_list);
 
-        getSupportActionBar().hide();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         spinner = findViewById(R.id.spinner1_spaceship);
 
         searchSpaceship = findViewById(R.id.srchCompany_spaceship);
         spaceShipArrayList = new ArrayList<>();
-        backUpSpaceShipList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progressbar_spaceship);
         recyclerView = findViewById(R.id.recycler_spaceship);
@@ -127,7 +121,7 @@ public class SpaceShipList extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getSpaceShips();
+                getSpaceShips("");
                 swipeRefreshLayout.setRefreshing(false);
                 spinner.setSelection(0);
             }
@@ -139,14 +133,14 @@ public class SpaceShipList extends AppCompatActivity {
             public void onSpaceShipsClicked(int position) {
                 Intent intent1 = new Intent(SpaceShipList.this, SpaceShipDetailsActivity.class);
                 intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
-                intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getRatings());
+                intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getSpaceShipRating());
                 intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
                 intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
-                intent1.putExtra("picUrl_ss", spaceShipArrayList.get(position).getSpaceShipImageUrl());
                 intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
                 intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
                 intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatAvailability());
                 intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
+                intent1.putExtra("reviews_ss", spaceShipArrayList.get(position).getReviews());
                 intent1.putExtra("loginMode", loginMode);
                 intent1.putExtra("companyID", companyId);
                 startActivity(intent1);
@@ -160,7 +154,7 @@ public class SpaceShipList extends AppCompatActivity {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                spaceShipAdapter.getFilter().filter(newText);
+                getSpaceShips(newText);
                 return false;
             }
         });
@@ -172,39 +166,7 @@ public class SpaceShipList extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if (position == 0) {
-                    getSpaceShips();
-                }
-                if (position == 1) {
-                    spaceShipArrayList.clear();
-                    spaceShipArrayList.addAll(backUpSpaceShipList);
-                    Collections.sort(spaceShipArrayList, new Comparator<SpaceShip>() {
-                        @Override
-                        public int compare(SpaceShip o1, SpaceShip o2) {
-                            return (-1)*(o1.getRatings().compareTo(o2.getRatings()));
-                        }
-                    });
-                    setAdapter(spaceShipArrayList);
-                }
-
-                if (position == 2) {
-                    spaceShipArrayList.clear();
-                    spaceShipArrayList.addAll(backUpSpaceShipList);
-                    Collections.sort(spaceShipArrayList, new Comparator<SpaceShip>() {
-                        @Override
-                        public int compare(SpaceShip o1, SpaceShip o2) {
-                            if (Math.abs(o1.getPrice() - o2.getPrice()) < EPSILON) {
-                                return 0; // Considered equal within epsilon
-                            } else if (o1.getPrice() > o2.getPrice()) {
-                                return -1;
-                            } else {
-                                return 1;
-                            }
-                        }
-                    });
-                    setAdapter(spaceShipArrayList);
-                }
+                getSpaceShips(searchSpaceship.getQuery().toString());
             }
 
             @Override
@@ -221,26 +183,37 @@ public class SpaceShipList extends AppCompatActivity {
         getUserData();
     }
 
-    private void getSpaceShips() {
+    private void getSpaceShips(String userQuery) {
         spaceShipArrayList.clear();
         try {
+            int spinnerPosition = spinner.getSelectedItemPosition();
+            String child = "";
+            if(spinnerPosition == 1){
+                child = "spaceShipRating";
+            }
+            if(spinnerPosition == 2){
+                child = "price";
+            }
 
-            DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId).child("spaceShips");
-
-            companyRef.addValueEventListener(new ValueEventListener() {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company").child(companyId).child("spaceShips");
+            Query query = databaseReference;
+            if(!child.isEmpty()){
+                query = databaseReference.orderByChild(child);
+            }
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                             if (spaceShip != null) {
-                                spaceShipArrayList.add(spaceShip);
+                                if(spaceShip.getSpaceShipName().toLowerCase().contains(userQuery.toLowerCase())){
+                                    spaceShipArrayList.add(spaceShip);
+                                }
                             }
                             setAdapter(spaceShipArrayList);
                         }
                     }
-                    backUpSpaceShipList.clear();
-                    backUpSpaceShipList.addAll(spaceShipArrayList);
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -278,7 +251,6 @@ public class SpaceShipList extends AppCompatActivity {
                 intent1.putExtra("update_from_allList", true);
                 intent1.putExtra("sender_pic", currentUserPic);
                 intent1.putExtra("sender_name", currentUserName);
-                intent1.putExtra("sender_number", currentUserNumber);
                 intent1.putExtra("sender_desc", currentUserDescription);
                 intent1.putExtra("licenseUrl", currentLicenseUrl);
                 intent1.putExtra("loginMode", loginMode);
@@ -294,7 +266,7 @@ public class SpaceShipList extends AppCompatActivity {
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<SpaceShip> arrayList) {
         spaceShipAdapter = new SpaceShipAdapter(arrayList, SpaceShipList.this, onSpaceShipClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipList.this, LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipList.this));
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(spaceShipAdapter);
@@ -322,12 +294,10 @@ public class SpaceShipList extends AppCompatActivity {
                             if (loginMode.equals("admin")) {
                                 currentUserName = snapshot.getValue(Admin.class).getName();
                                 currentUserEmail = snapshot.getValue(Admin.class).getEmail();
-                                currentUserNumber = snapshot.getValue(Admin.class).getNumber();
                             } else if (loginMode.equals("owner")) {
                                 currentUserName = snapshot.getValue(Company.class).getName();
                                 currentUserEmail = snapshot.getValue(Company.class).getEmail();
                                 currentUserPic = snapshot.getValue(Company.class).getImageUrl();
-                                currentUserNumber = snapshot.getValue(Company.class).getNumber();
                                 currentUserDescription = snapshot.getValue(Company.class).getDescription();
                                 currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
                                 currentUserAuthStatus = snapshot.getValue(Company.class).getOperational();
@@ -335,7 +305,6 @@ public class SpaceShipList extends AppCompatActivity {
                                 currentUserName = snapshot.getValue(Customer.class).getName();
                                 currentUserEmail = snapshot.getValue(Customer.class).getEmail();
                                 currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
-                                currentUserNumber = snapshot.getValue(Customer.class).getNumber();
                             }
                         }
 

@@ -38,7 +38,6 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView logout;
     private TextView name_tv;
     private TextView email_tv;
-    private TextView number_tv;
     private TextView mode_tv;
     private ImageView imgProfile;
     private ProgressBar progressBar;
@@ -57,7 +56,6 @@ public class UserProfileActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.uploadImage_b);
         progressBar = findViewById(R.id.progressBar_profile);
         mode_tv = findViewById(R.id.mode_info1_user_profile);
-//        number_tv = findViewById(R.id.number_profile_et);
 
         name_tv = findViewById(R.id.name_profile_et);
         email_tv = findViewById(R.id.email_profile_et);
@@ -84,7 +82,6 @@ public class UserProfileActivity extends AppCompatActivity {
             userPic = intent.getStringExtra("sender_pic");
             name_tv.setText(intent.getStringExtra("sender_name"));
             email_tv.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-//            number_tv.setText(intent.getStringExtra("sender_number"));
         }
 
         CircularProgressDrawable circularProgressDrawable =

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -24,7 +25,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -68,12 +71,12 @@ public class CompanyList extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getCompanies();
+                getCompanies("");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        getCompanies();
+        getCompanies("");
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
@@ -97,23 +100,26 @@ public class CompanyList extends Fragment {
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                companyAdapter.getFilter().filter(newText);
+                getCompanies(newText);
                 return false;
             }
         });
 
     }
 
-    private void getCompanies() {
+    private void getCompanies(String textQuery) {
         companyArrayList.clear();
         try {
-            FirebaseDatabase.getInstance().getReference("company").addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Company company = dataSnapshot.getValue(Company.class);
-                        if(company!=null && company.getOperational()){
-                            companyArrayList.add(company);
+                        if(company!=null && company.getOperational() ){
+                            if(company.getName().toLowerCase().contains(textQuery.toLowerCase())) {
+                                companyArrayList.add(company);
+                            }
                         }
                     }
                     setAdapter(companyArrayList);
@@ -140,6 +146,34 @@ public class CompanyList extends Fragment {
         recyclerView.setAdapter(companyAdapter);
         companyAdapter.notifyDataSetChanged();
 
+    }
+
+    private void getSortedCompanies(String child) {
+        companyArrayList.clear();
+        try {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
+            Query query = databaseReference.orderByChild(child);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Company company = dataSnapshot.getValue(Company.class);
+                        if(company!=null && company.getOperational()){
+                            companyArrayList.add(company);
+                        }
+                    }
+                    setAdapter(companyArrayList);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

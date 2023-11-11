@@ -198,8 +198,8 @@ public class SignUpActivity extends AppCompatActivity {
                             String key = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             FirebaseDatabase.getInstance().getReference("company/" + key)
                                     .setValue(new Company(name.getText().toString(),
-                                            email.getText().toString(), number.getText().toString(),
-                                            loginMode, key, "", "", "",
+                                            email.getText().toString(), loginMode, key,
+                                            "", "", "",
                                             false, spaceShips))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -215,7 +215,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                         Toast.LENGTH_LONG).show();
 
                                                 //Navigating to login activity for user to login after verifying email.
-                                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                                Intent intent = new Intent(SignUpActivity.this, SpaceShipList.class);
                                                 intent.putExtra("companyID", key);
                                                 intent.putExtra("loginMode", loginMode);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
