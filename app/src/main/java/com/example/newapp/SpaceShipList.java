@@ -79,6 +79,14 @@ public class SpaceShipList extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+//        getSupportActionBar().hide();
+
         spinner = findViewById(R.id.spinner1_spaceship);
 
         searchSpaceship = findViewById(R.id.srchCompany_spaceship);

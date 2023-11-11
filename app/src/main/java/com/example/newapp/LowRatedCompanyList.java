@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.CompanyAdapter;
@@ -36,7 +35,6 @@ import java.util.ArrayList;
 public class LowRatedCompanyList extends Fragment {
 
     private ArrayList<Company> companyArrayList;
-    private Spinner spinner;
     private SearchView searchCompany;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -56,7 +54,6 @@ public class LowRatedCompanyList extends Fragment {
 
         FirebaseApp.initializeApp(getActivity());
 
-        spinner = getView().findViewById(R.id.spinner1_lowRated);
         searchCompany = getView().findViewById(R.id.srchCompany_lowRated);
 
         companyArrayList = new ArrayList<>();

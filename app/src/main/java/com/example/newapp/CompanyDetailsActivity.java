@@ -1,6 +1,7 @@
 package com.example.newapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -29,7 +30,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
     private String companyLicenseUrl;
     private boolean isCompanyAuthorised;
     private TextView authorizeTextView;
-    private TextView statusAuthorization;
+    private CardView statusAuthorization;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         compImageView = findViewById(R.id.img_company_details);
         seeLicenseTextView = findViewById(R.id.seePdf_tv_details);
         authorizeTextView = findViewById(R.id.verify_company_details_activity_tv);
-//        statusAuthorization = findViewById(R.id.authorization_status_details_activity);
+        statusAuthorization = findViewById(R.id.cardView3);
 
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
@@ -66,6 +67,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         if (!(loginMode.equals("admin"))) {
             authorizeTextView.setVisibility(View.GONE);
             seeLicenseTextView.setVisibility(View.GONE);
+            statusAuthorization.setVisibility(View.GONE);
         }
 
         setAuthorizationViews();
@@ -123,13 +125,11 @@ public class CompanyDetailsActivity extends AppCompatActivity {
     private void setAuthorizationViews(){
         if (isCompanyAuthorised) {
             authorizeTextView.setText(R.string.unauthorize_company);
-//            statusAuthorization.setText(R.string.status_operational);
             if(loginMode.equals("user")) {
                 allTextView.setVisibility(View.VISIBLE);
             }
         } else {
             authorizeTextView.setText(R.string.authorise_company);
-//            statusAuthorization.setText(R.string.status_unoperational);
             if(loginMode.equals("user")) {
                 allTextView.setVisibility(View.GONE);
             }

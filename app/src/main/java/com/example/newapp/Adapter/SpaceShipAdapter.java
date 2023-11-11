@@ -52,7 +52,7 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
         holder.spaceShipName.setText(spaceships.get(position).getSpaceShipName());
         holder.price.setText(String.valueOf(spaceships.get(position).getPrice()));
 //        holder.ratings.setText(spaceships.get(position).getRatings());
-        holder.seatAvailability.setText(spaceships.get(position).getSeatAvailability());
+//        holder.seatAvailability.setText(spaceships.get(position).getSeatAvailability());
 //        holder.busyTime.setText(String.valueOf(spaceships.get(position).getBusyTime()));
 //
         CircularProgressDrawable circularProgressDrawable = new CircularProgressDrawable(context);
@@ -96,7 +96,7 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
 //            ratings = itemView.findViewById(R.id.spaceShip_rating_SpaceShipList);
             price = itemView.findViewById(R.id.spaceShip_price_SpaceShipList);
 //            feedback = itemView.findViewById(R.id.sp);
-            seatAvailability = itemView.findViewById(R.id.seats_spaceShip_SpaceShipList);
+//            seatAvailability = itemView.findViewById(R.id.seats_spaceShip_SpaceShipList);
 //            rideSharing = itemView.findViewById(R.id.spaceShip_rideSharing_SpaceShipList);
 //            busyTime = itemView.findViewById(R.id.spaceShip_busyTime_SpaceShipList);
 //            spaceShipPic = itemView.findViewById(R.id.img_SpaceShip);
