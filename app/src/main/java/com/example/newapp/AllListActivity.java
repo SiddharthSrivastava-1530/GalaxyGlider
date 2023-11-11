@@ -41,6 +41,14 @@ public class AllListActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+//        View decorView = getWindow().getDecorView();
+//        // Hide the status bar.
+//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+//        decorView.setSystemUiVisibility(uiOptions);
+//        // Remember that you should never show the action bar if the
+//        // status bar is hidden, so hide that too if necessary.
+//        getSupportActionBar().hide();
+
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
 
@@ -54,10 +62,11 @@ public class AllListActivity extends AppCompatActivity {
         VPAdapter vPadapter = new VPAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        vPadapter.addFragment(new CompanyList(), "Authorized");
-        if (loginMode.equals("user")) {
-            tabLayout.setVisibility(View.GONE);
-        }
+        vPadapter.addFragment(new CompanyList(), "Companies");
+
+//        if (loginMode.equals("user")) {
+//            tabLayout.getTabAt(0).setText("Gliding Companies");
+//        }
 
         if (loginMode.equals("admin")) {
             vPadapter.addFragment(new UnauthorisedCompanyList(), "Pending");

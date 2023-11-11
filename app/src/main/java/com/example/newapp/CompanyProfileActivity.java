@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,7 +48,6 @@ public class CompanyProfileActivity extends AppCompatActivity {
     private TextView logout;
     private TextView name_tv;
     private TextView email_tv;
-    private TextView number_tv;
     private TextView uploadButton;
     private EditText description_et;
     private ImageView imgProfile;
@@ -64,11 +64,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_profile);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         // associating variables with views using corresponding id(s)
         logout = findViewById(R.id.logout_tv_company_profile);
         imgProfile = findViewById(R.id.uploadImage_b_company_profile);
         progressBar = findViewById(R.id.progressBar_profile_company_profile);
-        number_tv = findViewById(R.id.number_profile_et_company_profile);
         description_et = findViewById(R.id.description_et_profile);
         uploadButton = findViewById(R.id.uploadPDF_btn);
         downloadPdf = findViewById(R.id.license_pdf_view_);
@@ -86,7 +87,6 @@ public class CompanyProfileActivity extends AppCompatActivity {
             userPic = intent.getStringExtra("sender_pic");
             name_tv.setText(intent.getStringExtra("sender_name"));
             email_tv.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-            number_tv.setText(intent.getStringExtra("sender_number"));
             description_et.setText(intent.getStringExtra("sender_desc"));
         }
 

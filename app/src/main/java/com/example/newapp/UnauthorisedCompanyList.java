@@ -1,29 +1,23 @@
 package com.example.newapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.SearchView;
-import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.example.newapp.Adapter.CompanyAdapter;
-import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
-import com.example.newapp.DataModel.Customer;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,7 +28,6 @@ import java.util.ArrayList;
 public class UnauthorisedCompanyList extends Fragment {
 
     private ArrayList<Company> companyArrayList;
-    private Spinner spinner;
     private SearchView searchCompany;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -53,7 +46,6 @@ public class UnauthorisedCompanyList extends Fragment {
 
         FirebaseApp.initializeApp(getActivity());
 
-        spinner = getView().findViewById(R.id.spinner1_unauthorized);
         searchCompany = getView().findViewById(R.id.srchCompany_unauthorized);
 
         companyArrayList = new ArrayList<>();

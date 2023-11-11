@@ -39,21 +39,25 @@
         app:layout_constraintStart_toStartOf="@+id/guideline44"
         app:layout_constraintTop_toTopOf="@+id/guideline33" />
 
-    <TextView
-        android:id="@+id/desc_details_activity"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@null"
-        android:text="The fastest space ship with high tenacity. Harm free and can take you the most farthest."
-        android:textColor="#ACA9A9"
-        android:gravity="start|top"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline42"
+        android:layout_height="80dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
-        app:layout_constraintTop_toTopOf="@+id/guideline40"
-        app:layout_constraintVertical_bias="0.367" />
+        app:layout_constraintTop_toTopOf="@+id/guideline40">
+
+        <TextView
+            android:id="@+id/desc_details_activity"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="6dp"
+            android:background="@null"
+            android:gravity="start|top"
+            android:text="The fastest space ship with high tenacity. Harm free and can take you the most farthest."
+            android:textColor="#ACA9A9"
+            android:textSize="18sp" />
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/seats_spaceShip_details_activity"
