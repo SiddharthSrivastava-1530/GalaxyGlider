@@ -1,34 +1,34 @@
 package com.example.newapp.DataModel;
 
+import java.util.ArrayList;
+
 public class SpaceShip {
     private String spaceShipName;
     private String description;
-    private String spaceShipImageUrl;
     private String spaceShipId;
-    private String ratings;
-    private String feedback;
+    private String spaceShipRating;
     private String seatAvailability;
     private boolean haveRideSharing;
     private long busyTime;
     private float price;
     private float speed;
+    private ArrayList<Review> reviews;
 
     public SpaceShip(){
 
     }
 
-    public SpaceShip(String spaceShipName, String description, String spaceShipImageUrl, String spaceShipId, String ratings, String feedback, String seatAvailability, boolean haveRideSharing, long busyTime, float price, float speed) {
+    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String seatAvailability, boolean haveRideSharing, long busyTime, float price, float speed, ArrayList<Review> reviews) {
         this.spaceShipName = spaceShipName;
         this.description = description;
-        this.spaceShipImageUrl = spaceShipImageUrl;
         this.spaceShipId = spaceShipId;
-        this.ratings = ratings;
-        this.feedback = feedback;
+        this.spaceShipRating = spaceShipRating;
         this.seatAvailability = seatAvailability;
         this.haveRideSharing = haveRideSharing;
         this.busyTime = busyTime;
         this.price = price;
         this.speed = speed;
+        this.reviews = reviews;
     }
 
     public String getSpaceShipName() {
@@ -47,14 +47,6 @@ public class SpaceShip {
         this.description = description;
     }
 
-    public String getSpaceShipImageUrl() {
-        return spaceShipImageUrl;
-    }
-
-    public void setSpaceShipImageUrl(String spaceShipImageUrl) {
-        this.spaceShipImageUrl = spaceShipImageUrl;
-    }
-
     public String getSpaceShipId() {
         return spaceShipId;
     }
@@ -63,20 +55,12 @@ public class SpaceShip {
         this.spaceShipId = spaceShipId;
     }
 
-    public String getRatings() {
-        return ratings;
+    public String getSpaceShipRating() {
+        return spaceShipRating;
     }
 
-    public void setRatings(String ratings) {
-        this.ratings = ratings;
-    }
-
-    public String getFeedback() {
-        return feedback;
-    }
-
-    public void setFeedback(String feedback) {
-        this.feedback = feedback;
+    public void setSpaceShipRating(String spaceShipRating) {
+        this.spaceShipRating = spaceShipRating;
     }
 
     public String getSeatAvailability() {
@@ -117,5 +101,13 @@ public class SpaceShip {
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    public ArrayList<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ArrayList<Review> reviews) {
+        this.reviews = reviews;
     }
 }

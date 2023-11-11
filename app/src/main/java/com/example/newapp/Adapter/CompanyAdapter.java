@@ -19,10 +19,9 @@ import com.example.newapp.R;
 
 import java.util.ArrayList;
 
-public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> implements Filterable {
+public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyHolder> {
 
     private ArrayList<Company> companies;
-    private ArrayList<Company> companyListBackup;
     private Context context;
     private OnCompanyClickListener onCompanyClickListener;
 
@@ -31,43 +30,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
         this.companies = companies;
         this.context = context;
         this.onCompanyClickListener = onCompanyClickListener;
-        companyListBackup = new ArrayList<>(companies);
     }
-
-
-    @Override
-    public Filter getFilter() {
-        return filter;
-    }
-
-    Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<Company> filteredCompanies = new ArrayList<>();
-
-            if(constraint.toString().isEmpty()){
-                filteredCompanies.addAll(companyListBackup);
-            }
-            else {
-                for (Company company : companyListBackup){
-                    if(company.getName().toLowerCase().trim().contains(constraint.toString().toLowerCase())) {
-                        filteredCompanies.add(company);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredCompanies;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            companies.clear();
-            companies.addAll((ArrayList<Company>)results.values);
-            notifyDataSetChanged();
-        }
-    };
 
 
 

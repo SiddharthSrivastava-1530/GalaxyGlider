@@ -23,10 +23,9 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.SpaceShipHolder> implements Filterable{
+public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.SpaceShipHolder> {
 
     private ArrayList<SpaceShip> spaceships;
-    private ArrayList<SpaceShip> spaceshipsBackupList;
     private Context context;
     private OnSpaceShipClickListener onSpaceshipClickListener;
 
@@ -34,45 +33,7 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
         this.spaceships = spaceships;
         this.context = context;
         this.onSpaceshipClickListener = onSpaceshipClickListener;
-        spaceshipsBackupList = new ArrayList<>(spaceships);
     }
-
-
-    @Override
-    public Filter getFilter() {
-        return filter;
-    }
-
-    Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<SpaceShip> filteredSpaceships = new ArrayList<>();
-
-            if(constraint.toString().isEmpty()){
-                filteredSpaceships.addAll(spaceshipsBackupList);
-            }
-            else {
-                for (SpaceShip spaceShip : spaceshipsBackupList){
-                    if(spaceShip.getSpaceShipName().toLowerCase().trim().contains(constraint.toString().toLowerCase())) {
-                        filteredSpaceships.add(spaceShip);
-                    }
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filteredSpaceships;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            spaceships.clear();
-            spaceships.addAll((ArrayList<SpaceShip>)results.values);
-            notifyDataSetChanged();
-        }
-    };
-
-
 
     public interface OnSpaceShipClickListener {
         void onSpaceShipsClicked(int position);

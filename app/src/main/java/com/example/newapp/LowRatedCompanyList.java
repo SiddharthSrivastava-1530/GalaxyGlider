@@ -108,7 +108,7 @@ public class LowRatedCompanyList extends Fragment {
                         boolean isLowRated = false;
                         if (spaceShipArrayList != null) {
                             for (SpaceShip spaceShip : spaceShipArrayList) {
-                                Float shipRating = Float.parseFloat(spaceShip.getRatings());
+                                Float shipRating = Float.parseFloat(spaceShip.getSpaceShipRating());
                                 if (shipRating <= 1 && shipRating > 0) {
                                     isLowRated = true;
                                 }

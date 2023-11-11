@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,13 +32,14 @@ public class AllListActivity extends AppCompatActivity {
     private String currentUserName;
     private String currentUserEmail;
     private String currentUserPic;
-    private String currentUserNumber;
     private String loginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_list);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -92,7 +94,6 @@ public class AllListActivity extends AppCompatActivity {
                 intent.putExtra("update_from_allList", false);
                 intent.putExtra("sender_pic", currentUserPic);
                 intent.putExtra("sender_name", currentUserName);
-                intent.putExtra("sender_number", currentUserNumber);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
@@ -127,17 +128,14 @@ public class AllListActivity extends AppCompatActivity {
                             if (loginMode.equals("admin")) {
                                 currentUserName = snapshot.getValue(Admin.class).getName();
                                 currentUserEmail = snapshot.getValue(Admin.class).getEmail();
-                                currentUserNumber = snapshot.getValue(Admin.class).getNumber();
                             } else if (loginMode.equals("owner")) {
                                 currentUserName = snapshot.getValue(Company.class).getName();
                                 currentUserEmail = snapshot.getValue(Company.class).getEmail();
                                 currentUserPic = snapshot.getValue(Company.class).getImageUrl();
-                                currentUserNumber = snapshot.getValue(Company.class).getNumber();
                             } else if (loginMode.equals("user")) {
                                 currentUserName = snapshot.getValue(Customer.class).getName();
                                 currentUserEmail = snapshot.getValue(Customer.class).getEmail();
                                 currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
-                                currentUserNumber = snapshot.getValue(Customer.class).getNumber();
                             }
                         }
 
