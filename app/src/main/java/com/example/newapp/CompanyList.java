@@ -148,32 +148,4 @@ public class CompanyList extends Fragment {
 
     }
 
-    private void getSortedCompanies(String child) {
-        companyArrayList.clear();
-        try {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
-            Query query = databaseReference.orderByChild(child);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Company company = dataSnapshot.getValue(Company.class);
-                        if(company!=null && company.getOperational()){
-                            companyArrayList.add(company);
-                        }
-                    }
-                    setAdapter(companyArrayList);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
-        }
-    }
-
 }

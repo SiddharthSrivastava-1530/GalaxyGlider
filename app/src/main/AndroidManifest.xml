@@ -16,6 +16,12 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
+            android:name=".SpaceShipReviews"
+            android:exported="false" />
+        <activity
+            android:name=".UserReviewsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AllListActivity"
             android:exported="true" />
         <activity

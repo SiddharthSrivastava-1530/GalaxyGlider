@@ -51,7 +51,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpaceShipEditorActivity extends AppCompatActivity implements Serializable {
+public class SpaceShipEditorActivity extends AppCompatActivity {
 
     private EditText nameEditText;
     private EditText descriptionEditText;

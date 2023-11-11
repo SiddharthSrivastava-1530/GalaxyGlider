@@ -1,6 +1,8 @@
 package com.example.newapp.DataModel;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable {
 
     private String review;
     private String rating;

@@ -15,7 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SpaceShipDetailsActivity extends AppCompatActivity implements Serializable {
+public class SpaceShipDetailsActivity extends AppCompatActivity {
 
     private TextView nameTextview;
     private TextView priceTextview;
@@ -24,6 +24,8 @@ public class SpaceShipDetailsActivity extends AppCompatActivity implements Seria
     private TextView speedTextview;
     private TextView sharedRideTextview;
     private TextView descriptionTextview;
+    private TextView bookSpaceShipTextView;
+    private TextView seeAllReviews;
     private String name;
     private String description;
     private String ratings;
@@ -50,6 +52,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity implements Seria
         // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
+        reviews = new ArrayList<>();
 
         nameTextview = findViewById(R.id.spaceShipName_details_activity);
         priceTextview = findViewById(R.id.spaceShip_price_details_activity);
@@ -59,6 +62,8 @@ public class SpaceShipDetailsActivity extends AppCompatActivity implements Seria
         seatAvailableTextview = findViewById(R.id.seats_spaceShip_details_activity);
 //        ratingTextview = findViewById(R.id.spaceShip_rating_details_activity);
 //        busyTimeTextview = findViewById(R.id.spaceShip_busyTime_details_activity);
+        bookSpaceShipTextView = findViewById(R.id.book_ss_tv);
+        seeAllReviews = findViewById(R.id.see_Reviews_tv);
 
         fab = findViewById(R.id.fab_details_activity);
 
@@ -75,8 +80,11 @@ public class SpaceShipDetailsActivity extends AppCompatActivity implements Seria
         companyId = intent.getStringExtra("companyID");
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
 
-        setViewData();
+        if(!loginMode.equals("user")){
+            bookSpaceShipTextView.setVisibility(View.GONE);
+        }
 
+        setViewData();
 
         if(!loginMode.equals("owner")){
             fab.setVisibility(View.GONE);
@@ -104,7 +112,33 @@ public class SpaceShipDetailsActivity extends AppCompatActivity implements Seria
             }
         });
 
+        bookSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(SpaceShipDetailsActivity.this, UserReviewsActivity.class);
+                intent1.putExtra("name_ss", name);
+                intent1.putExtra("rating_ss", ratings);
+                intent1.putExtra("description_ss", description);
+                intent1.putExtra("price_ss", price);
+                intent1.putExtra("speed_ss",speed);
+                intent1.putExtra("busyTime_ss",busyTime);
+                intent1.putExtra("seats_ss",seats);
+                intent1.putExtra("shared_ride_ss",haveSharedRide);
+                intent1.putExtra("companyID",companyId);
+                intent1.putExtra("update_spaceship",true);
+                intent1.putExtra("reviews_ss", reviews);
+                startActivity(intent1);
+            }
+        });
 
+        seeAllReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(SpaceShipDetailsActivity.this, SpaceShipReviews.class);
+                intent1.putExtra("reviews_ss", reviews);
+                startActivity(intent1);
+            }
+        });
 
     }
 
