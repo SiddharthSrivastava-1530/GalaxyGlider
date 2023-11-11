@@ -39,11 +39,13 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView name_tv;
     private TextView email_tv;
     private TextView number_tv;
+    private TextView mode_tv;
     private ImageView imgProfile;
     private ProgressBar progressBar;
     private String userPic;
     private Boolean updateFromAllList;
     private Uri imagePath;   // global variable to store the image from gallery and then show it on profile photo icon
+    private String loginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class UserProfileActivity extends AppCompatActivity {
         logout = findViewById(R.id.logout_tv);
         imgProfile = findViewById(R.id.uploadImage_b);
         progressBar = findViewById(R.id.progressBar_profile);
+        mode_tv = findViewById(R.id.mode_info1_user_profile);
 //        number_tv = findViewById(R.id.number_profile_et);
 
         name_tv = findViewById(R.id.name_profile_et);
@@ -68,8 +71,14 @@ public class UserProfileActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         Intent intent = getIntent();
-
+        loginMode = intent.getStringExtra("loginMode");
         updateFromAllList = intent.getBooleanExtra("update_from_allList", false);
+
+        if (loginMode.equals("user")) {
+            mode_tv.setText("User");
+        } else if (loginMode.equals("admin")) {
+            mode_tv.setText("admin");
+        }
 
         if (updateFromAllList) {
             userPic = intent.getStringExtra("sender_pic");
@@ -227,7 +236,7 @@ public class UserProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_profile_save) {
             if (!userPic.isEmpty()) {
-                startActivity(new Intent(UserProfileActivity.this, CompanyList.class));
+                startActivity(new Intent(UserProfileActivity.this, AllListActivity.class));
                 finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Please add a profile picture.", Toast.LENGTH_SHORT).show();
@@ -240,8 +249,8 @@ public class UserProfileActivity extends AppCompatActivity {
     private void eraseLoginMode() {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("loginMode","");
-        editor.putString("email","");
+        editor.putString("loginMode", "");
+        editor.putString("email", "");
         editor.apply();
     }
 }

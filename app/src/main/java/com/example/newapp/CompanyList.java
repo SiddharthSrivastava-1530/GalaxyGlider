@@ -1,20 +1,18 @@
 package com.example.newapp;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,19 +20,16 @@ import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class CompanyList extends AppCompatActivity {
+public class CompanyList extends Fragment {
 
     private ArrayList<Company> companyArrayList;
     private SearchView searchCompany;
@@ -44,36 +39,31 @@ public class CompanyList extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
-    private String currentUserName;
-    private String currentUserEmail;
-    private String currentUserPic;
-    private String currentUserNumber;
-    private TextView moveToLowRated;
-    private TextView moveToPendingReq;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_companies_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        return inflater.inflate(R.layout.activity_companies_list,container,false);
+    }
 
-        FirebaseApp.initializeApp(this);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        searchCompany = findViewById(R.id.srchCompany);
+        FirebaseApp.initializeApp(getActivity());
+
+        searchCompany = getView().findViewById(R.id.srchCompany);
 
         companyArrayList = new ArrayList<>();
 
-        progressBar = findViewById(R.id.progressbar);
-        recyclerView = findViewById(R.id.recycler);
-        swipeRefreshLayout = findViewById(R.id.swip);
-        moveToLowRated = findViewById(R.id.move_to_low_rated_companies_tv);
-        moveToPendingReq = findViewById(R.id.move_to_pending_req_tv);
+        progressBar = getView().findViewById(R.id.progressbar);
+        recyclerView = getView().findViewById(R.id.recycler);
+        swipeRefreshLayout = getView().findViewById(R.id.swip);
 
-        Intent intent1 = getIntent();
+        Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 
-        Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
 
-        getUserData();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -88,7 +78,7 @@ public class CompanyList extends AppCompatActivity {
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
             public void onCompaniesClicked(int position) {
-                Intent intent = new Intent(CompanyList.this, CompanyDetailsActivity.class);
+                Intent intent = new Intent(getActivity(), CompanyDetailsActivity.class);
                 intent.putExtra("loginMode", loginMode);
                 intent.putExtra("companyID", companyArrayList.get(position).getCompanyId());
                 intent.putExtra("company_name", companyArrayList.get(position).getName());
@@ -99,24 +89,6 @@ public class CompanyList extends AppCompatActivity {
                 startActivity(intent);
             }
         };
-
-        moveToPendingReq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(CompanyList.this,UnauthorisedCompanyList.class);
-                intent1.putExtra("loginMode",loginMode);
-                startActivity(intent1);
-            }
-        });
-
-        moveToLowRated.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent(CompanyList.this,LowRatedCompanyList.class);
-                intent1.putExtra("loginMode",loginMode);
-                startActivity(intent1);
-            }
-        });
 
         searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -154,101 +126,19 @@ public class CompanyList extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(CompanyList.this, "Slow Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<Company> arrayList) {
-        companyAdapter = new CompanyAdapter(arrayList, CompanyList.this, onCompanyClickListener);
-        recyclerView.setLayoutManager(new LinearLayoutManager(CompanyList.this));
+        companyAdapter = new CompanyAdapter(arrayList, getActivity(), onCompanyClickListener);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(companyAdapter);
         companyAdapter.notifyDataSetChanged();
-
-    }
-
-
-    // Inflating menu options.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.company_list_menu, menu);
-        return true;
-    }
-
-
-    // Setting what happens when any menu item is clicked.
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_item_profile) {
-            // Sending data to profile activity if received.
-            // Moving to respective profile activity as per loginMode.
-            if (loginMode.equals("user")) {
-                Intent intent = new Intent(CompanyList.this, UserProfileActivity.class);
-                intent.putExtra("update_from_allList", true);
-                intent.putExtra("sender_pic", currentUserPic);
-                intent.putExtra("sender_name", currentUserName);
-                intent.putExtra("sender_number", currentUserEmail);
-                startActivity(intent);
-            } else if (loginMode.equals("owner")) {
-                Intent intent = new Intent(CompanyList.this, CompanyProfileActivity.class);
-                intent.putExtra("update_from_allList", false);
-                intent.putExtra("sender_pic", currentUserPic);
-                intent.putExtra("sender_name", currentUserName);
-                intent.putExtra("sender_number", currentUserNumber);
-                startActivity(intent);
-            } else {
-
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void getUserData() {
-        try {
-            String key = "";
-            if (loginMode.equals("admin")) {
-                key = "admin";
-            } else if (loginMode.equals("owner")) {
-                key = "company";
-            } else if (loginMode.equals("user")) {
-                key = "users";
-            }
-
-            // Getting data about user from database.
-            FirebaseDatabase.getInstance().getReference(key + "/" +
-                            FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (loginMode.equals("admin")) {
-                                currentUserName = snapshot.getValue(Admin.class).getName();
-                                currentUserEmail = snapshot.getValue(Admin.class).getEmail();
-                                currentUserNumber = snapshot.getValue(Admin.class).getNumber();
-                            } else if (loginMode.equals("owner")) {
-                                currentUserName = snapshot.getValue(Company.class).getName();
-                                currentUserEmail = snapshot.getValue(Company.class).getEmail();
-                                currentUserPic = snapshot.getValue(Company.class).getImageUrl();
-                                currentUserNumber = snapshot.getValue(Company.class).getNumber();
-                            } else if (loginMode.equals("user")) {
-                                currentUserName = snapshot.getValue(Customer.class).getName();
-                                currentUserEmail = snapshot.getValue(Customer.class).getEmail();
-                                currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
-                                currentUserNumber = snapshot.getValue(Customer.class).getNumber();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Slow Internet Connection",
-                    Toast.LENGTH_SHORT).show();
-        }
 
     }
 

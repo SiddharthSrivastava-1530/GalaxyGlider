@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signup;
     private ImageView psw_show;
     private String loginMode;
-    private boolean isCorrectLoginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,30 +57,6 @@ public class LoginActivity extends AppCompatActivity {
 
         if(loginMode.equals("admin")){
             signup.setVisibility(View.GONE);
-        }
-
-        // If already logged in then open the specific activity.
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-
-            getCurrentUserLoginMode();
-
-            Intent intent1 = null;
-            if(isCorrectLoginMode) {
-                if (loginMode.equals("owner")) {
-
-                    String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
-                    intent1.putExtra("companyID", companyId);
-
-                } else {
-                    intent1 = new Intent(LoginActivity.this, CompanyList.class);
-                }
-            }
-            if (intent1 != null) {
-                intent1.putExtra("loginMode", loginMode);
-                startActivity(intent1);
-                finish();
-            }
         }
 
         psw_show.setOnClickListener(new View.OnClickListener() {
@@ -144,13 +119,13 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),"Logged in successful",Toast.LENGTH_SHORT).show();
                                 Intent intent1 = null;
                                 if(loginMode.equals("admin")){
-                                    intent1 = new Intent(LoginActivity.this, CompanyList.class);
+                                    intent1 = new Intent(LoginActivity.this, AllListActivity.class);
                                 } else if(loginMode.equals("owner")) {
                                     String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
                                     intent1.putExtra("companyID",companyId);
                                 } else {
-                                    intent1 = new Intent(LoginActivity.this, CompanyList.class);
+                                    intent1 = new Intent(LoginActivity.this, AllListActivity.class);
                                 }
                                 intent1.putExtra("loginMode",loginMode);
                                 intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -204,16 +179,4 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    private void getCurrentUserLoginMode() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
-
-        String prevLoginMode = sharedPreferences.getString("loginMode", "");
-        String prevLoginEmail = sharedPreferences.getString("email", "");
-        String currentUserMail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        if (prevLoginEmail.equals(currentUserMail) && prevLoginMode.equals(loginMode)) {
-            isCorrectLoginMode = true;
-        } else {
-            isCorrectLoginMode = false;
-        }
-    }
 }

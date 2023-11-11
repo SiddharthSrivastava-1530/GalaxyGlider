@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -37,6 +39,8 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class SpaceShipList extends AppCompatActivity {
 
@@ -67,6 +71,9 @@ public class SpaceShipList extends AppCompatActivity {
     private String companyId;
     private String loginMode;
     private String currentUserDescription;
+    private ArrayList<SpaceShip> backUpSpaceShipList;
+    final private String filtersUsed[] = {"Sort By", "Rating" , "Price"};
+    final private float EPSILON = 1e-9f;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -80,6 +87,7 @@ public class SpaceShipList extends AppCompatActivity {
 
         searchSpaceship = findViewById(R.id.srchCompany_spaceship);
         spaceShipArrayList = new ArrayList<>();
+        backUpSpaceShipList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progressbar_spaceship);
         recyclerView = findViewById(R.id.recycler_spaceship);
@@ -121,10 +129,9 @@ public class SpaceShipList extends AppCompatActivity {
             public void onRefresh() {
                 getSpaceShips();
                 swipeRefreshLayout.setRefreshing(false);
+                spinner.setSelection(0);
             }
         });
-
-        getSpaceShips();
 
         // Open the details of specific spaceship clicked
         onSpaceShipClickListener = new SpaceShipAdapter.OnSpaceShipClickListener() {
@@ -158,6 +165,54 @@ public class SpaceShipList extends AppCompatActivity {
             }
         });
 
+        ArrayAdapter arrayAdapter = new ArrayAdapter(SpaceShipList.this, android.R.layout.simple_spinner_item, filtersUsed);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0) {
+                    getSpaceShips();
+                }
+                if (position == 1) {
+                    spaceShipArrayList.clear();
+                    spaceShipArrayList.addAll(backUpSpaceShipList);
+                    Collections.sort(spaceShipArrayList, new Comparator<SpaceShip>() {
+                        @Override
+                        public int compare(SpaceShip o1, SpaceShip o2) {
+                            return (-1)*(o1.getRatings().compareTo(o2.getRatings()));
+                        }
+                    });
+                    setAdapter(spaceShipArrayList);
+                }
+
+                if (position == 2) {
+                    spaceShipArrayList.clear();
+                    spaceShipArrayList.addAll(backUpSpaceShipList);
+                    Collections.sort(spaceShipArrayList, new Comparator<SpaceShip>() {
+                        @Override
+                        public int compare(SpaceShip o1, SpaceShip o2) {
+                            if (Math.abs(o1.getPrice() - o2.getPrice()) < EPSILON) {
+                                return 0; // Considered equal within epsilon
+                            } else if (o1.getPrice() > o2.getPrice()) {
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+                        }
+                    });
+                    setAdapter(spaceShipArrayList);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     @Override
@@ -184,8 +239,9 @@ public class SpaceShipList extends AppCompatActivity {
                             setAdapter(spaceShipArrayList);
                         }
                     }
+                    backUpSpaceShipList.clear();
+                    backUpSpaceShipList.addAll(spaceShipArrayList);
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 

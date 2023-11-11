@@ -47,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity {
     private String usernumber;
     private String loginMode;
     private TextView loginView;
-    private boolean isCorrectLoginMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,30 +70,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         loginMode = intent1.getStringExtra("loginMode");
-
-        // If already logged in then open the specific activity.
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-
-            getCurrentUserLoginMode();
-
-            Intent intent = null;
-            if(isCorrectLoginMode) {
-                if (loginMode.equals("owner")) {
-
-                    String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    intent = new Intent(SignUpActivity.this, SpaceShipList.class);
-                    intent.putExtra("companyID", companyId);
-
-                } else {
-                    intent = new Intent(SignUpActivity.this, CompanyList.class);
-                }
-            }
-            if (intent != null) {
-                intent.putExtra("loginMode", loginMode);
-                startActivity(intent);
-                finish();
-            }
-        }
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,7 +215,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                         Toast.LENGTH_LONG).show();
 
                                                 //Navigating to login activity for user to login after verifying email.
-                                                Intent intent = new Intent(SignUpActivity.this, SpaceShipList.class);
+                                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                                 intent.putExtra("companyID", key);
                                                 intent.putExtra("loginMode", loginMode);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -307,7 +282,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                         Toast.LENGTH_LONG).show();
 
                                                 //Navigating to login activity for user to login after verifying email.
-                                                Intent intent = new Intent(SignUpActivity.this, CompanyList.class);
+                                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                                 intent.putExtra("loginMode", loginMode);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -330,20 +305,6 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-
-    private void getCurrentUserLoginMode() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
-
-        String prevLoginMode = sharedPreferences.getString("loginMode", "");
-        String prevLoginEmail = sharedPreferences.getString("email", "");
-        String currentUserMail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        if (prevLoginEmail.equals(currentUserMail) && prevLoginMode.equals(loginMode)) {
-            isCorrectLoginMode = true;
-        } else {
-            isCorrectLoginMode = false;
-        }
     }
 
     private void saveLoginMode() {

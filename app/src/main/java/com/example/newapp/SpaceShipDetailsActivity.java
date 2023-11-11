@@ -32,7 +32,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
     private Boolean haveSharedRide;
     private String companyId;
     private String loginMode;
-    private FloatingActionButton fab;
+//    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,31 +76,31 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         setViewData();
 
 
-        if(!loginMode.equals("owner")){
-            fab.setVisibility(View.GONE);
-        }
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(loginMode.equals("owner")){
-                    Intent intent1 = new Intent(SpaceShipDetailsActivity.this,SpaceShipEditorActivity.class);
-                    intent1.putExtra("name_ss", name);
-                    intent1.putExtra("rating_ss", ratings);
-                    intent1.putExtra("description_ss", description);
-                    intent1.putExtra("price_ss", price);
-                    intent1.putExtra("picUrl_ss", imageUrl);
-                    intent1.putExtra("speed_ss",speed);
-                    intent1.putExtra("busyTime_ss",busyTime);
-                    intent1.putExtra("seats_ss",seats);
-                    intent1.putExtra("shared_ride_ss",haveSharedRide);
-                    intent1.putExtra("loginMode",loginMode);
-                    intent1.putExtra("companyID",companyId);
-                    intent1.putExtra("update_spaceship",true);
-                    startActivity(intent1);
-                }
-            }
-        });
+//        if(!loginMode.equals("owner")){
+//            fab.setVisibility(View.GONE);
+//        }
+//
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(loginMode.equals("owner")){
+//                    Intent intent1 = new Intent(SpaceShipDetailsActivity.this,SpaceShipEditorActivity.class);
+//                    intent1.putExtra("name_ss", name);
+//                    intent1.putExtra("rating_ss", ratings);
+//                    intent1.putExtra("description_ss", description);
+//                    intent1.putExtra("price_ss", price);
+//                    intent1.putExtra("picUrl_ss", imageUrl);
+//                    intent1.putExtra("speed_ss",speed);
+//                    intent1.putExtra("busyTime_ss",busyTime);
+//                    intent1.putExtra("seats_ss",seats);
+//                    intent1.putExtra("shared_ride_ss",haveSharedRide);
+//                    intent1.putExtra("loginMode",loginMode);
+//                    intent1.putExtra("companyID",companyId);
+//                    intent1.putExtra("update_spaceship",true);
+//                    startActivity(intent1);
+//                }
+//            }
+//        });
 
 
 
