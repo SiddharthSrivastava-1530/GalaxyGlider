@@ -4,6 +4,7 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
 android {
     namespace 'com.example.newapp'
     compileSdk 33
@@ -48,7 +49,7 @@ android {
 }
 
 dependencies {
-
+    implementation 'com.razorpay:checkout:1.6.33'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

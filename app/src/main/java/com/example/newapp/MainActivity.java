@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         enterAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, CheckoutActivity.class);
                 intent.putExtra("loginMode", "admin");
                 startActivity(intent);
             }

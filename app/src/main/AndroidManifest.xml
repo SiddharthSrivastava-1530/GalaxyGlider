@@ -2,6 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <queries>
+
+        <!-- List of apps which you want to support for Intent pay -->
+        <package android:name="com.google.android.apps.nbu.paisa.user" />
+        <package android:name="com.phonepe.app" />
+        <!--
+             Specific intents you query for,
+             eg: for a custom share UI
+        -->
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+        </intent>
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -15,6 +29,42 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
+        <activity
+            android:name="com.example.newapp.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.newapp.PaymentSuccessfulActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.newapp.PaymentActivity"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.razorpay.RzpTokenReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="rzp.device_token.share" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="com.razorpay.CheckoutActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/CheckoutTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <data
+                    android:host="rzp.io"
+                    android:scheme="io.rzp" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_q6WwqZNsqzlog3" />
+
         <activity
             android:name=".SpaceShipReviews"
             android:exported="false" />
