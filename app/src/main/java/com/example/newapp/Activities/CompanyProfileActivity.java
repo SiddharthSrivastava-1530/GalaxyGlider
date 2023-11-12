@@ -61,6 +61,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_profile);
 
+        // To prevent collapse of views when typing is ON
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         // associating variables with views using corresponding id(s)

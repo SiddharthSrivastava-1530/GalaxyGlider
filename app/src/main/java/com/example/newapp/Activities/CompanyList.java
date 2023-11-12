@@ -105,8 +105,6 @@ public class CompanyList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        companyArrayList.clear();
-        setAdapter(companyArrayList);
         getCompanies(searchCompany.getQuery().toString());
     }
 

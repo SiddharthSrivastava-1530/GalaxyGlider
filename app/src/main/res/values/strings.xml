@@ -60,4 +60,7 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="LicenceString"><u>Licence</u></string>
+    <string name="open_nav_drawer"><u>Open Navigation Drawer</u></string>
+    <string name="close_nav_drawer"><u>Close Navigation Drawer</u></string>
+
 </resources>

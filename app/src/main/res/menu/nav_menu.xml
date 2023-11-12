@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/profile1"
+            android:title="Profile"
+            android:icon="@drawable/account_img"/>
+
+        <item android:id="@+id/contact1"
+            android:title="Contact Us"
+            android:icon="@drawable/contacts_img"/>
+
+        <item android:id="@+id/your_rides"
+            android:title="Ride"
+            android:icon="@drawable/account_img"/>
+
+        <item android:id="@+id/share1"
+            android:title="Share"
+            android:icon="@drawable/share_img"/>
+
+        <item android:id="@+id/rate_us"
+            android:title="Rate Us"
+            android:icon="@drawable/rate_img"/>
+
+        <item android:id="@+id/logout1"
+            android:title="Logout"
+            android:icon="@drawable/logout_img"/>
+
+        <item android:id="@+id/setting1"
+            android:title="Settings"
+            android:icon="@drawable/settings_img"/>
+
+    </group>
+
+</menu>

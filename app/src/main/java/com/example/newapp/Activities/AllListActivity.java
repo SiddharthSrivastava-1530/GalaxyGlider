@@ -1,6 +1,8 @@
 package com.example.newapp.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,7 +10,10 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -17,6 +22,7 @@ import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
 import com.example.newapp.R;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +37,11 @@ public class AllListActivity extends AppCompatActivity {
     private String currentUserName;
     private String currentUserEmail;
     private String currentUserPic;
+    private String currentLicenseUrl;
     private String loginMode;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +56,21 @@ public class AllListActivity extends AppCompatActivity {
 //        decorView.setSystemUiVisibility(uiOptions);
 //        // Remember that you should never show the action bar if the
 //        // status bar is hidden, so hide that too if necessary.
-//        getSupportActionBar().hide();
-
-        Intent intent = getIntent();
-        loginMode = intent.getStringExtra("loginMode");
+        getSupportActionBar().hide();
 
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
+        drawerLayout = findViewById(R.id.drawer_layout1_companies);
+        navigationView = findViewById(R.id.nav_items_companies);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_nav_drawer, R.string.close_nav_drawer);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        navigationView.bringToFront();
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        loginMode = intent.getStringExtra("loginMode");
 
         // Setting tab layout to show viewPager
         tabLayout.setupWithViewPager(viewPager);
@@ -63,9 +81,6 @@ public class AllListActivity extends AppCompatActivity {
 
         vPadapter.addFragment(new CompanyList(), "Companies");
 
-//        if (loginMode.equals("user")) {
-//            tabLayout.getTabAt(0).setText("Gliding Companies");
-//        }
 
         if (loginMode.equals("admin")) {
             vPadapter.addFragment(new UnauthorisedCompanyList(), "Pending");
@@ -75,46 +90,66 @@ public class AllListActivity extends AppCompatActivity {
 
         getUserData();
 
-    }
-
-    // Inflating menu options.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.company_list_menu, menu);
-        return true;
-    }
-
-
-    // Setting what happens when any menu item is clicked.
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_item_profile) {
-            // Sending data to profile activity if received.
-            // Moving to respective profile activity as per loginMode.
-            if (loginMode.equals("admin")) {
-                Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
-                intent.putExtra("update_from_allList", true);
-                intent.putExtra("loginMode", loginMode);
-                intent.putExtra("sender_name", currentUserName);
-                intent.putExtra("sender_number", currentUserEmail);
-                startActivity(intent);
-            } else if (loginMode.equals("owner")) {
-                Intent intent = new Intent(AllListActivity.this, CompanyProfileActivity.class);
-                intent.putExtra("update_from_allList", false);
-                intent.putExtra("sender_pic", currentUserPic);
-                intent.putExtra("sender_name", currentUserName);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
-                intent.putExtra("update_from_allList", true);
-                intent.putExtra("sender_pic", currentUserPic);
-                intent.putExtra("sender_name", currentUserName);
-                intent.putExtra("sender_number", currentUserEmail);
-                intent.putExtra("loginMode", loginMode);
-                startActivity(intent);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.profile1) {
+                    // Sending data to profile activity if received.
+                    // Moving to respective profile activity as per loginMode.
+                    if (loginMode.equals("admin")) {
+                        Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
+                        intent.putExtra("update_from_allList", true);
+                        intent.putExtra("loginMode", loginMode);
+                        intent.putExtra("sender_name", currentUserName);
+                        intent.putExtra("sender_number", currentUserEmail);
+                        startActivity(intent);
+                    } else if (loginMode.equals("owner")) {
+                        Intent intent = new Intent(AllListActivity.this, CompanyProfileActivity.class);
+                        intent.putExtra("update_from_allList", false);
+                        intent.putExtra("sender_pic", currentUserPic);
+                        intent.putExtra("sender_name", currentUserName);
+                        intent.putExtra("licenseUrl", currentLicenseUrl);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
+                        intent.putExtra("update_from_allList", true);
+                        intent.putExtra("sender_pic", currentUserPic);
+                        intent.putExtra("sender_name", currentUserName);
+                        intent.putExtra("sender_number", currentUserEmail);
+                        intent.putExtra("loginMode", loginMode);
+                        startActivity(intent);
+                    }
+                }
+                if (item.getItemId() == R.id.logout1) {
+                    eraseLoginMode();
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(AllListActivity.this, MainActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+                return false;
             }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     private void getUserData() {
         try {
@@ -140,6 +175,7 @@ public class AllListActivity extends AppCompatActivity {
                                 currentUserName = snapshot.getValue(Company.class).getName();
                                 currentUserEmail = snapshot.getValue(Company.class).getEmail();
                                 currentUserPic = snapshot.getValue(Company.class).getImageUrl();
+                                currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
                             } else if (loginMode.equals("user")) {
                                 currentUserName = snapshot.getValue(Customer.class).getName();
                                 currentUserEmail = snapshot.getValue(Customer.class).getEmail();
@@ -158,6 +194,14 @@ public class AllListActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void eraseLoginMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("loginMode", "");
+        editor.putString("email", "");
+        editor.apply();
     }
 
 }

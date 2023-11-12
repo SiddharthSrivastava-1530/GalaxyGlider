@@ -106,7 +106,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 startActivity(new Intent(UserProfileActivity.this, MainActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 finish();
-                /* ".setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP"  to clear all existing activity during logout */
             }
         });
 
@@ -220,28 +219,6 @@ public class UserProfileActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
         }
         userPic = url;
-    }
-
-    //Inflating menu options.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.user_profile_menu, menu);
-        return true;
-    }
-
-    //Setting what happens when any menu item is clicked.
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_profile_save) {
-            if (!userPic.isEmpty()) {
-                startActivity(new Intent(UserProfileActivity.this, AllListActivity.class));
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "Please add a profile picture.", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void eraseLoginMode() {

@@ -1,13 +1,18 @@
 package com.example.newapp.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +32,7 @@ import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -66,6 +72,9 @@ public class SpaceShipList extends AppCompatActivity {
     private String loginMode;
     private String currentUserDescription;
     final private String filtersUsed[] = {"Sort By", "Rating" , "Price"};
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -79,9 +88,8 @@ public class SpaceShipList extends AppCompatActivity {
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-//        getSupportActionBar().hide();
+        // Hide action bar
+        getSupportActionBar().hide();
 
         spinner = findViewById(R.id.spinner1_spaceship);
 
@@ -92,6 +100,14 @@ public class SpaceShipList extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_spaceship);
         floatingActionButton = findViewById(R.id.fab_spaceship);
         swipeRefreshLayout = findViewById(R.id.swip1_spaceship);
+        drawerLayout = findViewById(R.id.drawer_layout1_spaceShips);
+        navigationView = findViewById(R.id.nav_items_spaceShips);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_nav_drawer, R.string.close_nav_drawer);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        navigationView.bringToFront();
+        actionBarDrawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -180,6 +196,69 @@ public class SpaceShipList extends AppCompatActivity {
             }
         });
 
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.profile1) {
+                    // Sending data to profile activity if received.
+                    // Moving to respective profile activity as per loginMode.
+                    if (loginMode.equals("admin")) {
+                        Intent intent = new Intent(SpaceShipList.this, UserProfileActivity.class);
+                        intent.putExtra("update_from_allList", true);
+                        intent.putExtra("loginMode", loginMode);
+                        intent.putExtra("sender_name", currentUserName);
+                        intent.putExtra("sender_number", currentUserEmail);
+                        startActivity(intent);
+                    } else if (loginMode.equals("owner")) {
+                        Intent intent = new Intent(SpaceShipList.this, CompanyProfileActivity.class);
+                        intent.putExtra("update_from_allList", true);
+                        intent.putExtra("sender_pic", currentUserPic);
+                        intent.putExtra("loginMode", loginMode);
+                        intent.putExtra("sender_name", currentUserName);
+                        intent.putExtra("licenseUrl", currentLicenseUrl);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(SpaceShipList.this, UserProfileActivity.class);
+                        intent.putExtra("update_from_allList", true);
+                        intent.putExtra("sender_pic", currentUserPic);
+                        intent.putExtra("sender_name", currentUserName);
+                        intent.putExtra("sender_number", currentUserEmail);
+                        intent.putExtra("loginMode", loginMode);
+                        startActivity(intent);
+                    }
+                }
+                if (item.getItemId() == R.id.contact1) {
+
+                }
+                if (item.getItemId() == R.id.logout1) {
+                    eraseLoginMode();
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(SpaceShipList.this, MainActivity.class)
+                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                    finish();
+                }
+                return false;
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -229,43 +308,6 @@ public class SpaceShipList extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    // Inflating menu options.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.company_list_menu, menu);
-        return true;
-    }
-
-
-    // Setting what happens when any menu item is clicked.
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_item_profile) {
-            // Sending data to profile activity if received.
-            // Moving to respective profile activity as per loginMode.
-            if (loginMode.equals("user")) {
-                Intent intent1 = new Intent(SpaceShipList.this, UserProfileActivity.class);
-                intent1.putExtra("update_from_allList", true);
-                intent1.putExtra("sender_pic", currentUserPic);
-                intent1.putExtra("sender_name", currentUserName);
-                intent1.putExtra("sender_number", currentUserEmail);
-                intent1.putExtra("loginMode", loginMode);
-                startActivity(intent1);
-            } else if (loginMode.equals("owner")) {
-                Intent intent1 = new Intent(SpaceShipList.this, CompanyProfileActivity.class);
-                intent1.putExtra("update_from_allList", true);
-                intent1.putExtra("sender_pic", currentUserPic);
-                intent1.putExtra("sender_name", currentUserName);
-                intent1.putExtra("sender_desc", currentUserDescription);
-                intent1.putExtra("licenseUrl", currentLicenseUrl);
-                intent1.putExtra("loginMode", loginMode);
-                startActivity(intent1);
-            } else {
-
-            }
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -325,6 +367,14 @@ public class SpaceShipList extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void eraseLoginMode() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("loginMode", "");
+        editor.putString("email", "");
+        editor.apply();
     }
 
 }
