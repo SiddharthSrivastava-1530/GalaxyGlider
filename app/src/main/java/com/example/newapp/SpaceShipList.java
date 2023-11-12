@@ -254,6 +254,7 @@ public class SpaceShipList extends AppCompatActivity {
                 intent1.putExtra("sender_pic", currentUserPic);
                 intent1.putExtra("sender_name", currentUserName);
                 intent1.putExtra("sender_number", currentUserEmail);
+                intent1.putExtra("loginMode", loginMode);
                 startActivity(intent1);
             } else if (loginMode.equals("owner")) {
                 Intent intent1 = new Intent(SpaceShipList.this, CompanyProfileActivity.class);

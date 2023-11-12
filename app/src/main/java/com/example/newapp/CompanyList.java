@@ -24,6 +24,7 @@ import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
+import com.example.newapp.DataModel.SpaceShip;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -47,8 +48,8 @@ public class CompanyList extends Fragment {
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.activity_companies_list,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_companies_list, container, false);
     }
 
     @Override
@@ -74,12 +75,11 @@ public class CompanyList extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getCompanies("");
+                getCompanies(searchCompany.getQuery().toString());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        getCompanies("");
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
@@ -91,7 +91,7 @@ public class CompanyList extends Fragment {
                 intent.putExtra("company_desc", companyArrayList.get(position).getDescription());
                 intent.putExtra("company_img", companyArrayList.get(position).getImageUrl());
                 intent.putExtra("company_license", companyArrayList.get(position).getLicenseUrl());
-                intent.putExtra("isAuthorised",companyArrayList.get(position).getOperational());
+                intent.putExtra("isAuthorised", companyArrayList.get(position).getOperational());
                 startActivity(intent);
             }
         };
@@ -101,6 +101,7 @@ public class CompanyList extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 getCompanies(newText);
@@ -110,27 +111,38 @@ public class CompanyList extends Fragment {
 
     }
 
-    private void getCompanies(String textQuery) {
+    @Override
+    public void onResume() {
+        super.onResume();
+        companyArrayList.clear();
+        setAdapter(companyArrayList);
+        getCompanies(searchCompany.getQuery().toString());
+    }
+
+    private void getCompanies(String userQuery) {
         companyArrayList.clear();
         try {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            Query query = databaseReference;
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Company company = dataSnapshot.getValue(Company.class);
-                        if(company!=null && company.getOperational() ){
-                            if(company.getName().toLowerCase().contains(textQuery.toLowerCase())) {
-                                companyArrayList.add(company);
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot companySnapShot : dataSnapshot.getChildren()) {
+                            Company company = companySnapShot.getValue(Company.class);
+                            if (company != null) {
+                                if (company.getOperational() && company.getName().toLowerCase().contains(userQuery.toLowerCase())) {
+                                    companyArrayList.add(company);
+                                }
                             }
+                            setAdapter(companyArrayList);
                         }
                     }
-                    setAdapter(companyArrayList);
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getActivity(), databaseError.getMessage().toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {

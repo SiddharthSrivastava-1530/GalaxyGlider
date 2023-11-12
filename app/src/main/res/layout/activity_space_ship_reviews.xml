@@ -9,8 +9,16 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/companies_constraint_reviews"
-        android:layout_width="match_parent"
+        android:layout_width="600dp"
         android:layout_height="match_parent">
+
+        <Spinner
+            android:id="@+id/spinner_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressbar_reviews"
@@ -29,7 +37,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_reviews" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

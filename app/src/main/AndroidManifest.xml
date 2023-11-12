@@ -66,6 +66,9 @@
             android:value="rzp_test_q6WwqZNsqzlog3" />
 
         <activity
+            android:name=".RideBillsActivity"
+            android:exported="false" />
+        <activity
             android:name=".SpaceShipReviews"
             android:exported="false" />
         <activity

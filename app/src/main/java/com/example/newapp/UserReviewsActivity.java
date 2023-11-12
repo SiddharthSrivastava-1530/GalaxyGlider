@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ public class UserReviewsActivity extends AppCompatActivity {
     private Boolean haveSharedRide;
     private String companyId;
     private String loginMode;
-    ArrayList<Review> reviews;
+    private ArrayList<Review> reviews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +130,8 @@ public class UserReviewsActivity extends AppCompatActivity {
                 if(reviews_et != null){
                     reviewText = reviews_et.getText().toString();
                 }
+
+                currentSpaceShip.setSpaceShipRating(updateCompanyRating(currentSpaceShip));
                 // update reviews in current spaceShip
                 reviews.add(new Review(reviewText,String.valueOf(rating),userName,userEmail,System.currentTimeMillis()));
                 currentSpaceShip.setReviews(reviews);
@@ -152,6 +155,12 @@ public class UserReviewsActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    private String updateCompanyRating(SpaceShip currentSpaceShip) {
+        float reviewCount = currentSpaceShip.getReviews().size();
+        float currentRating = Float.parseFloat(currentSpaceShip.getSpaceShipRating());
+        return String.valueOf(((currentRating * reviewCount) + rating)/(reviewCount + 1));
     }
 
 

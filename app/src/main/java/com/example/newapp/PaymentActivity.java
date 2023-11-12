@@ -35,11 +35,11 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
     private void startPayment(){
 
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_q6WwqZNsqzlog3");
+        checkout.setKeyID("rzp_test_q6UwqZNsqzlog3");
         checkout.setImage(R.drawable.checkout_logo);
 
-         // Reference to current activity
-        final Activity activity = this;
+        // Reference to current activity
+        final Activity activity = PaymentActivity.this;
 
 
         //Pass your payment options to the Razorpay Checkout as a JSONObject
@@ -53,7 +53,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
             options.put("order_id", "order_DBJOWzybf0sJbb");
             options.put("theme.color", "#000000");
             options.put("currency", "INR");
-            options.put("amount", "60000");//pass amount in currency subunits
+            options.put("amount", "6");//pass amount in currency subunits
             options.put("prefill.email", "as.nishu18@gmail.com");
             options.put("prefill.contact","8707279750");
             JSONObject retryObj = new JSONObject();

@@ -9,9 +9,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.newapp.DataModel.Review;
+
+import java.util.ArrayList;
+
 public class CheckoutActivity extends AppCompatActivity {
-    EditText fromLocation,toLocation,date,time;
-    Button bookRideButton;
+    private EditText fromLocation,toLocation,date,time;
+    private Button bookRideButton;
+    private String name;
+    private String spaceShipRating;
+    private String description;
+    private String seats;
+    private String price;
+    private float speed;
+    private String busyTime;
+    private Boolean haveSharedRide;
+    private String companyId;
+    private String loginMode;
+    private ArrayList<Review> reviews;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,10 +39,23 @@ public class CheckoutActivity extends AppCompatActivity {
         date = findViewById(R.id.dateOfRide);
         time = findViewById(R.id.timeOfRide);
 
+        Intent intent = getIntent();
+        name = intent.getStringExtra("name_ss");
+        spaceShipRating = intent.getStringExtra("rating_ss");
+        description = intent.getStringExtra("description_ss");
+        price = intent.getStringExtra("price_ss");
+        speed = intent.getFloatExtra("speed_ss", 0);
+        busyTime = intent.getStringExtra("busyTime_ss");
+        seats = intent.getStringExtra("seats_ss");
+        haveSharedRide = intent.getBooleanExtra("shared_ride_ss", false);
+        loginMode = intent.getStringExtra("loginMode");
+        companyId = intent.getStringExtra("companyID");
+        reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
+
         bookRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CheckoutActivity.this,PaymentSuccessfulActivity.class);
+                Intent intent = new Intent(CheckoutActivity.this,PaymentActivity.class);
                 intent.putExtra("from",fromLocation.getText().toString());
                 intent.putExtra("to",toLocation.getText().toString());
                 intent.putExtra("date",date.getText().toString());
