@@ -30,13 +30,16 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
-            android:name="com.example.newapp.InvoiceActivity"
+            android:name=".Activities.ShowSeatConfigurationActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.newapp.Activities.CheckoutActivity"
+            android:name=".InvoiceActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.newapp.Activities.PaymentSuccessfulActivity"
+            android:name=".Activities.CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.PaymentSuccessfulActivity"
             android:exported="false" />
 
         <receiver
