@@ -38,6 +38,8 @@ public class SpaceShipReviews extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_reviews);
 
+        getSupportActionBar().hide();
+
         reviewArrayList = new ArrayList<>();
         spinner = findViewById(R.id.spinner_reviews);
         backUpReviewsList = new ArrayList<>();

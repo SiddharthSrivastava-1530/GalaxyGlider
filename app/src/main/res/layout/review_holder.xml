@@ -5,58 +5,107 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_margin="16dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/black"
+        android:paddingStart="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
 
+        <TextView
+            android:id="@+id/reviewer_name_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:fontFamily="@font/inter_semibold"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            tools:text="Reviewer Name" />
+
+        <TextView
+            android:id="@+id/reviewer_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:textSize="16sp"
+            tools:text="A review is an evaluation of a publication, product, service." />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp"
+            android:text="Rating"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
+
+            <!-- Star 1 -->
             <TextView
-                android:id="@+id/reviewer_name_holder"
+                android:id="@+id/oneStar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18sp"
-                android:layout_marginTop="18sp"
-                android:layout_marginEnd="18sp"
-                android:layout_marginBottom="18sp"
-                android:textSize="18sp"
-                tools:text="Reviewer Name" />
+                android:background="@drawable/star_ratings"
+                android:visibility="invisible"
+                android:layout_marginEnd="5dp"/>
 
+            <!-- Star 2 -->
             <TextView
-                android:id="@+id/reviewer_holder"
+                android:id="@+id/twoStar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/reviewer_name_holder"
-                android:layout_marginStart="18sp"
-                android:layout_marginTop="18sp"
-                android:layout_marginEnd="18sp"
-                android:layout_marginBottom="18sp"
-                android:textSize="18sp"
-                tools:text="A review is an evaluation of a publication, product, service." />
+                android:background="@drawable/star_ratings"
+                android:visibility="invisible"
+                android:layout_marginEnd="5dp"/>
 
+            <!-- Star 3 -->
             <TextView
-                android:id="@+id/rating_holder"
+                android:id="@+id/threeStar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/reviewer_holder"
-                android:layout_marginStart="18sp"
-                android:layout_marginTop="18sp"
-                android:layout_marginEnd="18sp"
-                android:layout_marginBottom="18sp"
-                android:textSize="18sp"
-                tools:text="4.0" />
+                android:background="@drawable/star_ratings"
+                android:visibility="invisible"
+                android:layout_marginEnd="5dp"/>
 
+            <!-- Star 4 -->
             <TextView
-                android:id="@+id/date_holder"
+                android:id="@+id/fourStar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rating_holder"
-                android:layout_marginStart="18sp"
-                android:layout_marginTop="18sp"
-                android:layout_marginEnd="18sp"
-                android:layout_marginBottom="18sp"
-                android:textSize="18sp"
-                tools:text="22/04/2023 18:45 hrs" />
+                android:background="@drawable/star_ratings"
+                android:visibility="invisible"
+                android:layout_marginEnd="5dp"/>
 
-        </RelativeLayout>
+            <!-- Star 5 -->
+            <TextView
+                android:id="@+id/fiveStar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:background="@drawable/star_ratings"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/date_holder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/inter"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            tools:text="22/04/2023 18:45 hrs" />
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

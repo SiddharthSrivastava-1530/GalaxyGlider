@@ -77,6 +77,8 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_configuration);
 
+        getSupportActionBar().hide();
+
         seat1 = findViewById(R.id.seat1);
         seat2 = findViewById(R.id.seat2);
         seat3 = findViewById(R.id.seat3);

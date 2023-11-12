@@ -42,7 +42,7 @@ import java.util.UUID;
 
 public class CompanyProfileActivity extends AppCompatActivity {
 
-    private TextView logout;
+    private TextView update;
     private TextView name_tv;
     private TextView email_tv;
     private TextView uploadButton;
@@ -63,9 +63,10 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
         // To prevent collapse of views when typing is ON
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getSupportActionBar().hide();
 
         // associating variables with views using corresponding id(s)
-        logout = findViewById(R.id.logout_tv_company_profile);
+        update = findViewById(R.id.update_tv_company_profile);
         imgProfile = findViewById(R.id.uploadImage_b_company_profile);
         progressBar = findViewById(R.id.progressBar_profile_company_profile);
         description_et = findViewById(R.id.description_et_profile);
@@ -101,15 +102,14 @@ public class CompanyProfileActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         //Logout the user.
-        logout.setOnClickListener(new View.OnClickListener() {
+        update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eraseLoginMode();
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(CompanyProfileActivity.this, MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-                /* ".setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP"  to clear all existing activity during logout */
+                if (!userPic.isEmpty()) {
+                    updateDescription();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please add a profile picture..", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -247,27 +247,6 @@ public class CompanyProfileActivity extends AppCompatActivity {
         userPic = url;
     }
 
-    //Inflating menu options.
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.user_profile_menu, menu);
-        return true;
-    }
-
-    // Setting what happens when any menu item is clicked.
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_profile_save) {
-            if (!userPic.isEmpty()) {
-                updateDescription();
-            } else {
-                Toast.makeText(getApplicationContext(), "Please add a profile picture..", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void updateDescription(){
         String description = "";
         if(description_et != null){
@@ -281,14 +260,6 @@ public class CompanyProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void eraseLoginMode() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("loginMode","");
-        editor.putString("email","");
-        editor.apply();
     }
 
     private void selectFiles() {

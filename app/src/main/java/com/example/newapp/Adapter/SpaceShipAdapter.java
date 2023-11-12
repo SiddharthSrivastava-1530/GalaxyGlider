@@ -43,6 +43,26 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
 
         holder.spaceShipName.setText(spaceships.get(position).getSpaceShipName());
         holder.price.setText(String.valueOf(spaceships.get(position).getPrice()));
+        holder.desc_spaceShip.setText(spaceships.get(position).getDescription());
+        int ratingVal = (int)Float.parseFloat(spaceships.get(position).getSpaceShipRating());
+        if(ratingVal==1){
+            holder.oneStar_spaceShip_holder.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==2){
+            holder.twoStar_spaceShip_holder.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==3){
+            holder.threeStar_spaceShip_holder.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==4){
+            holder.fourStar_spaceShip_holder.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==5){
+            holder.fiveStar_spaceShip_holder.setVisibility(View.VISIBLE);
+        }
+        else{
+
+        }
 //        holder.ratings.setText(spaceships.get(position).getRatings());
 //        holder.seatAvailability.setText(spaceships.get(position).getSeatAvailability());
 //        holder.busyTime.setText(String.valueOf(spaceships.get(position).getBusyTime()));
@@ -74,6 +94,14 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
         TextView price;
 //        ImageView spaceShipPic;
 
+        TextView desc_spaceShip;
+
+        TextView oneStar_spaceShip_holder;
+        TextView twoStar_spaceShip_holder;
+        TextView threeStar_spaceShip_holder;
+        TextView fourStar_spaceShip_holder;
+        TextView fiveStar_spaceShip_holder;
+
         public SpaceShipHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -85,8 +113,14 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
             });
 
             spaceShipName = itemView.findViewById(R.id.spaceShipName_SpaceShipList);
-//            ratings = itemView.findViewById(R.id.spaceShip_rating_SpaceShipList);
+            desc_spaceShip = itemView.findViewById(R.id.desc_glider_holder_details);
             price = itemView.findViewById(R.id.spaceShip_price_SpaceShipList);
+            oneStar_spaceShip_holder = itemView.findViewById(R.id.oneStar_spaceShip_holder);
+            twoStar_spaceShip_holder = itemView.findViewById(R.id.twoStar_spaceShip_holder);
+            threeStar_spaceShip_holder = itemView.findViewById(R.id.threeStar_spaceShip_holder);
+            fourStar_spaceShip_holder = itemView.findViewById(R.id.fourStar_spaceShip_holder);
+            fiveStar_spaceShip_holder = itemView.findViewById(R.id.fiveStar_spaceShip_holder);
+
 //            feedback = itemView.findViewById(R.id.sp);
 //            seatAvailability = itemView.findViewById(R.id.seats_spaceShip_SpaceShipList);
 //            rideSharing = itemView.findViewById(R.id.spaceShip_rideSharing_SpaceShipList);
