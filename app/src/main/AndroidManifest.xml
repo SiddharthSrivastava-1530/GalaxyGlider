@@ -30,13 +30,13 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
+            android:name="com.example.newapp.InvoiceActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.newapp.Activities.CheckoutActivity"
             android:exported="false" />
         <activity
             android:name="com.example.newapp.Activities.PaymentSuccessfulActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.newapp.Activities.PaymentActivity"
             android:exported="false" />
 
         <receiver
@@ -63,7 +63,7 @@
 
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_q6WwqZNsqzlog3" />
+            android:value="rzp_test_YEx4Fc8oJfPIUu" />
 
         <activity
             android:name=".Activities.RideBillsActivity"

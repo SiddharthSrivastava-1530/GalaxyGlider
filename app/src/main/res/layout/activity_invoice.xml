@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.PaymentActivity">
+    tools:context=".InvoiceActivity">
 
     <Button
-        android:id="@+id/pay_button"
-        android:layout_width="134dp"
-        android:layout_height="77dp"
-        android:text="Button"
+        android:id="@+id/GenerateInvoice"
+        android:layout_width="158dp"
+        android:layout_height="88dp"
+        android:text="Generate Invoice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
