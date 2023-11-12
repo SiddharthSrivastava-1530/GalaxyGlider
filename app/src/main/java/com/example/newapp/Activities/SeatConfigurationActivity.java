@@ -37,6 +37,16 @@ public class SeatConfigurationActivity extends AppCompatActivity {
     private TextView seat11;
     private TextView seat12;
 
+    private TextView music;
+
+    private TextView music_not;
+    private TextView sleep;
+    private TextView sleep_not;
+    private TextView fitness;
+
+    private TextView fitness_not;
+    private TextView food;
+    private TextView food_not;
     private ImageView addSeatbtn;
 
     private ImageView removeSeatbtn;
@@ -78,6 +88,22 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         seat10 = findViewById(R.id.seat10);
         seat11 = findViewById(R.id.seat11);
         seat12 = findViewById(R.id.seat12);
+
+        music = findViewById(R.id.music_tv);
+        music_not = findViewById(R.id.music_not_tv);
+
+        sleep = findViewById(R.id.sleep_tv);
+        sleep_not = findViewById(R.id.sleep_not_tv);
+
+        food = findViewById(R.id.food_tv);
+        food_not = findViewById(R.id.food_not_tv);
+
+        fitness = findViewById(R.id.fitness_tv);
+        fitness_not = findViewById(R.id.fitness_not_tv);
+
+
+
+
 
         addSeatbtn = findViewById(R.id.add_btn_seats);
         removeSeatbtn = findViewById(R.id.remove_seat);
@@ -180,6 +206,73 @@ public class SeatConfigurationActivity extends AppCompatActivity {
                 }
             }
         });
+
+        food_not.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                food.setVisibility(View.VISIBLE);
+                food_not.setVisibility(View.GONE);
+            }
+        });
+
+        food.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                food.setVisibility(View.GONE);
+                food_not.setVisibility(View.VISIBLE);
+            }
+        });
+
+        music_not.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                music.setVisibility(View.VISIBLE);
+                music_not.setVisibility(View.GONE);
+            }
+        });
+
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                music.setVisibility(View.GONE);
+                music_not.setVisibility(View.VISIBLE);
+            }
+        });
+
+        sleep_not.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sleep_not.setVisibility(View.GONE);
+                sleep.setVisibility(View.VISIBLE);
+            }
+        });
+
+        sleep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sleep.setVisibility(View.GONE);
+                sleep_not.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fitness_not.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fitness_not.setVisibility(View.GONE);
+                fitness.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fitness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fitness.setVisibility(View.GONE);
+                fitness_not.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+
 
         confirmSeatConfiguration.setOnClickListener(new View.OnClickListener() {
             @Override

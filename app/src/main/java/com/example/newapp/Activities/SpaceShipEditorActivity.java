@@ -63,7 +63,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 //
         nameEditText = findViewById(R.id.spaceshipName_et);
         priceEditText = findViewById(R.id.spaceship_price_et);
-////        rideSharingTextView = findViewById(R.id.spaceShip_rideSharing_edit);
+        rideSharingTextView = findViewById(R.id.spaceship_sharing_et);
         descriptionEditText = findViewById(R.id.spaceship_desc_et);
 ////        busyTimeEditText = findViewById(R.id.spaceship_busyTime_et);
         addSpaceShipTextView = findViewById(R.id.spaceShip_add);
@@ -94,6 +94,19 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
             setViewData();
         }
 
+        rideSharingTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(rideSharingTextView.getText().toString().equals("YES")){
+                    rideSharingTextView.setText("NO");
+                    haveSharedRide=false;
+                }
+                else{
+                    rideSharingTextView.setText("YES");
+                    haveSharedRide=true;
+                }
+            }
+        });
         addSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

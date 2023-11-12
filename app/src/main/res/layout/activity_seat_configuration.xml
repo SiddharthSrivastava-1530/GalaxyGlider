@@ -30,6 +30,130 @@
         app:layout_constraintTop_toTopOf="@+id/guideline103" />
 
     <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:text="Select seat configuration for your glider"
+        android:textColor="#ffffff"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline118"
+        app:layout_constraintEnd_toStartOf="@+id/guideline119"
+        app:layout_constraintStart_toStartOf="@+id/guideline111" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:text="Cannot be changed later."
+        android:textColor="#ACA9A9"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintTop_toTopOf="@+id/guideline118" />
+
+    <TextView
+        android:id="@+id/food_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:background="@drawable/baseline_fastfood_24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline105"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline104" />
+
+    <TextView
+        android:id="@+id/food_not_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="visible"
+        android:background="@drawable/food_not"
+        app:layout_constraintBottom_toTopOf="@+id/guideline105"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline104" />
+
+
+    <TextView
+        android:id="@+id/music_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:visibility="gone"
+        android:background="@drawable/baseline_music_note_24"
+        app:layout_constraintBottom_toTopOf="@+id/guideline106"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline105" />
+
+    <TextView
+        android:id="@+id/music_not_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/music_not"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline106"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline105" />
+
+    <TextView
+        android:id="@+id/sleep_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/sleep"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline107"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline106" />
+
+    <TextView
+        android:id="@+id/sleep_not_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/sleep_not"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline107"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline106" />
+
+    <TextView
+        android:id="@+id/fitness_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/fitness"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/guideline108"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline107" />
+
+    <TextView
+        android:id="@+id/fitness_not_tv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/fitness_not"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline108"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline107" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:text="Add Services"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline104"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline112"
+        app:layout_constraintTop_toTopOf="@+id/guideline103" />
+
+    <TextView
         android:id="@+id/seat3"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -144,7 +268,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/add_seat"
-        app:layout_constraintBottom_toTopOf="@+id/guideline113"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
         app:layout_constraintStart_toStartOf="@+id/guideline111"
         app:layout_constraintTop_toTopOf="@+id/guideline114" />
@@ -154,7 +277,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/baseline_remove_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline113"
         app:layout_constraintEnd_toStartOf="@+id/guideline112"
         app:layout_constraintStart_toStartOf="@+id/guideline110"
         app:layout_constraintTop_toTopOf="@+id/guideline114" />
@@ -185,6 +307,20 @@
         app:layout_constraintGuide_percent="0.22" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline117"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.03" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline118"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline104"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -211,6 +347,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline119"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.93" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline105"
@@ -252,13 +395,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.93" />
+        app:layout_constraintGuide_percent="0.9316006" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline114"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.86" />
+        app:layout_constraintGuide_percent="0.82" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
