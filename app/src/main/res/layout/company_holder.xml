@@ -51,6 +51,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter"
                 android:text="Simple, Fast and Reliable"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginLeft="15dp"
                 android:textColor="#ACA9A9"
                 android:textSize="16sp" />

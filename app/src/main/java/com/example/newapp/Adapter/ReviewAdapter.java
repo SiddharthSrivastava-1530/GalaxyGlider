@@ -47,7 +47,23 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
 
         holder.userName.setText(reviews.get(position).getReviewingUserName());
         holder.reviewText.setText(String.valueOf(reviews.get(position).getReview()));
-        holder.ratingTextView.setText(reviews.get(position).getRating());
+//        holder.ratingTextView.setText(reviews.get(position).getRating());
+        int ratingVal = (int) Float.parseFloat(reviews.get(position).getRating());
+        if(ratingVal==1){
+            holder.oneStar.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==2){
+            holder.twoStar.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==3){
+            holder.threeStar.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==4){
+            holder.fourStar.setVisibility(View.VISIBLE);
+        }
+        else if(ratingVal==5){
+            holder.fiveStar.setVisibility(View.VISIBLE);
+        }
         holder.dateTextView.setText(getDateFromTime(reviews.get(position).getTime()));
 
     }
@@ -65,6 +81,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
         TextView ratingTextView;
         TextView dateTextView;
 
+        TextView oneStar;
+        TextView twoStar;
+        TextView threeStar;
+        TextView fourStar;
+        TextView fiveStar;
+
         public ReviewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -77,8 +99,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
 
             userName = itemView.findViewById(R.id.reviewer_name_holder);
             reviewText = itemView.findViewById(R.id.reviewer_holder);
-            ratingTextView = itemView.findViewById(R.id.rating_holder);
             dateTextView = itemView.findViewById(R.id.date_holder);
+            oneStar = itemView.findViewById(R.id.oneStar);
+            twoStar = itemView.findViewById(R.id.twoStar);
+            threeStar = itemView.findViewById(R.id.threeStar);
+            fourStar = itemView.findViewById(R.id.fourStar);
+            fiveStar = itemView.findViewById(R.id.fiveStar);
 
         }
     }

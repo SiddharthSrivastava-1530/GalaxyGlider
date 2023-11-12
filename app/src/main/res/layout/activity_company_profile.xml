@@ -129,12 +129,12 @@
         app:layout_constraintTop_toTopOf="@+id/guideline72" />
 
     <TextView
-        android:id="@+id/logout_tv_company_profile"
+        android:id="@+id/update_tv_company_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline87"
         app:layout_constraintEnd_toStartOf="@+id/guideline85"
-        app:layout_constraintStart_toStartOf="@+id/guideline86"
+        app:layout_constraintStart_toStartOf="@+id/guideline122"
         app:layout_constraintTop_toTopOf="@+id/guideline88" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -270,6 +270,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.45" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline122"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.36" />
 
     <TextView
         android:id="@+id/email_profile_et_company_profile"

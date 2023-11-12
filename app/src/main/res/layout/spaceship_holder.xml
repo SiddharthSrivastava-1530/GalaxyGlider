@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="140dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="#000000">
 
@@ -46,25 +46,96 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/desc_glider_holder_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter"
                 android:text="Simple, Fast and Reliable"
                 android:layout_marginLeft="15dp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="#ACA9A9"
                 android:textSize="16sp" />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="7dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rating"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/inter"
+                    android:gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_gravity="center"
+                    android:textSize="16sp"/>
+
+                <Space
+                    android:layout_width="15dp"
+                    android:layout_height="0dp"/>
+
+                <!-- Star 1 -->
+                <TextView
+                    android:id="@+id/oneStar_spaceShip_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/star_ratings"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="5dp"/>
+
+                <!-- Star 2 -->
+                <TextView
+                    android:id="@+id/twoStar_spaceShip_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/star_ratings"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="5dp"/>
+
+                <!-- Star 3 -->
+                <TextView
+                    android:id="@+id/threeStar_spaceShip_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/star_ratings"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="5dp"/>
+
+                <!-- Star 4 -->
+                <TextView
+                    android:id="@+id/fourStar_spaceShip_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/star_ratings"
+                    android:visibility="invisible"
+                    android:layout_marginEnd="5dp"/>
+
+                <!-- Star 5 -->
+                <TextView
+                    android:id="@+id/fiveStar_spaceShip_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:background="@drawable/star_ratings"/>
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:id="@+id/spaceShip_price_SpaceShipList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0.1"
             android:fontFamily="@font/inter"
             android:layout_gravity="end|center"
             android:textColor="#ffffff"
-            android:textSize="16sp"
+            android:textSize="22sp"
             android:text="$220" />
 
     </LinearLayout>

@@ -36,7 +36,6 @@ import java.util.UUID;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private TextView logout;
     private TextView name_tv;
     private TextView email_tv;
     private TextView mode_tv;
@@ -53,7 +52,6 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_profile);
 
         // associating variables with views using corresponding id(s)
-        logout = findViewById(R.id.logout_tv);
         imgProfile = findViewById(R.id.uploadImage_b);
         progressBar = findViewById(R.id.progressBar_profile);
         mode_tv = findViewById(R.id.mode_info1_user_profile);
@@ -96,18 +94,6 @@ public class UserProfileActivity extends AppCompatActivity {
                 .into(imgProfile);
 
         progressBar.setVisibility(View.GONE);
-
-        //Logout the user.
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                eraseLoginMode();
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(UserProfileActivity.this, MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-            }
-        });
 
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
