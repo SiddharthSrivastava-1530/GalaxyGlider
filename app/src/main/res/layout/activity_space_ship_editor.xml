@@ -28,6 +28,7 @@
         app:layout_constraintGuide_percent="0.84" />
 
     <TextView
+        android:id="@+id/delete_ss_tv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/delete_btn_24"

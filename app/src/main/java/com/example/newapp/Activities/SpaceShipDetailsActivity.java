@@ -36,6 +36,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
     private String loginMode;
     private FloatingActionButton fab;
     private ArrayList<Review> reviews;
+    private String services;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         speed = intent.getFloatExtra("speed_ss",0);
         busyTime = intent.getStringExtra("busyTime_ss");
         seats = intent.getStringExtra("seats_ss");
+        services = intent.getStringExtra("services_ss");
         haveSharedRide = intent.getBooleanExtra("shared_ride_ss",false);
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
@@ -105,6 +107,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
                     intent1.putExtra("companyID",companyId);
                     intent1.putExtra("update_spaceship",true);
                     intent1.putExtra("reviews_ss", reviews);
+                    intent1.putExtra("services_ss", services);
                     startActivity(intent1);
                 }
             }
@@ -125,6 +128,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
                 intent1.putExtra("companyID",companyId);
                 intent1.putExtra("update_spaceship",true);
                 intent1.putExtra("reviews_ss", reviews);
+                intent1.putExtra("services_ss", services);
                 startActivity(intent1);
             }
         });
@@ -147,9 +151,24 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         speedTextview.setText(String.valueOf(speed));
 //        sharedRideTextview.setText(String.valueOf(haveSharedRide));
         descriptionTextview.setText(description);
-        seatAvailableTextview.setText(seats);
+        seatAvailableTextview.setText(String.valueOf(getSeatCount()));
 //        ratingTextview.setText(ratings);
 //        busyTimeTextview.setText(busyTime);
 
+    }
+
+    private int getSeatCount(){
+        int seatCount = 0;
+        if(seats != null)
+        {
+            for (int i = 0; i < seats.length(); i++)
+            {
+                if (seats.charAt(i)=='1')
+                {
+                    seatCount++;
+                }
+            }
+        }
+        return seatCount;
     }
 }

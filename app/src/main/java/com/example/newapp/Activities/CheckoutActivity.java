@@ -81,7 +81,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
         try {
             JSONObject options = new JSONObject();
-            String amount = "60000";
+            String amount = "6";
             amount = getIntent().getStringExtra("amt");
             options.put("name", "Galaxy Glider");
             options.put("description", "description");

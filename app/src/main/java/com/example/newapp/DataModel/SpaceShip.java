@@ -7,7 +7,8 @@ public class SpaceShip {
     private String description;
     private String spaceShipId;
     private String spaceShipRating;
-    private String seatAvailability;
+    private String seatsAvailable;
+    private String servicesAvailable;
     private boolean haveRideSharing;
     private long busyTime;
     private float price;
@@ -18,12 +19,13 @@ public class SpaceShip {
 
     }
 
-    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String seatAvailability, boolean haveRideSharing, long busyTime, float price, float speed, ArrayList<Review> reviews) {
+    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String seatsAvailable, String servicesAvailable, boolean haveRideSharing, long busyTime, float price, float speed, ArrayList<Review> reviews) {
         this.spaceShipName = spaceShipName;
         this.description = description;
         this.spaceShipId = spaceShipId;
         this.spaceShipRating = spaceShipRating;
-        this.seatAvailability = seatAvailability;
+        this.seatsAvailable = seatsAvailable;
+        this.servicesAvailable = servicesAvailable;
         this.haveRideSharing = haveRideSharing;
         this.busyTime = busyTime;
         this.price = price;
@@ -63,12 +65,20 @@ public class SpaceShip {
         this.spaceShipRating = spaceShipRating;
     }
 
-    public String getSeatAvailability() {
-        return seatAvailability;
+    public String getSeatsAvailable() {
+        return seatsAvailable;
     }
 
-    public void setSeatAvailability(String seatAvailability) {
-        this.seatAvailability = seatAvailability;
+    public void setSeatsAvailable(String seatsAvailable) {
+        this.seatsAvailable = seatsAvailable;
+    }
+
+    public String getServicesAvailable() {
+        return servicesAvailable;
+    }
+
+    public void setServicesAvailable(String servicesAvailable) {
+        this.servicesAvailable = servicesAvailable;
     }
 
     public boolean isHaveRideSharing() {

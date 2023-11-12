@@ -37,6 +37,7 @@ public class UserReviewsActivity extends AppCompatActivity {
     private String spaceShipRating;
     private String description;
     private String seats;
+    private String services;
     private String price;
     private float speed;
     private String busyTime;
@@ -62,6 +63,7 @@ public class UserReviewsActivity extends AppCompatActivity {
         speed = intent.getFloatExtra("speed_ss", 0);
         busyTime = intent.getStringExtra("busyTime_ss");
         seats = intent.getStringExtra("seats_ss");
+        services = intent.getStringExtra("services_ss");
         haveSharedRide = intent.getBooleanExtra("shared_ride_ss", false);
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
@@ -92,7 +94,7 @@ public class UserReviewsActivity extends AppCompatActivity {
 
     private void updateReviews() {
 
-        SpaceShip currentSpaceShip = new SpaceShip(name, description, "", spaceShipRating, seats,
+        SpaceShip currentSpaceShip = new SpaceShip(name, description, "", spaceShipRating, seats,services,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
@@ -171,7 +173,7 @@ public class UserReviewsActivity extends AppCompatActivity {
         if (!(spaceShip1.getSpaceShipRating().equals(spaceShip2.getSpaceShipRating()))) {
             return false;
         }
-        if (!(Objects.equals(spaceShip1.getSeatAvailability(), spaceShip2.getSeatAvailability()))) {
+        if (!(Objects.equals(spaceShip1.getSeatsAvailable(), spaceShip2.getSeatsAvailable()))) {
             return false;
         }
         if (!(spaceShip1.getDescription().equals(spaceShip2.getDescription()))) {

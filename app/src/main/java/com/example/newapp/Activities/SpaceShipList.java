@@ -159,11 +159,12 @@ public class SpaceShipList extends AppCompatActivity {
                 intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
                 intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
                 intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
-                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatAvailability());
+                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatsAvailable());
                 intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
                 intent1.putExtra("reviews_ss", spaceShipArrayList.get(position).getReviews());
                 intent1.putExtra("loginMode", loginMode);
                 intent1.putExtra("companyID", companyId);
+                intent1.putExtra("services_ss", spaceShipArrayList.get(position).getServicesAvailable());
                 startActivity(intent1);
             }
         };
