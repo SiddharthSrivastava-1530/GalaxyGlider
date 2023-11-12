@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.newapp.InvoiceActivity;
 import com.example.newapp.R;
 
 import java.util.Objects;
@@ -43,7 +44,7 @@ public class PaymentSuccessfulActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(PaymentSuccessfulActivity.this,SpaceShipList.class);
+                Intent intent = new Intent(PaymentSuccessfulActivity.this, InvoiceActivity.class);
                 review.setText("");
                 ratingbar.setRating(0.0f);
                 startActivity(intent);

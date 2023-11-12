@@ -63,7 +63,7 @@
 
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_q6WwqZNsqzlog3" />
+            android:value="rzp_test_YEx4Fc8oJfPIUu" />
 
         <activity
             android:name=".Activities.RideBillsActivity"
