@@ -1,4 +1,4 @@
-package com.example.newapp;
+package com.example.newapp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,21 +25,17 @@ import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
+import com.example.newapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class SpaceShipList extends AppCompatActivity {
 

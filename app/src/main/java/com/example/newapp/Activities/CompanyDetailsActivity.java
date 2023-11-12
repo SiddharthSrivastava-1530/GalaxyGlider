@@ -1,4 +1,4 @@
-package com.example.newapp;
+package com.example.newapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.newapp.R;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class CompanyDetailsActivity extends AppCompatActivity {

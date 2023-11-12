@@ -1,4 +1,9 @@
-package com.example.newapp;
+package com.example.newapp.Activities;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.DataModel.Company;
+import com.example.newapp.R;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class UnauthorisedCompanyList extends Fragment {
+public class CompanyList extends Fragment {
 
     private ArrayList<Company> companyArrayList;
     private SearchView searchCompany;
@@ -39,32 +39,34 @@ public class UnauthorisedCompanyList extends Fragment {
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.activity_unauthorised_company_list,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_companies_list, container, false);
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         FirebaseApp.initializeApp(getActivity());
 
-        searchCompany = getView().findViewById(R.id.srchCompany_unauthorized);
+        searchCompany = getView().findViewById(R.id.srchCompany);
 
         companyArrayList = new ArrayList<>();
 
-        progressBar = getView().findViewById(R.id.progressbar_unauthorized);
-        recyclerView = getView().findViewById(R.id.recycler_unauthorized);
-        swipeRefreshLayout = getView().findViewById(R.id.swip_unauthorized);
+        progressBar = getView().findViewById(R.id.progressbar);
+        recyclerView = getView().findViewById(R.id.recycler);
+        swipeRefreshLayout = getView().findViewById(R.id.swip);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 
         Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
 
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getUnauthorizedCompanies(searchCompany.getQuery().toString());
+                getCompanies(searchCompany.getQuery().toString());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -80,7 +82,7 @@ public class UnauthorisedCompanyList extends Fragment {
                 intent.putExtra("company_desc", companyArrayList.get(position).getDescription());
                 intent.putExtra("company_img", companyArrayList.get(position).getImageUrl());
                 intent.putExtra("company_license", companyArrayList.get(position).getLicenseUrl());
-                intent.putExtra("isAuthorised",companyArrayList.get(position).getOperational());
+                intent.putExtra("isAuthorised", companyArrayList.get(position).getOperational());
                 startActivity(intent);
             }
         };
@@ -93,7 +95,7 @@ public class UnauthorisedCompanyList extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                getUnauthorizedCompanies(newText);
+                getCompanies(newText);
                 return false;
             }
         });
@@ -105,10 +107,10 @@ public class UnauthorisedCompanyList extends Fragment {
         super.onResume();
         companyArrayList.clear();
         setAdapter(companyArrayList);
-        getUnauthorizedCompanies(searchCompany.getQuery().toString());
+        getCompanies(searchCompany.getQuery().toString());
     }
 
-    private void getUnauthorizedCompanies(String userQuery) {
+    private void getCompanies(String userQuery) {
         companyArrayList.clear();
         try {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
@@ -120,9 +122,7 @@ public class UnauthorisedCompanyList extends Fragment {
                         for (DataSnapshot companySnapShot : dataSnapshot.getChildren()) {
                             Company company = companySnapShot.getValue(Company.class);
                             if (company != null) {
-                                if (!company.getLicenseUrl().isEmpty() &&
-                                        !company.getOperational() &&
-                                        company.getName().toLowerCase().contains(userQuery.toLowerCase())) {
+                                if (company.getOperational() && company.getName().toLowerCase().contains(userQuery.toLowerCase())) {
                                     companyArrayList.add(company);
                                 }
                             }

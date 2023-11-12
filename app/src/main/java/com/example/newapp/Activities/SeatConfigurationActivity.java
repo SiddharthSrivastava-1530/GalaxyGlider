@@ -1,9 +1,7 @@
-package com.example.newapp;
+package com.example.newapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
+import com.example.newapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

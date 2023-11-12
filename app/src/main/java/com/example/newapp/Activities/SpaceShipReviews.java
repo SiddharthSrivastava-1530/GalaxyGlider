@@ -1,4 +1,4 @@
-package com.example.newapp;
+package com.example.newapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,17 +11,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Spinner;
 
-import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.Adapter.ReviewAdapter;
-import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Review;
-import com.google.firebase.FirebaseApp;
+import com.example.newapp.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 

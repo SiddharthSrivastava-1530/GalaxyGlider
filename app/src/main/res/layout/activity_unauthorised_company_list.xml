@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/swip_unauthorized"
-    tools:context="UnauthorisedCompanyList">
+    tools:context=".Activities.UnauthorisedCompanyList">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/companies_constraint_unauthorized"

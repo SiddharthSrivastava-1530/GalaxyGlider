@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="top|left"
     android:background="@drawable/profilepg"
-    tools:context="UserProfileActivity">
+    tools:context=".Activities.UserProfileActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="250dp"

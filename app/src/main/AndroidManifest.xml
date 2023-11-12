@@ -30,13 +30,13 @@
         android:theme="@style/Theme.NewApp"
         tools:targetApi="31">
         <activity
-            android:name="com.example.newapp.CheckoutActivity"
+            android:name="com.example.newapp.Activities.CheckoutActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.newapp.PaymentSuccessfulActivity"
+            android:name="com.example.newapp.Activities.PaymentSuccessfulActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.newapp.PaymentActivity"
+            android:name="com.example.newapp.Activities.PaymentActivity"
             android:exported="false" />
 
         <receiver
@@ -66,54 +66,54 @@
             android:value="rzp_test_q6WwqZNsqzlog3" />
 
         <activity
-            android:name=".RideBillsActivity"
+            android:name=".Activities.RideBillsActivity"
             android:exported="false" />
         <activity
-            android:name=".SeatConfigurationActivity"
+            android:name=".Activities.SeatConfigurationActivity"
             android:exported="false" />
         <activity
-            android:name=".SpaceShipReviews"
+            android:name=".Activities.SpaceShipReviews"
             android:exported="false" />
         <activity
-            android:name=".UserReviewsActivity"
+            android:name=".Activities.UserReviewsActivity"
             android:exported="false" />
         <activity
-            android:name=".AllListActivity"
+            android:name=".Activities.AllListActivity"
             android:exported="true" />
         <activity
-            android:name=".CompanyDetailsActivity"
+            android:name=".Activities.CompanyDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SpaceShipDetailsActivity"
+            android:name=".Activities.SpaceShipDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CompanyProfileActivity"
+            android:name=".Activities.CompanyProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SpaceShipEditorActivity"
+            android:name=".Activities.SpaceShipEditorActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".Activities.UserProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SpaceShipList"
+            android:name=".Activities.SpaceShipList"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".Activities.SignUpActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

@@ -1,4 +1,4 @@
-package com.example.newapp;
+package com.example.newapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,13 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.newapp.DataModel.Admin;
-import com.example.newapp.DataModel.Company;
-import com.example.newapp.DataModel.SpaceShip;
+import com.example.newapp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
