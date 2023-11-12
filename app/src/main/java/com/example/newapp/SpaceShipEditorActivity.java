@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,12 +58,8 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private EditText descriptionEditText;
     private EditText priceEditText;
     private TextView rideSharingTextView;
-    private EditText speedEditText;
-    private EditText seatsEditText;
     private  TextView addSpaceShipTextView;
     private Boolean booleanUpdate;
-    private SpaceShip spaceShip;
-    private String spaceShipKey;
     private String name;
     private String rating;
     private String description;
@@ -73,6 +70,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private Boolean haveSharedRide;
     private String companyId;
     private String loginMode;
+
     ArrayList<Review> reviews;
 
     @Override
@@ -80,22 +78,20 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_ship_editor);
 
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+//        View decorView = getWindow().getDecorView();
+//        // Hide the status bar.
+//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+//        decorView.setSystemUiVisibility(uiOptions);
         // Remember that you should never show the action bar if the
         // status bar is hidden, so hide that too if necessary.
 //        getSupportActionBar().hide();
 
-
+//
         nameEditText = findViewById(R.id.spaceshipName_et);
-        seatsEditText = findViewById(R.id.spaceship_seats_et);
         priceEditText = findViewById(R.id.spaceship_price_et);
-//        rideSharingTextView = findViewById(R.id.spaceShip_rideSharing_edit);
+////        rideSharingTextView = findViewById(R.id.spaceShip_rideSharing_edit);
         descriptionEditText = findViewById(R.id.spaceship_desc_et);
-//        busyTimeEditText = findViewById(R.id.spaceship_busyTime_et);
-        speedEditText = findViewById(R.id.spaceShip_speed_editor);
+////        busyTimeEditText = findViewById(R.id.spaceship_busyTime_et);
         addSpaceShipTextView = findViewById(R.id.spaceShip_add);
 
         Intent intent = getIntent();
@@ -112,7 +108,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         booleanUpdate = intent.getBooleanExtra("update_spaceship", false);
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
 
-        spaceShipKey = UUID.randomUUID().toString();
 
         CircularProgressDrawable circularProgressDrawable =
                 new CircularProgressDrawable(SpaceShipEditorActivity.this);
@@ -128,22 +123,39 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         addSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveSpaceShipsData();
+//                saveSpaceShipsData();
+                Intent intent1 = new Intent(SpaceShipEditorActivity.this,SeatConfigurationActivity.class);
+                if(booleanUpdate) {
+                    intent1.putExtra("name_ss", name);
+                    intent1.putExtra("description_ss", description);
+                    intent1.putExtra("price_ss", price);
+
+                } else {
+                    intent1.putExtra("name_ss", nameEditText.getText().toString());
+                    intent1.putExtra("description_ss", descriptionEditText.getText().toString());
+                    intent1.putExtra("price_ss", priceEditText.getText().toString());
+                }
+                intent1.putExtra("rating_ss", rating);
+                intent1.putExtra("speed_ss", speed);
+                intent1.putExtra("busyTime_ss",busyTime);
+                intent1.putExtra("seats_ss",seats);
+                intent1.putExtra("shared_ride_ss",haveSharedRide);
+                intent1.putExtra("loginMode",loginMode);
+                intent1.putExtra("companyID",companyId);
+                intent1.putExtra("update_spaceship",true);
+                intent1.putExtra("reviews_ss", reviews);
+                intent1.putExtra("update_spaceship", false);
+                startActivity(intent1);
             }
         });
 
 
     }
 
-
+//
     private boolean checkData() {
         if (nameEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter name",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (seatsEditText.getText().toString().isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please enter seats.",
                     Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -159,6 +171,8 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         }
         return true;
     }
+
+
 
 
     //Inflating the menu options.
@@ -189,7 +203,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
             if (booleanUpdate && checkData()) {
                 updateSpaceShipsData();
             } else if (checkData()) {
-                saveSpaceShipsData();
+//                saveSpaceShipsData();
             }
             return true;
         }
@@ -249,9 +263,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
                                 // Set the updated spaceShips back to the company reference
                                 companyRef.setValue(spaceShipArrayList);
-
                             }
-
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                                 // Handle any errors here
@@ -263,20 +275,19 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
     }
 
-
     // update the existing spaceship
     private void updateSpaceShipsData() {
 
-        SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                "", rating, seatsEditText.getText().toString(), haveSharedRide,
-                Long.parseLong(busyTime), Float.parseFloat(priceEditText.getText().toString()),
-                Float.parseFloat(speedEditText.getText().toString()),reviews);
+        SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(),
+                descriptionEditText.getText().toString(),
+                "", rating, seats, haveSharedRide,
+                Long.parseLong(busyTime), Float.parseFloat(priceEditText.getText().toString()), speed,reviews);
 
         SpaceShip originalSpaceShip = new SpaceShip(name, description, "", rating, seats,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SpaceShipEditorActivity.this);
         builder.setTitle("Update spaceship data")
                 .setMessage("Are you sure you want to update the spaceship data?")
                 .setNegativeButton("NO", null)
@@ -307,7 +318,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
                                 // Update the spaceShip you want to delete
                                 try {
-                                    spaceShipArrayList.set(index, updatedSpaceShip);
+                                    if(index != -1) spaceShipArrayList.set(index, updatedSpaceShip);
                                 } catch (IndexOutOfBoundsException e){
                                     Toast.makeText(SpaceShipEditorActivity.this, "Data not updated. Please retry", Toast.LENGTH_SHORT).show();
                                 }
@@ -327,60 +338,19 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
     }
 
-    // save the new spaceship data in database
-    private void saveSpaceShipsData() {
-
-        DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
-        ArrayList<Review> reviews = new ArrayList<>();
-        spaceShip = new SpaceShip(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                "", "0.0", seatsEditText.getText().toString(), haveSharedRide,
-                0, Float.parseFloat(priceEditText.getText().toString()),
-                Float.parseFloat(speedEditText.getText().toString()), reviews);
-
-        companyRef.child("spaceShips").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<SpaceShip> spaceShips = new ArrayList<>();
-
-                // Check if the spaceShips field exists
-                if (dataSnapshot.exists()) {
-                    GenericTypeIndicator<ArrayList<SpaceShip>> t = new GenericTypeIndicator<ArrayList<SpaceShip>>() {
-                    };
-                    spaceShips = dataSnapshot.getValue(t);
-                }
-
-                // Add the new spaceShip to the ArrayList
-                spaceShips.add(spaceShip);
-
-                // Set the updated spaceShips ArrayList back to the company reference
-                companyRef.child("spaceShips").setValue(spaceShips);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
 
     // setting the data to views
     private void setViewData() {
 
         nameEditText.setText(name);
         priceEditText.setText(price);
-        speedEditText.setText(String.valueOf(speed));
+//        speedEditText.setText(String.valueOf(speed));
 //        rideSharingTextView.setText(String.valueOf(haveSharedRide));
         descriptionEditText.setText(description);
-        seatsEditText.setText(seats);
     }
 
     private Boolean areEqualSpaceShips(SpaceShip spaceShip1, SpaceShip spaceShip2) {
         if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpaceShipId().equals(spaceShip2.getSpaceShipId()))) {
             return false;
         }
         if (!(spaceShip1.getBusyTime()==spaceShip2.getBusyTime())) {
