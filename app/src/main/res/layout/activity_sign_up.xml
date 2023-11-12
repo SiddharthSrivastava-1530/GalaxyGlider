@@ -112,7 +112,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline12" />
 
     <EditText
-        android:id="@+id/Number_et"
+        android:id="@+id/password_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
@@ -128,7 +128,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline15" />
 
     <EditText
-        android:id="@+id/Password_et"
+        android:id="@+id/confirm_password_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"

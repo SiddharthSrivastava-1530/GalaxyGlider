@@ -115,7 +115,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         bookSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(SpaceShipDetailsActivity.this, UserReviewsActivity.class);
+                Intent intent1 = new Intent(SpaceShipDetailsActivity.this, CheckoutActivity.class);
                 intent1.putExtra("name_ss", name);
                 intent1.putExtra("rating_ss", ratings);
                 intent1.putExtra("description_ss", description);

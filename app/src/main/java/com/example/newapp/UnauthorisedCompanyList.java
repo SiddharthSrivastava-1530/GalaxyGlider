@@ -20,7 +20,9 @@ import com.example.newapp.DataModel.Company;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -62,12 +64,11 @@ public class UnauthorisedCompanyList extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getUnauthorizedCompanies();
+                getUnauthorizedCompanies(searchCompany.getQuery().toString());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        getUnauthorizedCompanies();
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
@@ -84,26 +85,55 @@ public class UnauthorisedCompanyList extends Fragment {
             }
         };
 
+        searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                getUnauthorizedCompanies(newText);
+                return false;
+            }
+        });
+
     }
 
-    private void getUnauthorizedCompanies() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        companyArrayList.clear();
+        setAdapter(companyArrayList);
+        getUnauthorizedCompanies(searchCompany.getQuery().toString());
+    }
+
+    private void getUnauthorizedCompanies(String userQuery) {
         companyArrayList.clear();
         try {
-            FirebaseDatabase.getInstance().getReference("company").addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
+            Query query = databaseReference;
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Company company = dataSnapshot.getValue(Company.class);
-                        if (company != null && !company.getLicenseUrl().isEmpty() && !company.getOperational()) {
-                            companyArrayList.add(company);
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot companySnapShot : dataSnapshot.getChildren()) {
+                            Company company = companySnapShot.getValue(Company.class);
+                            if (company != null) {
+                                if (!company.getLicenseUrl().isEmpty() &&
+                                        !company.getOperational() &&
+                                        company.getName().toLowerCase().contains(userQuery.toLowerCase())) {
+                                    companyArrayList.add(company);
+                                }
+                            }
+                            setAdapter(companyArrayList);
                         }
                     }
-                    setAdapter(companyArrayList);
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getActivity(), databaseError.getMessage().toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (Exception e) {

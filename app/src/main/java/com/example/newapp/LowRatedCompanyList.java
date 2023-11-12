@@ -27,7 +27,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -70,12 +72,11 @@ public class LowRatedCompanyList extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getLowRatedCompanies();
+                getLowRatedCompanies(searchCompany.getQuery().toString());
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        getLowRatedCompanies();
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
@@ -92,16 +93,40 @@ public class LowRatedCompanyList extends Fragment {
             }
         };
 
+        searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                getLowRatedCompanies(newText);
+                return false;
+            }
+        });
+
     }
 
-    private void getLowRatedCompanies() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        companyArrayList.clear();
+        setAdapter(companyArrayList);
+        getLowRatedCompanies(searchCompany.getQuery().toString());
+    }
+
+    private void getLowRatedCompanies(String userQuery) {
         companyArrayList.clear();
         try {
-            FirebaseDatabase.getInstance().getReference("company").addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
+            Query query = databaseReference;
+            query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        ArrayList<SpaceShip> spaceShipArrayList = dataSnapshot.getValue(Company.class).getSpaceShips();
+                        Company company = dataSnapshot.getValue(Company.class);
+                        ArrayList<SpaceShip> spaceShipArrayList = company.getSpaceShips();
                         boolean isLowRated = false;
                         if (spaceShipArrayList != null) {
                             for (SpaceShip spaceShip : spaceShipArrayList) {
@@ -111,7 +136,7 @@ public class LowRatedCompanyList extends Fragment {
                                 }
                             }
                         }
-                        if (isLowRated) {
+                        if (isLowRated && company.getName().toLowerCase().contains(userQuery.toLowerCase())) {
                             companyArrayList.add(dataSnapshot.getValue(Company.class));
                         }
 

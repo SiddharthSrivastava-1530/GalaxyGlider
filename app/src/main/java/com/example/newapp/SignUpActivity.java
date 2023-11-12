@@ -39,12 +39,11 @@ public class SignUpActivity extends AppCompatActivity {
 
     private EditText name;
     private EditText email;
-    private EditText password;
-    private EditText number;
+    private EditText confirmPassword;
+    private EditText passwordEditText;
     private TextView submit;
     private String username;
     private String useremail;
-    private String usernumber;
     private String loginMode;
     private TextView loginView;
 
@@ -55,8 +54,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         name = findViewById(R.id.name_et);
         email = findViewById(R.id.email_et);
-        password = findViewById(R.id.Password_et);
-        number = findViewById(R.id.Number_et);
+        confirmPassword = findViewById(R.id.confirm_password_et);
+        passwordEditText = findViewById(R.id.password_et);
         submit = findViewById(R.id.submit_tv);
         loginView = findViewById(R.id.login_sign_up_activity_tv);
 
@@ -77,19 +76,8 @@ public class SignUpActivity extends AppCompatActivity {
 
                 username = name.getText().toString();
                 useremail = email.getText().toString();
-                String userpassword = password.getText().toString();
-                usernumber = number.getText().toString();
-
-                //Validate Mobile Number using Matcher and Pattern with the help of regular expression.
-
-                //[6-9] means first digit can be 6,7,8,9;
-                // [0-9]{9} means rest 9 digits can be from 0 to 9.
-                String mobileRegex = "[6-9][0-9]{9}";
-
-                //mobileMatcher matches the regular expression with mobile number.
-                Matcher mobileMatcher;
-                Pattern mobilePattern = Pattern.compile(mobileRegex);
-                mobileMatcher = mobilePattern.matcher(usernumber);
+                String userPassword = passwordEditText.getText().toString();
+                String userConfirmedPassword = confirmPassword.getText().toString();
 
                 //Checking if the username is empty and showing error accordingly.
                 if (TextUtils.isEmpty(username)) {
@@ -119,37 +107,25 @@ public class SignUpActivity extends AppCompatActivity {
                 }
 
                 //Checking if mobile number is empty and showing errors accordingly.
-                else if (TextUtils.isEmpty(usernumber)) {
-                    Toast.makeText(SignUpActivity.this, "Please enter your mobile no.",
+                else if (TextUtils.isEmpty(userPassword)) {
+                    Toast.makeText(SignUpActivity.this, "Please enter your password",
                             Toast.LENGTH_SHORT).show();
-                    number.setError("Mobile No. is required");
-                    number.requestFocus();
-                    return;
-                }
-
-                //Checking if mobile number is not equal to 10 digits and showing errors accordingly.
-                else if (usernumber.length() != 10) {
-                    Toast.makeText(SignUpActivity.this, "Please re-enter your mobile no.",
-                            Toast.LENGTH_SHORT).show();
-                    number.setError("Mobile No. should have 10 digits");
-                    number.requestFocus();
-                    return;
-                }
-                //Matching the entered mobile number with regular expression defined by us.
-                else if (!mobileMatcher.find()) {
-                    Toast.makeText(SignUpActivity.this, "Please re-enter your mobile no.",
-                            Toast.LENGTH_SHORT).show();
-                    number.setError("Mobile No. is not valid");
-                    number.requestFocus();
+                    passwordEditText.setError("Mobile No. is required");
+                    passwordEditText.requestFocus();
                     return;
                 }
                 //Checking if the password is left empty and showing errors accordingly.
-                else if (TextUtils.isEmpty(userpassword)) {
-                    Toast.makeText(SignUpActivity.this, "Please enter your password",
+                else if (TextUtils.isEmpty(userConfirmedPassword)) {
+                    Toast.makeText(SignUpActivity.this, "Please confirm your password",
                             Toast.LENGTH_SHORT).show();
-                    password.setError("Password is required");
-                    password.requestFocus();
+                    confirmPassword.setError("Password is required");
+                    confirmPassword.requestFocus();
                     return;
+                }
+                // Checking if password and confirmedPassword are not same
+                else if (!(userConfirmedPassword.equals(userPassword))) {
+                    Toast.makeText(SignUpActivity.this, "Password & confirmed password are not the same",
+                            Toast.LENGTH_SHORT).show();
                 }
 
                 if (loginMode.equals("user")) {
@@ -164,6 +140,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(SignUpActivity.this, LoginActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent1.putExtra("loginMode", loginMode);
                 startActivity(intent1);
             }
@@ -177,7 +155,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Creating user using FirebaseAuth with help of email and password.
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString(),
-                        password.getText().toString())
+                        passwordEditText.getText().toString())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -215,7 +193,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                         Toast.LENGTH_LONG).show();
 
                                                 //Navigating to login activity for user to login after verifying email.
-                                                Intent intent = new Intent(SignUpActivity.this, SpaceShipList.class);
+                                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                                 intent.putExtra("companyID", key);
                                                 intent.putExtra("loginMode", loginMode);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -247,7 +225,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         //Creating user using FirebaseAuth with help of email and password.
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.getText().toString(),
-                        password.getText().toString())
+                        passwordEditText.getText().toString())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -266,7 +244,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // Setting data into the database.
                             FirebaseDatabase.getInstance().getReference("users/" +
                                             FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(new Customer(name.getText().toString(), number.getText().toString(),
+                                    .setValue(new Customer(name.getText().toString(), "",
                                             email.getText().toString(), "", loginMode))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -310,8 +288,8 @@ public class SignUpActivity extends AppCompatActivity {
     private void saveLoginMode() {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("loginMode",loginMode);
-        editor.putString("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        editor.putString("loginMode", loginMode);
+        editor.putString("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
         editor.apply();
     }
 

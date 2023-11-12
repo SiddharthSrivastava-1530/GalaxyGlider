@@ -15,9 +15,9 @@ import com.razorpay.Checkout;
 import java.util.Objects;
 
 public class PaymentSuccessfulActivity extends AppCompatActivity {
-    TextView referenceID,review ;
-    RatingBar ratingbar;
-    Button Submit;
+    private TextView referenceID,review ;
+    private RatingBar ratingbar;
+    private Button Submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

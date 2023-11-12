@@ -55,20 +55,19 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
 
-        if(loginMode.equals("admin")){
+        if (loginMode.equals("admin")) {
             signup.setVisibility(View.GONE);
         }
 
         psw_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(pass.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())){
+                if (pass.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
                     //If password is visible then hide it.
                     pass.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     //Change icon
 //                    psw_show.setImageResource(R.drawable.ic_hide_pwd);
-                }
-                else{
+                } else {
                     //If password is not visible the show it.
                     pass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     //Change icon
@@ -82,8 +81,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Checking that text entered in the email and password is empty or not.
-                if(email.getText().toString().isEmpty() || pass.getText().toString().isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Invalid Input",
+                if (email.getText().toString().isEmpty() || pass.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please enter valid email and password",
                             Toast.LENGTH_SHORT).show();
 
                     return;
@@ -97,7 +96,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(new Intent(LoginActivity.this, SignUpActivity.class));
-                intent1.putExtra("loginMode",loginMode);
+                intent1.putExtra("loginMode", loginMode);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent1);
             }
         });
@@ -105,48 +106,46 @@ public class LoginActivity extends AppCompatActivity {
 
     //Login using email and password.
     private void handleLogin() {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString(),pass.getText().toString())
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString(), pass.getText().toString())
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){ //Checking if the task to sign in user was successful or not.
+                        if (task.isSuccessful()) { //Checking if the task to sign in user was successful or not.
 
                             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                             String currentUserEmail = firebaseUser.getEmail();
                             //If the user's email is verified then send him to allListsActivity
-                            if(firebaseUser.isEmailVerified() || currentUserEmail.equals("admin2@gmail.com")){
+                            if (firebaseUser.isEmailVerified() || currentUserEmail.equals("admin2@gmail.com")) {
                                 saveLoginMode();
-                                Toast.makeText(getApplicationContext(),"Logged in successful",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Logged in successful", Toast.LENGTH_SHORT).show();
                                 Intent intent1 = null;
-                                if(loginMode.equals("admin")){
+                                if (loginMode.equals("admin")) {
                                     intent1 = new Intent(LoginActivity.this, AllListActivity.class);
-                                } else if(loginMode.equals("owner")) {
+                                } else if (loginMode.equals("owner")) {
                                     String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                     intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
-                                    intent1.putExtra("companyID",companyId);
+                                    intent1.putExtra("companyID", companyId);
                                 } else {
                                     intent1 = new Intent(LoginActivity.this, AllListActivity.class);
                                 }
-                                intent1.putExtra("loginMode",loginMode);
+                                intent1.putExtra("loginMode", loginMode);
                                 intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                                         | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                 startActivity(intent1);
                                 finish();
-                            }
-                            else{
+                            } else {
                                 //If the user's email is not verified then send him another email and sign out him.
                                 firebaseUser.sendEmailVerification();
                                 FirebaseAuth.getInstance().signOut();
                                 //With the help of alertDialogBox user can directly open an app to see his emails.
                                 showAlertDialogBox();
                             }
-                        }
-                        else{
-                            //If the task is not successful toast the exception.
-                            Toast.makeText(getApplicationContext(), "Slow Internet Connection",
-                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // If the task is not successful toast the exception.
+                            Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -174,8 +173,8 @@ public class LoginActivity extends AppCompatActivity {
     private void saveLoginMode() {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("loginMode",loginMode);
-        editor.putString("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        editor.putString("loginMode", loginMode);
+        editor.putString("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
         editor.apply();
     }
 
