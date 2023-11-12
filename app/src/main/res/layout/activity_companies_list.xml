@@ -51,6 +51,7 @@
                 <SearchView
                     android:id="@+id/srchCompany"
                     android:layout_width="match_parent"
+                    android:queryBackground="@android:color/transparent"
                     android:layout_height="match_parent"
                     android:queryHint="Search company here..."
                     android:iconifiedByDefault="false"

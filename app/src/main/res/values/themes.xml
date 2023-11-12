@@ -12,6 +12,18 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="BrandedSwitch.control" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#ffffff</item>
+        <item name="colorSwitchThumbNormal">#ffffff</item>
+
+    </style>
+
+    <style name="BrandedSwitch.text" parent="Theme.AppCompat.Light">
+        <item name="android:textColor">#ffa000</item>
+        <item name="android:textSize">9sp</item>
+    </style>
+
 <!--    <style name="Theme.Design.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">-->
 <!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
 <!--        <item name="colorPrimary">@color/purple_500</item>-->
