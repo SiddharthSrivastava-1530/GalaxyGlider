@@ -4,28 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/spaceship_editor_activity">
+    android:background="@color/black">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline44"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.13" />
+        app:layout_constraintGuide_percent="0.07" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline46"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.87" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline45"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.54" />
+        app:layout_constraintGuide_percent="0.93" />
 
     <EditText
         android:id="@+id/spaceshipName_et"
@@ -33,68 +26,46 @@
         android:layout_height="0dp"
         android:background="@null"
         android:inputType="text"
-        android:textColor="#fff"
-        android:textSize="32sp"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:fontFamily="@font/inter"
+        android:hint="Enter your glider name"
+        android:textColorHint="#ACA9A9"
         app:layout_constraintBottom_toTopOf="@+id/guideline34"
         app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
-        app:layout_constraintTop_toTopOf="@+id/guideline33"
-        tools:text="Lunar SpaceRover" />
+        app:layout_constraintTop_toTopOf="@+id/guideline33" />
 
     <EditText
         android:id="@+id/spaceship_desc_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
-        tools:text="The fastest space ship with high tenacity. Harm free and can take you the most farthest."
-        android:textColor="#ACA9A9"
+        android:hint="Describe your glider here..."
+        android:textColor="#ffffff"
+        android:textColorHint="#ACA9A9"
+        android:fontFamily="@font/inter"
         android:gravity="start|top"
-        android:layout_marginTop="6dp"
         android:inputType="textMultiLine"
-        android:textSize="18sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline42"
         app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
         app:layout_constraintTop_toTopOf="@+id/guideline40"
         app:layout_constraintVertical_bias="0.367" />
 
-    <EditText
-        android:id="@+id/spaceship_seats_et"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@null"
-        android:inputType="number"
-        tools:text="15"
-        android:textColor="#fff"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline41"
-        app:layout_constraintEnd_toStartOf="@+id/guideline45"
-        app:layout_constraintStart_toStartOf="@+id/guideline44"
-        app:layout_constraintTop_toTopOf="@+id/guideline36"
-        app:layout_constraintVertical_bias="0.555" />
-
-    <EditText
-        android:id="@+id/spaceShip_speed_editor"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:background="@null"
-        android:inputType="number"
-        tools:text="28"
-        android:textColor="#fff"
-        android:textSize="32sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline43"
-        app:layout_constraintEnd_toStartOf="@+id/guideline45"
-        app:layout_constraintStart_toStartOf="@+id/guideline44"
-        app:layout_constraintTop_toTopOf="@+id/guideline38"
-        app:layout_constraintVertical_bias="0.444" />
 
     <TextView
         android:id="@+id/spaceShip_add"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="#fff"
+        android:background="#ffffff"
+        android:fontFamily="@font/inter_semibold"
+        android:gravity="center"
+        android:text="Add Glider"
+        android:textColor="#000000"
+        android:textSize="38sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,13 +76,16 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@null"
+        android:fontFamily="@font/inter"
         android:inputType="number"
-        tools:text="1200"
-        android:textColor="#fff"
-        android:textSize="30sp"
+        android:hint="Enter glider price per light year"
+        android:textColor="#ffffff"
+        android:textColorHint="#ACA9A9"
+        android:gravity="top|left"
+        android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline41"
         app:layout_constraintEnd_toStartOf="@+id/guideline46"
-        app:layout_constraintStart_toStartOf="@+id/guideline45"
+        app:layout_constraintStart_toStartOf="@+id/guideline44"
         app:layout_constraintTop_toTopOf="@+id/guideline36" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -126,21 +100,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.44" />
+        app:layout_constraintGuide_percent="0.19" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline34"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline35"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.53" />
+        app:layout_constraintGuide_percent="0.28" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline36"
@@ -150,52 +117,31 @@
         app:layout_constraintGuide_percent="0.55" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline37"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.64" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline38"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline39"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.76" />
+        app:layout_constraintGuide_percent="0.89" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline41"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.61" />
+        app:layout_constraintGuide_percent="0.77" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline42"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.88" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline43"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.78" />
+        app:layout_constraintGuide_percent="0.29" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

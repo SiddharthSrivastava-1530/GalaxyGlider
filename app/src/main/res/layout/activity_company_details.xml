@@ -55,14 +55,13 @@
 
     <TextView
         android:id="@+id/name_company_details"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="Nasa"
         android:fontFamily="@font/inter"
+        android:text="Nasa"
         android:textColor="#ffffff"
         android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline49"
-        app:layout_constraintEnd_toStartOf="@+id/guideline71"
         app:layout_constraintStart_toStartOf="@+id/guideline74"
         app:layout_constraintTop_toTopOf="@+id/guideline48" />
 
@@ -80,7 +79,7 @@
             android:layout_height="match_parent"
             android:text="NASA stands for National Aeronautics and Space Administration. NASA is a U.S. government agency that is responsible for science and technology related to air and space. The Space Age started in 1957 with the launch of the Soviet satellite Sputnik.NASA opened for business on Oct. 1, 1958. The agency was created to oversee U.S. space exploration and aeronautics research. The administrator is in charge of NASA. The NASA administrator is nominated by the president and confirmed by a vote in the Senate."
             android:textColor="#ffffff"
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/guideline49"
             app:layout_constraintEnd_toStartOf="@+id/guideline71"
             app:layout_constraintStart_toStartOf="@+id/guideline74"
