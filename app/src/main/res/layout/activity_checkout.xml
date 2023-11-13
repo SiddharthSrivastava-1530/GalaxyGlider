@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/spaceship_details"
     tools:context=".Activities.CheckoutActivity">
 
     <EditText
@@ -12,7 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
         android:padding="10dp"
-        android:text="From"
+        android:textSize="24sp"
+        android:hint="Mention your starting planet"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,41 +26,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="To"
+        android:hint="Mention your destination planet"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fromLocation" />
 
     <EditText
-        android:id="@+id/dateOfRide"
+        android:id="@+id/distance_journey_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="Date"
+        android:hint="Mention distance of journey"
+        android:inputType="number"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:textSize="24sp"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toLocation" />
 
-    <EditText
-        android:id="@+id/timeOfRide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:text="Time"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateOfRide" />
-
-    <Button
+    <TextView
         android:id="@+id/bookRideButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"
-        android:text="Book Ride"
+        android:text="BOOK RIDE"
+        android:textSize="32sp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeOfRide" />
+        app:layout_constraintTop_toBottomOf="@+id/distance_journey_et" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

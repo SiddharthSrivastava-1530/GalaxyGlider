@@ -32,7 +32,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private EditText descriptionEditText;
     private EditText priceEditText;
     private TextView rideSharingTextView;
-    private  TextView addSpaceShipTextView;
+    private TextView addSpaceShipTextView;
     private TextView deleteSpaceShipTextView;
     private Boolean booleanUpdate;
     private String name;
@@ -103,13 +103,12 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         rideSharingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(rideSharingTextView.getText().toString().equals("YES")){
+                if (rideSharingTextView.getText().toString().equals("YES")) {
                     rideSharingTextView.setText("NO");
-                    haveSharedRide=false;
-                }
-                else{
+                    haveSharedRide = false;
+                } else {
                     rideSharingTextView.setText("YES");
-                    haveSharedRide=true;
+                    haveSharedRide = true;
                 }
             }
         });
@@ -117,28 +116,24 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         addSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(booleanUpdate) {
-                    if(checkData() && booleanUpdate){
+                if (booleanUpdate) {
+                    if (checkData() && booleanUpdate) {
                         updateSpaceShipsData();
                     }
                 } else {
-                    Intent intent1 = new Intent(SpaceShipEditorActivity.this,SeatConfigurationActivity.class);
-                    intent1.putExtra("name_ss", name);
-                    intent1.putExtra("description_ss", description);
-                    intent1.putExtra("price_ss", price);
+                    Intent intent1 = new Intent(SpaceShipEditorActivity.this, SeatConfigurationActivity.class);
                     intent1.putExtra("name_ss", nameEditText.getText().toString());
                     intent1.putExtra("description_ss", descriptionEditText.getText().toString());
                     intent1.putExtra("price_ss", priceEditText.getText().toString());
                     intent1.putExtra("rating_ss", rating);
                     intent1.putExtra("speed_ss", speed);
-                    intent1.putExtra("busyTime_ss",busyTime);
-                    intent1.putExtra("seats_ss",seats);
-                    intent1.putExtra("shared_ride_ss",haveSharedRide);
-                    intent1.putExtra("loginMode",loginMode);
-                    intent1.putExtra("companyID",companyId);
-                    intent1.putExtra("update_spaceship",true);
-                    intent1.putExtra("reviews_ss", reviews);
+                    intent1.putExtra("busyTime_ss", busyTime);
+                    intent1.putExtra("seats_ss", seats);
+                    intent1.putExtra("shared_ride_ss", haveSharedRide);
+                    intent1.putExtra("loginMode", loginMode);
+                    intent1.putExtra("companyID", companyId);
                     intent1.putExtra("update_spaceship", false);
+                    intent1.putExtra("reviews_ss", reviews);
                     startActivity(intent1);
                 }
 
@@ -148,7 +143,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         deleteSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkData()){
+                if (checkData()) {
                     deleteSpaceShipsData();
                 }
             }
@@ -174,7 +169,6 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         }
         return true;
     }
-
 
 
     // deleting the spaceships
@@ -213,11 +207,12 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                 }
 
                                 // Remove the spaceShip you want to delete
-                                if(index != -1) spaceShipArrayList.remove(index);
+                                if (index != -1) spaceShipArrayList.remove(index);
 
                                 // Set the updated spaceShips back to the company reference
                                 companyRef.setValue(spaceShipArrayList);
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
                                 // Handle any errors here
@@ -233,16 +228,16 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private void updateSpaceShipsData() {
 
         boolean updatedRideSharing = false;
-        if(rideSharingTextView.getText().toString().equals("YES")){
+        if (rideSharingTextView.getText().toString().equals("YES")) {
             updatedRideSharing = true;
         }
 
         SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(),
                 descriptionEditText.getText().toString(),
-                "", rating, seats,services, updatedRideSharing,
-                Long.parseLong(busyTime), Float.parseFloat(priceEditText.getText().toString()), speed,reviews);
+                "", rating, seats, services, updatedRideSharing,
+                Long.parseLong(busyTime), Float.parseFloat(priceEditText.getText().toString()), speed, reviews);
 
-        SpaceShip originalSpaceShip = new SpaceShip(name, description, "", rating, seats,services,
+        SpaceShip originalSpaceShip = new SpaceShip(name, description, "", rating, seats, services,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
 
@@ -277,8 +272,9 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
                                 // Update the spaceShip you want to delete
                                 try {
-                                    if(index != -1) spaceShipArrayList.set(index, updatedSpaceShip);
-                                } catch (IndexOutOfBoundsException e){
+                                    if (index != -1)
+                                        spaceShipArrayList.set(index, updatedSpaceShip);
+                                } catch (IndexOutOfBoundsException e) {
                                     Toast.makeText(SpaceShipEditorActivity.this, "Data not updated. Please retry", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -306,7 +302,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 //        speedEditText.setText(String.valueOf(speed));
 //        rideSharingTextView.setText(String.valueOf(haveSharedRide));
         descriptionEditText.setText(description);
-        if(haveSharedRide) rideSharingTextView.setText("YES");
+        if (haveSharedRide) rideSharingTextView.setText("YES");
         else rideSharingTextView.setText("NO");
     }
 
@@ -314,10 +310,10 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
             return false;
         }
-        if (!(spaceShip1.getBusyTime()==spaceShip2.getBusyTime())) {
+        if (!(spaceShip1.getBusyTime() == spaceShip2.getBusyTime())) {
             return false;
         }
-        if (!(spaceShip1.getPrice()==spaceShip2.getPrice())) {
+        if (!(spaceShip1.getPrice() == spaceShip2.getPrice())) {
             return false;
         }
         if (!(spaceShip1.getSpaceShipRating().equals(spaceShip2.getSpaceShipRating()))) {

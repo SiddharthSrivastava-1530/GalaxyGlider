@@ -266,6 +266,8 @@ public class SpaceShipList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getUserData();
+        searchSpaceship.setQuery("",false);
+        getSpaceShips("");
     }
 
     private void getSpaceShips(String userQuery) {

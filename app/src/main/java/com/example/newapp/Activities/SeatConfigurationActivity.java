@@ -106,7 +106,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
         // {0,1,2,3} = {Food,Music,Sleep,Fitness};
         services = "0000";
-        seatsAvailable = "000000000000";
+        seatsAvailable = "222222222222";
 
 
         addSeatbtn = findViewById(R.id.add_btn_seats);

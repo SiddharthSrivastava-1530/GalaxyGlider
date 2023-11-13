@@ -69,6 +69,8 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private ArrayList<Review> reviews;
     private String services;
     private String currentSeatConfiguration;
+    private String chosenSeatConfiguration;
+    private int seatsChosen = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
 
         currentSeatConfiguration = seats;
+        chosenSeatConfiguration = "000000000000";
 
         attachSeatsListener();
         setServicesViews();
@@ -137,22 +140,35 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         confirm_seats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ShowSeatConfigurationActivity.this, CheckoutActivity.class);
-                intent.putExtra("current_seat_config", currentSeatConfiguration);
-                startActivity(intent);
+                Intent intent1 = new Intent(ShowSeatConfigurationActivity.this, CheckoutActivity.class);
+                intent1.putExtra("name_ss", name);
+                intent1.putExtra("description_ss", description);
+                intent1.putExtra("price_ss", price);
+                intent1.putExtra("rating_ss", ratings);
+                intent1.putExtra("speed_ss", speed);
+                intent1.putExtra("busyTime_ss", busyTime);
+                intent1.putExtra("seats_ss", seats);
+                intent1.putExtra("shared_ride_ss", haveSharedRide);
+                intent1.putExtra("loginMode", loginMode);
+                intent1.putExtra("companyID", companyId);
+                intent1.putExtra("update_spaceship", false);
+                intent1.putExtra("reviews_ss", reviews);
+                intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
+                startActivity(intent1);
             }
         });
-
 
 
         seat1_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(0)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,0,'1');
+                if (currentSeatConfiguration.charAt(0) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 0, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 0, '1');
                     seat1_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,0,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 0, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 0, '0');
                     seat1_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -161,11 +177,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat2_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(1)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,1,'1');
+                if (currentSeatConfiguration.charAt(1) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 1, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 1, '1');
                     seat2_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,1,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 1, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 1, '0');
                     seat2_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -174,11 +192,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat3_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(2)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,2,'1');
+                if (currentSeatConfiguration.charAt(2) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 2, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 2, '1');
                     seat3_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,2,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 2, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 2, '0');
                     seat3_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -187,11 +207,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat4_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(3)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,3,'1');
+                if (currentSeatConfiguration.charAt(3) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 3, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 3, '1');
                     seat4_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,3,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 3, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 3, '0');
                     seat4_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -200,11 +222,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat5_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(4)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,4,'1');
+                if (currentSeatConfiguration.charAt(4) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 4, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 4, '1');
                     seat5_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,4,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 4, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 4, '0');
                     seat5_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -213,11 +237,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat6_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(5)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,5,'1');
+                if (currentSeatConfiguration.charAt(5) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 5, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 5, '1');
                     seat6_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,5,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 5, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 5, '0');
                     seat6_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -226,11 +252,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat7_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(6)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,6,'1');
+                if (currentSeatConfiguration.charAt(6) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 6, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 6, '1');
                     seat7_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,6,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 6, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 6, '0');
                     seat7_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -239,11 +267,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat8_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(7)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,7,'1');
+                if (currentSeatConfiguration.charAt(7) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 7, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 7, '1');
                     seat8_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,7,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 7, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 7, '0');
                     seat8_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -252,11 +282,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat9_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(8)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,8,'1');
+                if (currentSeatConfiguration.charAt(8) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 8, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 8, '1');
                     seat9_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,8,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 8, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 8, '0');
                     seat9_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -265,11 +297,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat10_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(9)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,9,'1');
+                if (currentSeatConfiguration.charAt(9) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 9, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 9, '1');
                     seat10_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,9,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 9, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 9, '0');
                     seat10_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -278,11 +312,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat11_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(10)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,10,'1');
+                if (currentSeatConfiguration.charAt(10) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 10, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 10, '1');
                     seat11_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,10,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 10, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 10, '0');
                     seat11_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
@@ -291,58 +327,159 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         seat12_trans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentSeatConfiguration.charAt(11)=='0'){
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,11,'1');
+                if (currentSeatConfiguration.charAt(11) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 11, '0');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 11, '1');
                     seat12_trans.setBackgroundResource(R.drawable.colored_seats);
                 } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration,11,'0');
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 11, '1');
+                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 11, '0');
                     seat12_trans.setBackgroundResource(R.drawable.transparent_seat);
                 }
             }
         });
 
 
+    }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        attachSeatsListener();
     }
 
     private void setSeatConfigurationViews() {
         for (int i = 0; i < 12; i++) {
-            if (seats.charAt(i) == '1') {
-                if (i == 0) {
+            if (i == 0) {
+                if (seats.charAt(i) == '1') {
+                    seat1_trans.setVisibility(View.VISIBLE);
+                    seat1.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat1_trans.setVisibility(View.GONE);
+                    seat1.setVisibility(View.GONE);
+                } else {
                     seat1_trans.setVisibility(View.GONE);
                     seat1.setVisibility(View.VISIBLE);
-                } else if (i == 1) {
+                }
+            } else if (i == 1) {
+                if (seats.charAt(i) == '1') {
+                    seat2_trans.setVisibility(View.VISIBLE);
+                    seat2.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat2_trans.setVisibility(View.GONE);
+                    seat2.setVisibility(View.GONE);
+                } else {
                     seat2_trans.setVisibility(View.GONE);
                     seat2.setVisibility(View.VISIBLE);
-                } else if (i == 2) {
+                }
+            } else if (i == 2) {
+                if (seats.charAt(i) == '1') {
+                    seat3_trans.setVisibility(View.VISIBLE);
+                    seat3.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat3_trans.setVisibility(View.GONE);
+                    seat3.setVisibility(View.GONE);
+                } else {
                     seat3_trans.setVisibility(View.GONE);
                     seat3.setVisibility(View.VISIBLE);
-                } else if (i == 3) {
+                }
+            } else if (i == 3) {
+                if (seats.charAt(i) == '1') {
+                    seat4_trans.setVisibility(View.VISIBLE);
+                    seat4.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat4_trans.setVisibility(View.GONE);
+                    seat4.setVisibility(View.GONE);
+                } else {
                     seat4_trans.setVisibility(View.GONE);
                     seat4.setVisibility(View.VISIBLE);
-                } else if (i == 4) {
+                }
+            } else if (i == 4) {
+                if (seats.charAt(i) == '1') {
+                    seat5_trans.setVisibility(View.VISIBLE);
+                    seat5.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat5_trans.setVisibility(View.GONE);
+                    seat5.setVisibility(View.GONE);
+                } else {
                     seat5_trans.setVisibility(View.GONE);
                     seat5.setVisibility(View.VISIBLE);
-                } else if (i == 5) {
+                }
+            } else if (i == 5) {
+                if (seats.charAt(i) == '1') {
+                    seat6_trans.setVisibility(View.VISIBLE);
+                    seat6.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat6_trans.setVisibility(View.GONE);
+                    seat6.setVisibility(View.GONE);
+                } else {
                     seat6_trans.setVisibility(View.GONE);
                     seat6.setVisibility(View.VISIBLE);
-                } else if (i == 6) {
+                }
+            } else if (i == 6) {
+                if (seats.charAt(i) == '1') {
+                    seat7_trans.setVisibility(View.VISIBLE);
+                    seat7.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat7_trans.setVisibility(View.GONE);
+                    seat7.setVisibility(View.GONE);
+                } else {
                     seat7_trans.setVisibility(View.GONE);
                     seat7.setVisibility(View.VISIBLE);
-                } else if (i == 7) {
+                }
+            } else if (i == 7) {
+                if (seats.charAt(i) == '1') {
+                    seat8_trans.setVisibility(View.VISIBLE);
+                    seat8.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat8_trans.setVisibility(View.GONE);
+                    seat8.setVisibility(View.GONE);
+                } else {
                     seat8_trans.setVisibility(View.GONE);
                     seat8.setVisibility(View.VISIBLE);
-                } else if (i == 8) {
+                }
+            } else if (i == 8) {
+                if (seats.charAt(i) == '1') {
+                    seat9_trans.setVisibility(View.VISIBLE);
+                    seat9.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat9_trans.setVisibility(View.GONE);
+                    seat9.setVisibility(View.GONE);
+                } else {
                     seat9_trans.setVisibility(View.GONE);
                     seat9.setVisibility(View.VISIBLE);
-                } else if (i == 9) {
+                }
+            } else if (i == 9) {
+                if (seats.charAt(i) == '1') {
+                    seat10_trans.setVisibility(View.VISIBLE);
+                    seat10.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat10_trans.setVisibility(View.GONE);
+                    seat10.setVisibility(View.GONE);
+                } else {
                     seat10_trans.setVisibility(View.GONE);
                     seat10.setVisibility(View.VISIBLE);
-                } else if (i == 10) {
+                }
+            } else if (i == 10) {
+                if (seats.charAt(i) == '1') {
+                    seat11_trans.setVisibility(View.VISIBLE);
+                    seat11.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat11_trans.setVisibility(View.GONE);
+                    seat11.setVisibility(View.GONE);
+                } else {
                     seat11_trans.setVisibility(View.GONE);
                     seat11.setVisibility(View.VISIBLE);
-                } else if (i == 11) {
+                }
+            } else if (i == 11) {
+                if (seats.charAt(i) == '1') {
+                    seat12_trans.setVisibility(View.VISIBLE);
+                    seat12.setVisibility(View.GONE);
+                } else if (seats.charAt(i) == '2') {
+                    seat12_trans.setVisibility(View.GONE);
+                    seat12.setVisibility(View.GONE);
+                } else {
                     seat12_trans.setVisibility(View.GONE);
                     seat12.setVisibility(View.VISIBLE);
                 }
@@ -372,21 +509,22 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         }
     }
 
-    private String setCharAt(String services, int i,char ch) {
-        char [] charArray = services.toCharArray();
+    private String setCharAt(String services, int i, char ch) {
+        char[] charArray = services.toCharArray();
         charArray[i] = ch;
         return new String(charArray);
     }
 
-    private void attachSeatsListener(){
+    private void attachSeatsListener() {
+//        Toast.makeText(this, seats, Toast.LENGTH_SHORT).show();////////////////////////////////
         try {
-            SpaceShip originalSpaceShip = new SpaceShip(name,description,ratings,ratings,seats,services,
-                    haveSharedRide,Long.parseLong(busyTime),Float.parseFloat(price),speed,reviews);
+            SpaceShip originalSpaceShip = new SpaceShip(name, description, "", ratings, seats, services,
+                    haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
             DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                     .child(companyId).child("spaceShips");
 
             // Fetch the existing spaceShips
-            companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            companyRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
@@ -404,16 +542,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                         }
                     }
 
-                    // Update the spaceShip you want to delete
+                    // get upadated the spaceShip seats
                     try {
                         if (index != -1) seats = spaceShipArrayList.get(index).getSeatsAvailable();
                         setSeatConfigurationViews();
                     } catch (IndexOutOfBoundsException e) {
                         Toast.makeText(ShowSeatConfigurationActivity.this, "Data not updated. Please retry", Toast.LENGTH_SHORT).show();
                     }
-
-                    // Set the updated spaceShips back to the company reference
-                    companyRef.setValue(spaceShipArrayList);
 
                 }
 
@@ -422,8 +557,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                     // Handle any errors here
                 }
             });
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "Slow Internet Connection",
                     Toast.LENGTH_SHORT).show();
         }
@@ -433,10 +567,10 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
             return false;
         }
-        if (!(spaceShip1.getBusyTime()==spaceShip2.getBusyTime())) {
+        if (!(spaceShip1.getBusyTime() == spaceShip2.getBusyTime())) {
             return false;
         }
-        if (!(spaceShip1.getPrice()==spaceShip2.getPrice())) {
+        if (!(spaceShip1.getPrice() == spaceShip2.getPrice())) {
             return false;
         }
         if (!(spaceShip1.getSpaceShipRating().equals(spaceShip2.getSpaceShipRating()))) {
