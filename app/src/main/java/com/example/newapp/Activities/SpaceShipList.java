@@ -71,7 +71,7 @@ public class SpaceShipList extends AppCompatActivity {
     private String companyId;
     private String loginMode;
     private String currentUserDescription;
-    final private String filtersUsed[] = {"Sort By", "Rating" , "Price"};
+    final private String filtersUsed[] = {"Sort By", "Rating", "Price"};
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -125,7 +125,7 @@ public class SpaceShipList extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentUserAuthStatus) {
+                if (currentUserAuthStatus) {
                     if (loginMode.equals("owner")) {
                         Intent intent1 = new Intent(SpaceShipList.this, SpaceShipEditorActivity.class);
                         intent1.putExtra("companyID", companyId);
@@ -174,6 +174,7 @@ public class SpaceShipList extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 getSpaceShips(newText);
@@ -266,7 +267,7 @@ public class SpaceShipList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getUserData();
-        searchSpaceship.setQuery("",false);
+        searchSpaceship.setQuery("", false);
         getSpaceShips("");
     }
 
@@ -275,16 +276,16 @@ public class SpaceShipList extends AppCompatActivity {
         try {
             int spinnerPosition = spinner.getSelectedItemPosition();
             String child = "";
-            if(spinnerPosition == 1){
+            if (spinnerPosition == 1) {
                 child = "spaceShipRating";
             }
-            if(spinnerPosition == 2){
+            if (spinnerPosition == 2) {
                 child = "price";
             }
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company").child(companyId).child("spaceShips");
             Query query = databaseReference;
-            if(!child.isEmpty()){
+            if (!child.isEmpty()) {
                 query = databaseReference.orderByChild(child);
             }
             query.addValueEventListener(new ValueEventListener() {
@@ -295,7 +296,7 @@ public class SpaceShipList extends AppCompatActivity {
                         for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                             if (spaceShip != null) {
-                                if(spaceShip.getSpaceShipName().toLowerCase().contains(userQuery.toLowerCase())){
+                                if (spaceShip.getSpaceShipName().toLowerCase().contains(userQuery.toLowerCase())) {
                                     spaceShipArrayList.add(spaceShip);
                                 }
                             }
@@ -303,6 +304,7 @@ public class SpaceShipList extends AppCompatActivity {
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
