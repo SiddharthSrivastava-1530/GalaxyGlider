@@ -77,52 +77,23 @@
                     android:textSize="16sp"/>
 
                 <Space
-                    android:layout_width="15dp"
+                    android:layout_width="11dp"
                     android:layout_height="0dp"/>
 
                 <!-- Star 1 -->
-                <TextView
-                    android:id="@+id/oneStar_spaceShip_holder"
+                <RatingBar
+                    android:id="@+id/ratingBar_spaceship_holder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/star_ratings"
-                    android:visibility="invisible"
-                    android:layout_marginEnd="5dp"/>
-
-                <!-- Star 2 -->
-                <TextView
-                    android:id="@+id/twoStar_spaceShip_holder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/star_ratings"
-                    android:visibility="invisible"
-                    android:layout_marginEnd="5dp"/>
-
-                <!-- Star 3 -->
-                <TextView
-                    android:id="@+id/threeStar_spaceShip_holder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/star_ratings"
-                    android:visibility="invisible"
-                    android:layout_marginEnd="5dp"/>
-
-                <!-- Star 4 -->
-                <TextView
-                    android:id="@+id/fourStar_spaceShip_holder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/star_ratings"
-                    android:visibility="invisible"
-                    android:layout_marginEnd="5dp"/>
-
-                <!-- Star 5 -->
-                <TextView
-                    android:id="@+id/fiveStar_spaceShip_holder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"
-                    android:background="@drawable/star_ratings"/>
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/black"
+                    android:progressBackgroundTint="@color/black"
+                    android:progressTint="@color/white"
+                    android:stepSize="0.5"
+                    android:rating="2"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:background="@color/white"
+                    />
             </LinearLayout>
         </LinearLayout>
 

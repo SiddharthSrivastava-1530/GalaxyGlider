@@ -3,6 +3,7 @@ package com.example.newapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
     private ArrayList<Review> reviews;
     private String services;
 
+    private RatingBar ratingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +58,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
         nameTextview = findViewById(R.id.spaceShipName_details_activity);
         priceTextview = findViewById(R.id.spaceShip_price_details_activity);
-        speedTextview = findViewById(R.id.spaceShip_speed_details_activity);
+//        speedTextview = findViewById(R.id.spaceShip_speed_details_activity);
 //        sharedRideTextview = findViewById(R.id.spaceShip_rideSharing_details_activity);
         descriptionTextview = findViewById(R.id.desc_details_activity);
         seatAvailableTextview = findViewById(R.id.seats_spaceShip_details_activity);
@@ -63,6 +66,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 //        busyTimeTextview = findViewById(R.id.spaceShip_busyTime_details_activity);
         bookSpaceShipTextView = findViewById(R.id.book_ss_tv);
         seeAllReviews = findViewById(R.id.see_Reviews_tv);
+        ratingBar = findViewById(R.id.ratingBar_spaceship_details);
 
         fab = findViewById(R.id.fab_details_activity);
 
@@ -79,6 +83,8 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
+
+        ratingBar.setRating(Float.parseFloat(ratings));
 
         if(!loginMode.equals("user")){
             bookSpaceShipTextView.setVisibility(View.GONE);
@@ -146,9 +152,10 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
     private void setViewData() {
 
+
         nameTextview.setText(name);
         priceTextview.setText(price);
-        speedTextview.setText(String.valueOf(speed));
+//        speedTextview.setText(String.valueOf(speed));
 //        sharedRideTextview.setText(String.valueOf(haveSharedRide));
         descriptionTextview.setText(description);
         seatAvailableTextview.setText(String.valueOf(getSeatCount()));
