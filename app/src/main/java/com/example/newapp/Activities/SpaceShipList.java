@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -51,7 +53,6 @@ public class SpaceShipList extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SpaceShipAdapter spaceShipAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
     SpaceShipAdapter.OnSpaceShipClickListener onSpaceShipClickListener;
     private FloatingActionButton floatingActionButton;
     private String imageUrl;
@@ -99,7 +100,6 @@ public class SpaceShipList extends AppCompatActivity {
         progressBar = findViewById(R.id.progressbar_spaceship);
         recyclerView = findViewById(R.id.recycler_spaceship);
         floatingActionButton = findViewById(R.id.fab_spaceship);
-        swipeRefreshLayout = findViewById(R.id.swip1_spaceship);
         drawerLayout = findViewById(R.id.drawer_layout1_spaceShips);
         navigationView = findViewById(R.id.nav_items_spaceShips);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_nav_drawer, R.string.close_nav_drawer);
@@ -113,7 +113,6 @@ public class SpaceShipList extends AppCompatActivity {
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
 
-        Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
 
         if (!loginMode.equals("owner")) {
             floatingActionButton.setVisibility(View.GONE);
@@ -139,21 +138,13 @@ public class SpaceShipList extends AppCompatActivity {
         });
 
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getSpaceShips("");
-                swipeRefreshLayout.setRefreshing(false);
-                spinner.setSelection(0);
-            }
-        });
-
         // Open the details of specific spaceship clicked
         onSpaceShipClickListener = new SpaceShipAdapter.OnSpaceShipClickListener() {
             @Override
             public void onSpaceShipsClicked(int position) {
                 Intent intent1 = new Intent(SpaceShipList.this, SpaceShipDetailsActivity.class);
                 intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
+                intent1.putExtra("id_ss", spaceShipArrayList.get(position).getSpaceShipId());
                 intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getSpaceShipRating());
                 intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
                 intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
@@ -247,15 +238,6 @@ public class SpaceShipList extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
@@ -269,6 +251,37 @@ public class SpaceShipList extends AppCompatActivity {
         getUserData();
         searchSpaceship.setQuery("", false);
         getSpaceShips("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (loginMode.equals("owner")) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Exit the app");
+                builder.setMessage("Are you sure you want to exit the app.");
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SpaceShipList.super.onBackPressed();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 
     private void getSpaceShips(String userQuery) {

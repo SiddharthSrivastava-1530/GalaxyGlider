@@ -62,7 +62,6 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         companyLicenseUrl = intent.getStringExtra("company_license");
         isCompanyAuthorised = intent.getBooleanExtra("isAuthorised", false);
 
-        Toast.makeText(this, loginMode, Toast.LENGTH_SHORT).show();
 
         if (!(loginMode.equals("admin"))) {
             authorizeTextView.setVisibility(View.GONE);

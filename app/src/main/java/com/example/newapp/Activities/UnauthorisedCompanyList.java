@@ -34,7 +34,6 @@ public class UnauthorisedCompanyList extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private CompanyAdapter companyAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
@@ -54,20 +53,9 @@ public class UnauthorisedCompanyList extends Fragment {
 
         progressBar = getView().findViewById(R.id.progressbar_unauthorized);
         recyclerView = getView().findViewById(R.id.recycler_unauthorized);
-        swipeRefreshLayout = getView().findViewById(R.id.swip_unauthorized);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
-
-        Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getUnauthorizedCompanies(searchCompany.getQuery().toString());
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {

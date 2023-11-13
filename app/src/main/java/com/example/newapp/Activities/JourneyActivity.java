@@ -3,13 +3,11 @@ package com.example.newapp.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,51 +15,44 @@ import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.razorpay.Checkout;
-import com.razorpay.PaymentResultListener;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
-    private EditText fromLocation, toLocation, distance;
-    private TextView bookRideButton;
+public class JourneyActivity extends AppCompatActivity {
+
+    private TextView journeyCompletedTextView;
     private String name;
     private String spaceShipRating;
     private String description;
     private String seats;
+    private String services;
     private String price;
     private float speed;
     private String busyTime;
     private Boolean haveSharedRide;
     private String companyId;
     private String loginMode;
-    private String services;
-    private String chosenSeatConfig;
+    private String refId;
     private ArrayList<Review> reviews;
+    private String source;
+    private String destination;
+    private String distance;
     private String updatedSeatsConfiguration;
+    private String chosenSeatConfig;
     private String spaceShipId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checkout);
-        Checkout.preload(getApplicationContext());
+        setContentView(R.layout.activity_journey);
 
-        getSupportActionBar().hide();
-
-        bookRideButton = findViewById(R.id.bookRideButton);
-        fromLocation = findViewById(R.id.fromLocation);
-        toLocation = findViewById(R.id.toLocation);
-        distance = findViewById(R.id.distance_journey_et);
+        journeyCompletedTextView = findViewById(R.id.journey_completed_tv);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
@@ -78,63 +69,32 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         companyId = intent.getStringExtra("companyID");
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
         chosenSeatConfig = intent.getStringExtra("chosen_seat_config");
+        refId = intent.getStringExtra("refId");
+        source = intent.getStringExtra("source");
+        destination = intent.getStringExtra("destination");
+        distance = intent.getStringExtra("distance");
 
-        bookRideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(CheckoutActivity.this, UserReviewsActivity.class);
-//                intent.putExtra("from", fromLocation.getText().toString());
-//                intent.putExtra("to", toLocation.getText().toString());
-//                intent.putExtra("date", date.getText().toString());
-//                intent.putExtra("time", time.getText().toString());
-//                startPayment();
-                onPaymentSuccess("h2njdfk456iowGFbjsvd");
-            }
-        });
-    }
-
-    private void startPayment() {
-        Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_YEx4Fc8oJfPIUu");
-        checkout.setImage(R.drawable.checkout_logo);
-
-        final Activity activity = this;
-
-        try {
-            JSONObject options = new JSONObject();
-            String amount = "6";
-            amount = getIntent().getStringExtra("amt");
-            options.put("name", "Galaxy Glider");
-            options.put("description", "description");
-            options.put("theme.color", "#000000");
-            options.put("currency", "INR");
-            options.put("amount", amount);
-            options.put("prefill.email", "as.nishu18@gmail.com");
-//            options.put("prefill.contact","8707279750");
-            JSONObject retryObj = new JSONObject();
-            checkout.open(activity, options);
-        } catch (Exception e) {
-            Log.e("TAG", "Error in starting Razorpay Checkout", e);
-        }
-    }
-
-    @Override
-    public void onPaymentSuccess(String s) {
-//        Checkout.clearUserData(this);
-        if(checkData()) {
-            updateSeats(s);
-        }
-        Log.d("onSUCCESS", "onPaymentSuccess: " + s);
-    }
-
-    @Override
-    public void onPaymentError(int i, String s) {
-        Log.d("onERROR", "onPaymentError: " + s);
-    }
-
-    private void updateSeats(String refId) {
+        updatedSeatsConfiguration = seats;
 
         attachSeatsListener();
+
+        journeyCompletedTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSeats();
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
+    private void updateSeats() {
 
         SpaceShip currentSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats, services,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
@@ -161,27 +121,20 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                     }
                 }
 
-
-                if(updateSeatsConfiguration()) {
-                    currentSpaceShip.setSeatsAvailable(updatedSeatsConfiguration);
-                } else {
-                    Toast.makeText(CheckoutActivity.this, "Chosen configuration unavailable at moment. Please retry", Toast.LENGTH_SHORT).show();
-                }
+                getChangedSeatConfig();
+                currentSpaceShip.setSeatsAvailable(updatedSeatsConfiguration);
 
 
                 // Update the spaceShip
-                    if (index != -1) {
-                        spaceShipArrayList.set(index, currentSpaceShip);
-                        Toast.makeText(CheckoutActivity.this, "Your seats are booked. Enjoy the journey",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                if (index != -1) {
+                    spaceShipArrayList.set(index, currentSpaceShip);
+                }
 
                 // Set the updated spaceShips back to the company reference
                 companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(CheckoutActivity.this, "Seats confirmed", Toast.LENGTH_SHORT).show();
-                        Intent intent1 = new Intent(CheckoutActivity.this, JourneyActivity.class);
+                        Intent intent1 = new Intent(JourneyActivity.this, UserReviewsActivity.class);
                         intent1.putExtra("name_ss", name);
                         intent1.putExtra("id_ss", spaceShipId);
                         intent1.putExtra("description_ss", description);
@@ -194,12 +147,11 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         intent1.putExtra("loginMode", loginMode);
                         intent1.putExtra("companyID", companyId);
                         intent1.putExtra("update_spaceship", false);
-                        intent1.putExtra("chosen_seat_config", chosenSeatConfig);
                         intent1.putExtra("reviews_ss", reviews);
                         intent1.putExtra("refId", refId);
-                        intent1.putExtra("source", fromLocation.getText().toString());
-                        intent1.putExtra("destination", toLocation.getText().toString());
-                        intent1.putExtra("distance", distance.getText().toString());
+                        intent1.putExtra("source", source);
+                        intent1.putExtra("destination", destination);
+                        intent1.putExtra("distance", distance);
                         startActivity(intent1);
                     }
                 });
@@ -215,30 +167,22 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
     }
 
+    private void getChangedSeatConfig() {
 
-    private boolean updateSeatsConfiguration() {
-        String copy = updatedSeatsConfiguration;
         for (int position = 0; position < 12; position++) {
-            if (chosenSeatConfig.charAt(position) == '1')
-            {
-                if (seats.charAt(position) == '1') {
-                    updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, '0');
-                } else {
-                    updatedSeatsConfiguration = copy;
-                    return false;
-                }
-            } else
-            {
+            if (chosenSeatConfig.charAt(position) == '1') {
+                updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, '1');
+            } else {
                 char character = seats.charAt(position);
                 updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, character);
             }
         }
-        return true;
+
     }
 
-    private String setCharAt(String services, int position, char ch) {
+    private String setCharAt(String services, int i, char ch) {
         char[] charArray = services.toCharArray();
-        charArray[position] = ch;
+        charArray[i] = ch;
         return new String(charArray);
     }
 
@@ -251,7 +195,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                     .child(companyId).child("spaceShips");
 
-            // Fetch the existing spaceShips
+
             companyRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -262,7 +206,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                             if (spaceShip != null) {
                                 spaceShipArrayList.add(spaceShip);
-                                if (spaceShip.getSpaceShipId().equals(originalSpaceShip.getSpaceShipId())) {
+                                if (originalSpaceShip.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
                                     index = counter;
                                 }
                                 counter++;
@@ -270,14 +214,16 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         }
                     }
 
-                    // Update the spaceShip you want to delete
+                    // Update the data changes in variables
                     try {
                         if (index != -1) {
                             seats = spaceShipArrayList.get(index).getSeatsAvailable();
                             updatedSeatsConfiguration = seats;
+                            reviews = spaceShipArrayList.get(index).getReviews();
+                            spaceShipRating = spaceShipArrayList.get(index).getSpaceShipRating();
                         }
                     } catch (IndexOutOfBoundsException e) {
-                        Toast.makeText(CheckoutActivity.this, "Data not updated. Please retry",
+                        Toast.makeText(JourneyActivity.this, "Data not updated. Please retry",
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -285,7 +231,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors here
+
                 }
             });
         } catch (Exception e) {
@@ -294,20 +240,32 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         }
     }
 
-    private boolean checkData(){
-        if(TextUtils.isEmpty(fromLocation.getText().toString())){
-            Toast.makeText(this, "Please enter source", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(TextUtils.isEmpty(toLocation.getText().toString())){
-            Toast.makeText(this, "Please enter destination", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if(TextUtils.isEmpty(distance.getText().toString())){
-            Toast.makeText(this, "Please enter approximated distance", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
+
+    // showing confirmation dialog to user onBackPress.
+    private void showExitConfirmationDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Exit the process");
+        builder.setMessage("Are you sure you want to exit ");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent1 = new Intent(JourneyActivity.this, SpaceShipList.class);
+                intent1.putExtra("loginMode", "user");
+                intent1.putExtra("companyID", companyId);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent1);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

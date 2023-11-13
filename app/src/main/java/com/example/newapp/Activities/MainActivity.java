@@ -28,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
         enterAsOwner = findViewById(R.id.textView_as_owner);
         enterAsAdmin = findViewById(R.id.textView_as_admin);
 
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
-        getSupportActionBar().hide();
+//        View decorView = getWindow().getDecorView();
+//        // Hide the status bar.
+//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+//        decorView.setSystemUiVisibility(uiOptions);
+//        // Remember that you should never show the action bar if the
+//        // status bar is hidden, so hide that too if necessary.
+//        getSupportActionBar().hide();
 
         // If already logged in then open the specific activity.
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {

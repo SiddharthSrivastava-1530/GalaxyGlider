@@ -17,17 +17,11 @@
         app:menu="@menu/nav_menu"
         android:layout_gravity="start"/>
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/companies_constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/swip1_spaceship">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/companies_constraint"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+    android:background="@color/white">
 
         <ProgressBar
             android:id="@+id/progressbar_spaceship"
@@ -114,5 +108,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

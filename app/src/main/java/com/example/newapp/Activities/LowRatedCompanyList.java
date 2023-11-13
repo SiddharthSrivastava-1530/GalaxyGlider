@@ -36,7 +36,6 @@ public class LowRatedCompanyList extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private CompanyAdapter companyAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
@@ -57,20 +56,10 @@ public class LowRatedCompanyList extends Fragment {
 
         progressBar = getView().findViewById(R.id.progressbar_lowRated);
         recyclerView = getView().findViewById(R.id.recycler_lowRated);
-        swipeRefreshLayout = getView().findViewById(R.id.swip_lowRated);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 
-        Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getLowRatedCompanies(searchCompany.getQuery().toString());
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {

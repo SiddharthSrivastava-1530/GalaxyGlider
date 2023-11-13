@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SeatConfigurationActivity extends AppCompatActivity {
 
@@ -75,6 +76,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
     private String services;
     private String seatsAvailable;
     ArrayList<Review> reviews;
+    private String spaceShipId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +124,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
         rating = intent.getStringExtra("rating_ss");
+        spaceShipId = intent.getStringExtra("id_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
         speed = intent.getFloatExtra("speed_ss", 0);
@@ -140,38 +143,32 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         addSeatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(total_seats==0){
+                if (total_seats == 0) {
                     seat1.setVisibility(View.VISIBLE);
                     seat2.setVisibility(View.VISIBLE);
-                    total_seats+=2;
-                }
-                else if(total_seats==2){
+                    total_seats += 2;
+                } else if (total_seats == 2) {
                     seat3.setVisibility(View.VISIBLE);
                     seat4.setVisibility(View.VISIBLE);
-                    total_seats+=2;
-                }
-                else if(total_seats==4){
+                    total_seats += 2;
+                } else if (total_seats == 4) {
                     seat5.setVisibility(View.VISIBLE);
                     seat6.setVisibility(View.VISIBLE);
-                    total_seats+=2;
-                }
-                else if(total_seats==6){
+                    total_seats += 2;
+                } else if (total_seats == 6) {
                     seat7.setVisibility(View.VISIBLE);
                     seat8.setVisibility(View.VISIBLE);
-                    total_seats+=2;
-                }
-                else if(total_seats==8){
+                    total_seats += 2;
+                } else if (total_seats == 8) {
                     seat9.setVisibility(View.VISIBLE);
                     seat10.setVisibility(View.VISIBLE);
-                    total_seats+=2;
-                }
-                else if(total_seats==10){
+                    total_seats += 2;
+                } else if (total_seats == 10) {
                     seat11.setVisibility(View.VISIBLE);
                     seat12.setVisibility(View.VISIBLE);
-                    total_seats+=2;
-                }
-                else{
-                    Toast.makeText(SeatConfigurationActivity.this,"You cannot add more seats to your spaceship",Toast.LENGTH_SHORT).show();
+                    total_seats += 2;
+                } else {
+                    Toast.makeText(SeatConfigurationActivity.this, "You cannot add more seats to your spaceship", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -179,37 +176,31 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         removeSeatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(total_seats==2){
+                if (total_seats == 2) {
                     seat1.setVisibility(View.INVISIBLE);
                     seat2.setVisibility(View.INVISIBLE);
-                    total_seats-=2;
-                }
-                else if(total_seats==4){
+                    total_seats -= 2;
+                } else if (total_seats == 4) {
                     seat3.setVisibility(View.INVISIBLE);
                     seat4.setVisibility(View.INVISIBLE);
-                    total_seats-=2;
-                }
-                else if(total_seats==6){
+                    total_seats -= 2;
+                } else if (total_seats == 6) {
                     seat5.setVisibility(View.INVISIBLE);
                     seat6.setVisibility(View.INVISIBLE);
-                    total_seats-=2;
-                }
-                else if(total_seats==8){
+                    total_seats -= 2;
+                } else if (total_seats == 8) {
                     seat7.setVisibility(View.INVISIBLE);
                     seat8.setVisibility(View.INVISIBLE);
-                    total_seats-=2;
-                }
-                else if(total_seats==10){
+                    total_seats -= 2;
+                } else if (total_seats == 10) {
                     seat9.setVisibility(View.INVISIBLE);
                     seat10.setVisibility(View.INVISIBLE);
-                    total_seats-=2;
-                }
-                else if(total_seats==12){
+                    total_seats -= 2;
+                } else if (total_seats == 12) {
                     seat11.setVisibility(View.INVISIBLE);
                     seat12.setVisibility(View.INVISIBLE);
-                    total_seats-=2;
-                }
-                else{
+                    total_seats -= 2;
+                } else {
 
                 }
             }
@@ -220,7 +211,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 food.setVisibility(View.VISIBLE);
                 food_not.setVisibility(View.GONE);
-                services = setCharAt(services,0, '1');
+                services = setCharAt(services, 0, '1');
             }
         });
 
@@ -229,7 +220,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 food.setVisibility(View.GONE);
                 food_not.setVisibility(View.VISIBLE);
-                services = setCharAt(services,0, '0');
+                services = setCharAt(services, 0, '0');
             }
         });
 
@@ -238,7 +229,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 music.setVisibility(View.VISIBLE);
                 music_not.setVisibility(View.GONE);
-                services = setCharAt(services,1, '1');
+                services = setCharAt(services, 1, '1');
             }
         });
 
@@ -247,7 +238,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 music.setVisibility(View.GONE);
                 music_not.setVisibility(View.VISIBLE);
-                services = setCharAt(services,1, '0');
+                services = setCharAt(services, 1, '0');
             }
         });
 
@@ -256,7 +247,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 sleep_not.setVisibility(View.GONE);
                 sleep.setVisibility(View.VISIBLE);
-                services = setCharAt(services,2, '1');
+                services = setCharAt(services, 2, '1');
             }
         });
 
@@ -265,7 +256,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 sleep.setVisibility(View.GONE);
                 sleep_not.setVisibility(View.VISIBLE);
-                services = setCharAt(services,2, '0');
+                services = setCharAt(services, 2, '0');
             }
         });
 
@@ -274,7 +265,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 fitness_not.setVisibility(View.GONE);
                 fitness.setVisibility(View.VISIBLE);
-                services = setCharAt(services,3, '1');
+                services = setCharAt(services, 3, '1');
             }
         });
 
@@ -283,31 +274,32 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 fitness.setVisibility(View.GONE);
                 fitness_not.setVisibility(View.VISIBLE);
-                services = setCharAt(services,3, '0');
+                services = setCharAt(services, 3, '0');
             }
         });
-
-
 
 
         confirmSeatConfiguration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!booleanUpdate){
-                    for(int i=0;i<total_seats;i++)
-                    {
-                        seatsAvailable = setCharAt(seatsAvailable,i,'1');
+                if (!booleanUpdate) {
+                    for (int position = 0; position < total_seats; position++) {
+                        seatsAvailable = setCharAt(seatsAvailable, position, '1');
                     }
-//                    Toast.makeText(SeatConfigurationActivity.this, , Toast.LENGTH_SHORT).show();
-                    saveSpaceShipsData();
+                    if(total_seats > 0) {
+                        saveSpaceShipsData();
+                    } else {
+                        Toast.makeText(SeatConfigurationActivity.this, "Please add a seat configuration " +
+                                        "for your spaceship", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
 
     }
 
-    private String setCharAt(String services, int i,char ch) {
-        char [] charArray = services.toCharArray();
+    private String setCharAt(String services, int i, char ch) {
+        char[] charArray = services.toCharArray();
         charArray[i] = ch;
         return new String(charArray);
     }
@@ -318,7 +310,8 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
         ArrayList<Review> reviews = new ArrayList<>();
-        spaceShip = new SpaceShip(name, description, "", "0.0", seatsAvailable,services,
+        String id = UUID.randomUUID().toString();
+        spaceShip = new SpaceShip(name, description, id, "0.0", seatsAvailable, services,
                 haveSharedRide, Long.parseLong("0"), Float.parseFloat(price), 0, reviews);
 
         companyRef.child("spaceShips").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -340,13 +333,15 @@ public class SeatConfigurationActivity extends AppCompatActivity {
                 companyRef.child("spaceShips").setValue(spaceShips).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(SeatConfigurationActivity.this, "SpaceShip added...",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent1 = new Intent(SeatConfigurationActivity.this, SpaceShipList.class);
-                        intent1.putExtra("loginMode","owner");
-                        intent1.putExtra("companyID", companyId);
-                        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent1);
+                        if (task.isComplete()) {
+                            Toast.makeText(SeatConfigurationActivity.this, "SpaceShip added...",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent intent1 = new Intent(SeatConfigurationActivity.this, SpaceShipList.class);
+                            intent1.putExtra("loginMode", "owner");
+                            intent1.putExtra("companyID", companyId);
+                            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent1);
+                        }
                     }
                 });
             }

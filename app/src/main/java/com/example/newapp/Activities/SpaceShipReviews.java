@@ -30,7 +30,7 @@ public class SpaceShipReviews extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     ReviewAdapter.OnReviewClickLiListener onReviewClickLiListener;
     private Spinner spinner;
-    final private String filtersUsed[] = {"Sort By", "Rating" , "Time"};
+    final private String filtersUsed[] = {"Sort By", "Rating", "Time"};
     private ArrayList<Review> backUpReviewsList;
 
     @Override
@@ -52,7 +52,7 @@ public class SpaceShipReviews extends AppCompatActivity {
         Intent intent = getIntent();
         reviewArrayList = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
 
-        if(reviewArrayList == null){
+        if (reviewArrayList == null) {
             reviewArrayList = new ArrayList<>();
         }
 
@@ -74,35 +74,31 @@ public class SpaceShipReviews extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
+                if (position == 0) {
                     reviewArrayList.clear();
                     reviewArrayList.addAll(backUpReviewsList);
                     setAdapter(reviewArrayList);
-                }
-                else if (position == 1){
+                } else if (position == 1) {
                     reviewArrayList.clear();
                     reviewArrayList.addAll(backUpReviewsList);
                     Collections.sort(reviewArrayList, new Comparator<Review>() {
                         @Override
                         public int compare(Review review, Review t1) {
-                            return (-1)*review.getRating().compareTo(t1.getRating());
+                            return (-1) * review.getRating().compareTo(t1.getRating());
                         }
                     });
                     setAdapter(reviewArrayList);
-                }
-                else if(position == 2){
+                } else if (position == 2) {
                     reviewArrayList.clear();
                     reviewArrayList.addAll(backUpReviewsList);
                     Collections.sort(reviewArrayList, new Comparator<Review>() {
                         @Override
                         public int compare(Review review, Review t1) {
-                            if(review.getTime() == t1.getTime()){
+                            if (review.getTime() == t1.getTime()) {
                                 return 0;
-                            }
-                            else if(review.getTime() > t1.getTime()){
+                            } else if (review.getTime() > t1.getTime()) {
                                 return -1;
-                            }
-                            else {
+                            } else {
                                 return 1;
                             }
                         }

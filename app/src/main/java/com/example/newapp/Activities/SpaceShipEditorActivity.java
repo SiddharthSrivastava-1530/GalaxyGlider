@@ -50,6 +50,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     private String loginMode;
     private String services;
     ArrayList<Review> reviews;
+    private String spaceShipId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
+        spaceShipId = intent.getStringExtra("id_ss");
         rating = intent.getStringExtra("rating_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
@@ -124,20 +126,23 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                         updateSpaceShipsData();
                     }
                 } else {
-                    Intent intent1 = new Intent(SpaceShipEditorActivity.this, SeatConfigurationActivity.class);
-                    intent1.putExtra("name_ss", nameEditText.getText().toString());
-                    intent1.putExtra("description_ss", descriptionEditText.getText().toString());
-                    intent1.putExtra("price_ss", priceEditText.getText().toString());
-                    intent1.putExtra("rating_ss", rating);
-                    intent1.putExtra("speed_ss", speed);
-                    intent1.putExtra("busyTime_ss", busyTime);
-                    intent1.putExtra("seats_ss", seats);
-                    intent1.putExtra("shared_ride_ss", haveSharedRide);
-                    intent1.putExtra("loginMode", loginMode);
-                    intent1.putExtra("companyID", companyId);
-                    intent1.putExtra("update_spaceship", false);
-                    intent1.putExtra("reviews_ss", reviews);
-                    startActivity(intent1);
+                    if (checkData()) {
+                        Intent intent1 = new Intent(SpaceShipEditorActivity.this, SeatConfigurationActivity.class);
+                        intent1.putExtra("name_ss", nameEditText.getText().toString());
+                        intent1.putExtra("id_ss", spaceShipId);
+                        intent1.putExtra("description_ss", descriptionEditText.getText().toString());
+                        intent1.putExtra("price_ss", priceEditText.getText().toString());
+                        intent1.putExtra("rating_ss", rating);
+                        intent1.putExtra("speed_ss", speed);
+                        intent1.putExtra("busyTime_ss", busyTime);
+                        intent1.putExtra("seats_ss", seats);
+                        intent1.putExtra("shared_ride_ss", haveSharedRide);
+                        intent1.putExtra("loginMode", loginMode);
+                        intent1.putExtra("companyID", companyId);
+                        intent1.putExtra("update_spaceship", false);
+                        intent1.putExtra("reviews_ss", reviews);
+                        startActivity(intent1);
+                    }
                 }
 
             }
@@ -177,7 +182,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     // deleting the spaceships
     private void deleteSpaceShipsData() {
 
-        SpaceShip spaceShipToDelete = new SpaceShip(name, description, "", rating
+        SpaceShip spaceShipToDelete = new SpaceShip(name, description, spaceShipId, rating
                 , seats, services, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(SpaceShipEditorActivity.this);
@@ -201,7 +206,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                         SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                                         if (spaceShip != null) {
                                             spaceShipArrayList.add(spaceShip);
-                                            if (areEqualSpaceShips(spaceShip, spaceShipToDelete)) {
+                                            if (spaceShipToDelete.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
                                                 index = counter;
                                             }
                                             counter++;
@@ -219,7 +224,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                         Toast.makeText(SpaceShipEditorActivity.this, "SpaceShip Deleted...",
                                                 Toast.LENGTH_SHORT).show();
                                         Intent intent1 = new Intent(SpaceShipEditorActivity.this, SpaceShipList.class);
-                                        intent1.putExtra("loginMode","owner");
+                                        intent1.putExtra("loginMode", "owner");
                                         intent1.putExtra("companyID", companyId);
                                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent1);
@@ -229,7 +234,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                // Handle any errors here
+
                             }
                         });
 
@@ -248,10 +253,10 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
         SpaceShip updatedSpaceShip = new SpaceShip(nameEditText.getText().toString(),
                 descriptionEditText.getText().toString(),
-                "", rating, seats, services, updatedRideSharing,
+                spaceShipId, rating, seats, services, updatedRideSharing,
                 Long.parseLong(busyTime), Float.parseFloat(priceEditText.getText().toString()), speed, reviews);
 
-        SpaceShip originalSpaceShip = new SpaceShip(name, description, "", rating, seats, services,
+        SpaceShip originalSpaceShip = new SpaceShip(name, description, spaceShipId, rating, seats, services,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
 
@@ -276,7 +281,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                         SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                                         if (spaceShip != null) {
                                             spaceShipArrayList.add(spaceShip);
-                                            if (areEqualSpaceShips(spaceShip, originalSpaceShip)) {
+                                            if (originalSpaceShip.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
                                                 index = counter;
                                             }
                                             counter++;
@@ -296,13 +301,15 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                 companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        Toast.makeText(SpaceShipEditorActivity.this, "SpaceShip Updated...",
-                                                Toast.LENGTH_SHORT).show();
-                                        Intent intent1 = new Intent(SpaceShipEditorActivity.this, SpaceShipList.class);
-                                        intent1.putExtra("loginMode","owner");
-                                        intent1.putExtra("companyID", companyId);
-                                        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent1);
+                                        if (task.isComplete()) {
+                                            Toast.makeText(SpaceShipEditorActivity.this, "SpaceShip Updated...",
+                                                    Toast.LENGTH_SHORT).show();
+                                            Intent intent1 = new Intent(SpaceShipEditorActivity.this, SpaceShipList.class);
+                                            intent1.putExtra("loginMode", "owner");
+                                            intent1.putExtra("companyID", companyId);
+                                            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent1);
+                                        }
                                     }
                                 });
 
@@ -310,7 +317,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                // Handle any errors here
+
                             }
                         });
                     }
@@ -331,26 +338,5 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         else rideSharingTextView.setText("NO");
     }
 
-    private boolean areEqualSpaceShips(SpaceShip spaceShip1, SpaceShip spaceShip2) {
-        if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpaceShipId().equals(spaceShip2.getSpaceShipId()))) {
-            return false;
-        }
-        if (!(spaceShip1.getBusyTime() == spaceShip2.getBusyTime())) {
-            return false;
-        }
-        if (!(spaceShip1.getPrice() == spaceShip2.getPrice())) {
-            return false;
-        }
-        if (!(spaceShip1.getDescription().equals(spaceShip2.getDescription()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpeed() == spaceShip2.getSpeed())) {
-            return false;
-        }
-        return true;
-    }
 
 }

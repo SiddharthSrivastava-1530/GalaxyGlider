@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/spaceship_details"
-    tools:context=".InvoiceActivity">
+    tools:context=".Activities.InvoiceActivity">
 
     <TextView
         android:id="@+id/textView_final"
@@ -14,26 +14,40 @@
         android:text="Thanks for using our app"
         android:textColor="@color/white"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/GenerateInvoice"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.63" />
 
-    <TextView
-        android:id="@+id/GenerateInvoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generate Invoice"
-        android:textSize="32sp"
-        android:textColor="@color/white"
-        android:background="@color/black"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
+        android:layout_width="210dp"
+        android:layout_height="60dp"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.751" />
+        app:layout_constraintVertical_bias="0.751">
 
+
+        <TextView
+            android:id="@+id/GenerateInvoice"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@color/black"
+            android:fontFamily="@font/inter_semibold"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Generate Invoice"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

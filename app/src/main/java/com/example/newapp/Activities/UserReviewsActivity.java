@@ -3,10 +3,11 @@ package com.example.newapp.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -15,9 +16,10 @@ import android.widget.Toast;
 import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
-import com.example.newapp.InvoiceActivity;
 import com.example.newapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,11 +28,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class UserReviewsActivity extends AppCompatActivity {
 
-    private Button submitReview_tv;
+    private TextView submitReview_tv;
     private RatingBar ratingBar;
     private float rating;
     private EditText reviews_et;
@@ -52,6 +53,7 @@ public class UserReviewsActivity extends AppCompatActivity {
     private String source;
     private String destination;
     private String distance;
+    private String spaceShipId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class UserReviewsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
+        spaceShipId = intent.getStringExtra("id_ss");
         spaceShipRating = intent.getStringExtra("rating_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
@@ -93,6 +96,7 @@ public class UserReviewsActivity extends AppCompatActivity {
                 updateReviews();
                 Intent intent1 = new Intent(UserReviewsActivity.this, InvoiceActivity.class);
                 intent1.putExtra("name_ss", name);
+                intent1.putExtra("id_ss", spaceShipId);
                 intent1.putExtra("description_ss", description);
                 intent1.putExtra("price_ss", price);
                 intent1.putExtra("rating_ss", spaceShipRating);
@@ -125,10 +129,43 @@ public class UserReviewsActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        showExitConfirmationDialog();
+    }
+
+    // showing confirmation dialog to user onBackPress.
+    private void showExitConfirmationDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Exit the process!!");
+        builder.setMessage("Are you sure you want to go back to spaceship Lists");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent1 = new Intent(UserReviewsActivity.this, SpaceShipList.class);
+                intent1.putExtra("loginMode", "user");
+                intent1.putExtra("companyID", companyId);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent1);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
 
     private void updateReviews() {
 
-        SpaceShip currentSpaceShip = new SpaceShip(name, description, "", spaceShipRating, seats,services,
+        SpaceShip currentSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats,services,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
@@ -145,7 +182,7 @@ public class UserReviewsActivity extends AppCompatActivity {
                     SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                         if (spaceShip != null) {
                             spaceShipArrayList.add(spaceShip);
-                            if (areEqualSpaceShips(spaceShip, currentSpaceShip)) {
+                            if (currentSpaceShip.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
                                 index = counter;
                             }
                             counter++;
@@ -172,11 +209,11 @@ public class UserReviewsActivity extends AppCompatActivity {
                 }
 
                 // Set the updated spaceShips back to the company reference
-                companyRef.setValue(spaceShipArrayList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(UserReviewsActivity.this, "Your review have been added. " +
-                                "Thanks for reviewing", Toast.LENGTH_SHORT).show();
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(UserReviewsActivity.this, "Thanks for reviewing us. " +
+                                "Your response was recorded...", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -195,29 +232,6 @@ public class UserReviewsActivity extends AppCompatActivity {
         float reviewCount = currentSpaceShip.getReviews().size();
         float currentRating = Float.parseFloat(currentSpaceShip.getSpaceShipRating());
         return String.valueOf(((currentRating * reviewCount) + rating)/(reviewCount + 1));
-    }
-
-
-    private Boolean areEqualSpaceShips(SpaceShip spaceShip1, SpaceShip spaceShip2) {
-        if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpaceShipId().equals(spaceShip2.getSpaceShipId()))) {
-            return false;
-        }
-        if (!(spaceShip1.getBusyTime()==spaceShip2.getBusyTime())) {
-            return false;
-        }
-        if (!(spaceShip1.getPrice()==spaceShip2.getPrice())) {
-            return false;
-        }
-        if (!(spaceShip1.getDescription().equals(spaceShip2.getDescription()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpeed() == spaceShip2.getSpeed())) {
-            return false;
-        }
-        return true;
     }
 
 

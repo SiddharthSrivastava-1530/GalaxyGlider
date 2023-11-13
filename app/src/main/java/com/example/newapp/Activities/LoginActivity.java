@@ -129,10 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                                     intent1 = new Intent(LoginActivity.this, AllListActivity.class);
                                 }
                                 intent1.putExtra("loginMode", loginMode);
-                                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                        | Intent.FLAG_ACTIVITY_NEW_TASK);
-
+                                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent1);
                                 finish();
                             } else {

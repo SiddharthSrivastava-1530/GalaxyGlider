@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
@@ -70,12 +71,14 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private String services;
     private String currentSeatConfiguration;
     private String chosenSeatConfiguration;
-    private int seatsChosen = 0;
+    private String spaceShipId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_seat_configuration);
+
+        getSupportActionBar().hide();
 
         seat1 = findViewById(R.id.seat1_show);
         seat2 = findViewById(R.id.seat2_show);
@@ -119,6 +122,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
+        spaceShipId = intent.getStringExtra("id_ss");
         ratings = intent.getStringExtra("rating_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
@@ -140,21 +144,27 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         confirm_seats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1 = new Intent(ShowSeatConfigurationActivity.this, CheckoutActivity.class);
-                intent1.putExtra("name_ss", name);
-                intent1.putExtra("description_ss", description);
-                intent1.putExtra("price_ss", price);
-                intent1.putExtra("rating_ss", ratings);
-                intent1.putExtra("speed_ss", speed);
-                intent1.putExtra("busyTime_ss", busyTime);
-                intent1.putExtra("seats_ss", seats);
-                intent1.putExtra("shared_ride_ss", haveSharedRide);
-                intent1.putExtra("loginMode", loginMode);
-                intent1.putExtra("companyID", companyId);
-                intent1.putExtra("update_spaceship", false);
-                intent1.putExtra("reviews_ss", reviews);
-                intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
-                startActivity(intent1);
+                if(checkData()) {
+                    Intent intent1 = new Intent(ShowSeatConfigurationActivity.this, CheckoutActivity.class);
+                    intent1.putExtra("name_ss", name);
+                    intent1.putExtra("id_ss", spaceShipId);
+                    intent1.putExtra("description_ss", description);
+                    intent1.putExtra("price_ss", price);
+                    intent1.putExtra("rating_ss", ratings);
+                    intent1.putExtra("speed_ss", speed);
+                    intent1.putExtra("busyTime_ss", busyTime);
+                    intent1.putExtra("seats_ss", seats);
+                    intent1.putExtra("shared_ride_ss", haveSharedRide);
+                    intent1.putExtra("loginMode", loginMode);
+                    intent1.putExtra("companyID", companyId);
+                    intent1.putExtra("update_spaceship", false);
+                    intent1.putExtra("reviews_ss", reviews);
+                    intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
+                    startActivity(intent1);
+                } else {
+                    Toast.makeText(ShowSeatConfigurationActivity.this, "Please choose at least 1 seat...",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -342,6 +352,16 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
     }
 
+    private boolean checkData() {
+        int chosenSeats = 0;
+        for(int position=0;position<12;position++){
+            if(chosenSeatConfiguration.charAt(position)=='1') {
+                chosenSeats++;
+            }
+        }
+        return chosenSeats>0;
+    }
+
 
     @Override
     protected void onResume() {
@@ -516,9 +536,9 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     }
 
     private void attachSeatsListener() {
-//        Toast.makeText(this, seats, Toast.LENGTH_SHORT).show();////////////////////////////////
+
         try {
-            SpaceShip originalSpaceShip = new SpaceShip(name, description, "", ratings, seats, services,
+            SpaceShip originalSpaceShip = new SpaceShip(name, description, spaceShipId, ratings, seats, services,
                     haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
             DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                     .child(companyId).child("spaceShips");
@@ -534,7 +554,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                             if (spaceShip != null) {
                                 spaceShipArrayList.add(spaceShip);
-                                if (areEqualSpaceShips(spaceShip, originalSpaceShip)) {
+                                if (originalSpaceShip.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
                                     index = counter;
                                 }
                                 counter++;
@@ -542,7 +562,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                         }
                     }
 
-                    // get upadated the spaceShip seats
+                    // get updated the spaceShip seats
                     try {
                         if (index != -1) seats = spaceShipArrayList.get(index).getSeatsAvailable();
                         setSeatConfigurationViews();
@@ -563,26 +583,5 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean areEqualSpaceShips(SpaceShip spaceShip1, SpaceShip spaceShip2) {
-        if (!(spaceShip1.getSpaceShipName().equals(spaceShip2.getSpaceShipName()))) {
-            return false;
-        }
-        if (!(spaceShip1.getBusyTime() == spaceShip2.getBusyTime())) {
-            return false;
-        }
-        if (!(spaceShip1.getPrice() == spaceShip2.getPrice())) {
-            return false;
-        }
-        if (!(spaceShip1.getSpaceShipRating().equals(spaceShip2.getSpaceShipRating()))) {
-            return false;
-        }
-        if (!(spaceShip1.getDescription().equals(spaceShip2.getDescription()))) {
-            return false;
-        }
-        if (!(spaceShip1.getSpeed() == spaceShip2.getSpeed())) {
-            return false;
-        }
-        return true;
-    }
 
 }

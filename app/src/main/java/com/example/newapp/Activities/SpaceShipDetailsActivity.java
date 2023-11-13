@@ -38,7 +38,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private ArrayList<Review> reviews;
     private String services;
-
+    private String spaceShipId;
     private RatingBar ratingBar;
 
     @Override
@@ -72,46 +72,48 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
+        spaceShipId = intent.getStringExtra("id_ss");
         ratings = intent.getStringExtra("rating_ss");
         description = intent.getStringExtra("description_ss");
         price = intent.getStringExtra("price_ss");
-        speed = intent.getFloatExtra("speed_ss",0);
+        speed = intent.getFloatExtra("speed_ss", 0);
         busyTime = intent.getStringExtra("busyTime_ss");
         seats = intent.getStringExtra("seats_ss");
         services = intent.getStringExtra("services_ss");
-        haveSharedRide = intent.getBooleanExtra("shared_ride_ss",false);
+        haveSharedRide = intent.getBooleanExtra("shared_ride_ss", false);
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
 
         ratingBar.setRating(Float.parseFloat(ratings));
 
-        if(!loginMode.equals("user")){
+        if (!loginMode.equals("user")) {
             bookSpaceShipTextView.setVisibility(View.GONE);
         }
 
         setViewData();
 
-        if(!loginMode.equals("owner")){
+        if (!loginMode.equals("owner")) {
             fab.setVisibility(View.GONE);
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(loginMode.equals("owner")){
-                    Intent intent1 = new Intent(SpaceShipDetailsActivity.this,SpaceShipEditorActivity.class);
+                if (loginMode.equals("owner")) {
+                    Intent intent1 = new Intent(SpaceShipDetailsActivity.this, SpaceShipEditorActivity.class);
                     intent1.putExtra("name_ss", name);
+                    intent1.putExtra("id_ss", spaceShipId);
                     intent1.putExtra("rating_ss", ratings);
                     intent1.putExtra("description_ss", description);
                     intent1.putExtra("price_ss", price);
-                    intent1.putExtra("speed_ss",speed);
-                    intent1.putExtra("busyTime_ss",busyTime);
-                    intent1.putExtra("seats_ss",seats);
-                    intent1.putExtra("shared_ride_ss",haveSharedRide);
-                    intent1.putExtra("loginMode",loginMode);
-                    intent1.putExtra("companyID",companyId);
-                    intent1.putExtra("update_spaceship",true);
+                    intent1.putExtra("speed_ss", speed);
+                    intent1.putExtra("busyTime_ss", busyTime);
+                    intent1.putExtra("seats_ss", seats);
+                    intent1.putExtra("shared_ride_ss", haveSharedRide);
+                    intent1.putExtra("loginMode", loginMode);
+                    intent1.putExtra("companyID", companyId);
+                    intent1.putExtra("update_spaceship", true);
                     intent1.putExtra("reviews_ss", reviews);
                     intent1.putExtra("services_ss", services);
                     startActivity(intent1);
@@ -124,15 +126,16 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent1 = new Intent(SpaceShipDetailsActivity.this, ShowSeatConfigurationActivity.class);
                 intent1.putExtra("name_ss", name);
+                intent1.putExtra("id_ss", spaceShipId);
                 intent1.putExtra("rating_ss", ratings);
                 intent1.putExtra("description_ss", description);
                 intent1.putExtra("price_ss", price);
-                intent1.putExtra("speed_ss",speed);
-                intent1.putExtra("busyTime_ss",busyTime);
-                intent1.putExtra("seats_ss",seats);
-                intent1.putExtra("shared_ride_ss",haveSharedRide);
-                intent1.putExtra("companyID",companyId);
-                intent1.putExtra("update_spaceship",true);
+                intent1.putExtra("speed_ss", speed);
+                intent1.putExtra("busyTime_ss", busyTime);
+                intent1.putExtra("seats_ss", seats);
+                intent1.putExtra("shared_ride_ss", haveSharedRide);
+                intent1.putExtra("companyID", companyId);
+                intent1.putExtra("update_spaceship", true);
                 intent1.putExtra("reviews_ss", reviews);
                 intent1.putExtra("services_ss", services);
                 startActivity(intent1);
@@ -164,14 +167,11 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
     }
 
-    private int getSeatCount(){
+    private int getSeatCount() {
         int seatCount = 0;
-        if(seats != null)
-        {
-            for (int i = 0; i < seats.length(); i++)
-            {
-                if (seats.charAt(i)=='1')
-                {
+        if (seats != null) {
+            for (int i = 0; i < seats.length(); i++) {
+                if (seats.charAt(i) == '1') {
                     seatCount++;
                 }
             }

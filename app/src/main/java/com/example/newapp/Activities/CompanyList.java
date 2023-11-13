@@ -34,7 +34,6 @@ public class CompanyList extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private CompanyAdapter companyAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
@@ -55,21 +54,10 @@ public class CompanyList extends Fragment {
 
         progressBar = getView().findViewById(R.id.progressbar);
         recyclerView = getView().findViewById(R.id.recycler);
-        swipeRefreshLayout = getView().findViewById(R.id.swip);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 
-        Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
-
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getCompanies(searchCompany.getQuery().toString());
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {

@@ -247,12 +247,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
         userPic = url;
     }
 
-    private void updateDescription(){
+    private void updateDescription() {
         String description = "";
-        if(description_et != null){
+        if (description_et != null) {
             description = description_et.getText().toString();
         }
-        DatabaseReference databaseReference =  FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
                 .getUid() + "/description");
         databaseReference.setValue(description).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
