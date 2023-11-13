@@ -119,6 +119,7 @@ public class LowRatedCompanyList extends Fragment {
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    companyArrayList.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         Company company = dataSnapshot.getValue(Company.class);
                         ArrayList<SpaceShip> spaceShipArrayList = company.getSpaceShips();

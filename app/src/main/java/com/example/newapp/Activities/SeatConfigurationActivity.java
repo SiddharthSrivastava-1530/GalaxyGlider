@@ -1,5 +1,6 @@
 package com.example.newapp.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -333,7 +337,18 @@ public class SeatConfigurationActivity extends AppCompatActivity {
                 spaceShips.add(spaceShip);
 
                 // Set the updated spaceShips ArrayList back to the company reference
-                companyRef.child("spaceShips").setValue(spaceShips);
+                companyRef.child("spaceShips").setValue(spaceShips).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(SeatConfigurationActivity.this, "SpaceShip added...",
+                                Toast.LENGTH_SHORT).show();
+                        Intent intent1 = new Intent(SeatConfigurationActivity.this, SpaceShipList.class);
+                        intent1.putExtra("loginMode","owner");
+                        intent1.putExtra("companyID", companyId);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent1);
+                    }
+                });
             }
 
             @Override
