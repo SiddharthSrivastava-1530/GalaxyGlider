@@ -36,65 +36,37 @@
             android:textSize="16sp"
             tools:text="A review is an evaluation of a publication, product, service." />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter"
-            android:textSize="18sp"
-            android:layout_marginLeft="10dp"
-            android:text="Rating"
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/white" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:orientation="horizontal">
 
-            <!-- Star 1 -->
             <TextView
-                android:id="@+id/oneStar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/star_ratings"
-                android:visibility="invisible"
-                android:layout_marginEnd="5dp"/>
+                android:fontFamily="@font/inter"
+                android:textSize="18sp"
+                android:paddingStart="10dp"
+                android:paddingRight="10dp"
+                android:text="Rating"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/white" />
 
-            <!-- Star 2 -->
-            <TextView
-                android:id="@+id/twoStar"
+            <RatingBar
+                android:id="@+id/ratingBar_userReview_holder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/star_ratings"
-                android:visibility="invisible"
-                android:layout_marginEnd="5dp"/>
+                android:layout_gravity="center"
+                android:backgroundTint="@color/black"
+                android:progressBackgroundTint="@color/black"
+                android:progressTint="@color/white"
+                android:stepSize="0.5"
+                android:rating="2"
+                style="?android:attr/ratingBarStyleSmall"
+                android:background="@color/white"
+                />
 
-            <!-- Star 3 -->
-            <TextView
-                android:id="@+id/threeStar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/star_ratings"
-                android:visibility="invisible"
-                android:layout_marginEnd="5dp"/>
-
-            <!-- Star 4 -->
-            <TextView
-                android:id="@+id/fourStar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/star_ratings"
-                android:visibility="invisible"
-                android:layout_marginEnd="5dp"/>
-
-            <!-- Star 5 -->
-            <TextView
-                android:id="@+id/fiveStar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:background="@drawable/star_ratings"/>
         </LinearLayout>
 
         <TextView
