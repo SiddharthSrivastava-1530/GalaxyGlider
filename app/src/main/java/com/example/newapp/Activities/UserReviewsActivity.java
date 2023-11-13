@@ -39,7 +39,6 @@ public class UserReviewsActivity extends AppCompatActivity {
     private String spaceShipRating;
     private String description;
     private String seats;
-    private String chosenSeatConfig;
     private String services;
     private String price;
     private float speed;
@@ -107,6 +106,8 @@ public class UserReviewsActivity extends AppCompatActivity {
                 intent1.putExtra("source",source);
                 intent1.putExtra("destination", destination);
                 intent1.putExtra("distance", distance);
+                intent1.putExtra("user_name",userName);
+                intent1.putExtra("user_email", userEmail);
                 startActivity(intent1);
             }
         });

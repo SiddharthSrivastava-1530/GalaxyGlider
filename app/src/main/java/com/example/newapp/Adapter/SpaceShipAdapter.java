@@ -49,15 +49,25 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
             holder.oneStar_spaceShip_holder.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==2){
+            holder.oneStar_spaceShip_holder.setVisibility(View.VISIBLE);
             holder.twoStar_spaceShip_holder.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==3){
+            holder.oneStar_spaceShip_holder.setVisibility(View.VISIBLE);
+            holder.twoStar_spaceShip_holder.setVisibility(View.VISIBLE);
             holder.threeStar_spaceShip_holder.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==4){
+            holder.oneStar_spaceShip_holder.setVisibility(View.VISIBLE);
+            holder.twoStar_spaceShip_holder.setVisibility(View.VISIBLE);
+            holder.threeStar_spaceShip_holder.setVisibility(View.VISIBLE);
             holder.fourStar_spaceShip_holder.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==5){
+            holder.oneStar_spaceShip_holder.setVisibility(View.VISIBLE);
+            holder.twoStar_spaceShip_holder.setVisibility(View.VISIBLE);
+            holder.threeStar_spaceShip_holder.setVisibility(View.VISIBLE);
+            holder.fourStar_spaceShip_holder.setVisibility(View.VISIBLE);
             holder.fiveStar_spaceShip_holder.setVisibility(View.VISIBLE);
         }
         else{

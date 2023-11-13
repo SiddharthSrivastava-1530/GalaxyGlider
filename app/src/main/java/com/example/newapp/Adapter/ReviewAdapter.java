@@ -53,17 +53,31 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             holder.oneStar.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==2){
+            holder.oneStar.setVisibility(View.VISIBLE);
             holder.twoStar.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==3){
+            holder.oneStar.setVisibility(View.VISIBLE);
+            holder.twoStar.setVisibility(View.VISIBLE);
             holder.threeStar.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==4){
+            holder.oneStar.setVisibility(View.VISIBLE);
+            holder.twoStar.setVisibility(View.VISIBLE);
+            holder.threeStar.setVisibility(View.VISIBLE);
             holder.fourStar.setVisibility(View.VISIBLE);
         }
         else if(ratingVal==5){
+            holder.oneStar.setVisibility(View.VISIBLE);
+            holder.twoStar.setVisibility(View.VISIBLE);
+            holder.threeStar.setVisibility(View.VISIBLE);
+            holder.fourStar.setVisibility(View.VISIBLE);
             holder.fiveStar.setVisibility(View.VISIBLE);
         }
+        else{
+
+        }
+
         holder.dateTextView.setText(getDateFromTime(reviews.get(position).getTime()));
 
     }

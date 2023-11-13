@@ -116,6 +116,7 @@ public class CompanyList extends Fragment {
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    companyArrayList.clear();
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot companySnapShot : dataSnapshot.getChildren()) {
                             Company company = companySnapShot.getValue(Company.class);

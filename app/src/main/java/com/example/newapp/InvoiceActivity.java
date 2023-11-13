@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
@@ -42,7 +43,7 @@ import java.util.Objects;
 
 public class InvoiceActivity extends AppCompatActivity {
     private TextView saveAndPrint;
-    private long invoiceNo = 435873245;
+    private long invoiceNo;
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat datePatternFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
@@ -75,35 +76,31 @@ public class InvoiceActivity extends AppCompatActivity {
         distance = intent.getStringExtra("distance");
         userName = intent.getStringExtra("user_name");
         userEmail = intent.getStringExtra("user_email");
-        companyName = intent.getStringExtra("company_name");
 
         bmp = BitmapFactory.decodeResource(getResources(),R.drawable.bg);
         scaledBitmap = Bitmap.createScaledBitmap(bmp,250,60,false);
         saveAndPrint = findViewById(R.id.GenerateInvoice);
 
-        Toast.makeText(this, userName, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, userEmail, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, distance, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, source, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, destination, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, companyName, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, companyId, Toast.LENGTH_SHORT).show();
+        getCompanyName();
+
         saveAndPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 printPdf();
                 Toast.makeText(InvoiceActivity.this, "Invoice Generated and downloaded", Toast.LENGTH_SHORT).show();
-//                Intent intent1 = new Intent(InvoiceActivity.this, SpaceShipList.class);
-//                intent1.putExtra("loginMode", "user");
-//                intent1.putExtra("companyID", companyId);
-//                startActivity(intent1);
+                Intent intent1 = new Intent(InvoiceActivity.this, SpaceShipList.class);
+                intent1.putExtra("loginMode", "user");
+                intent1.putExtra("companyID", companyId);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent1);
             }
         });
 
 
 
     }
-
 
 
     private void printPdf() {
@@ -221,8 +218,8 @@ public class InvoiceActivity extends AppCompatActivity {
         try {
             myPdfDocument.writeTo(new FileOutputStream(file));
             // print invoice in new activity
-            Intent intent = new Intent(InvoiceActivity.this, SpaceShipList.class);
-            startActivity(intent);
+//            Intent intent = new Intent(InvoiceActivity.this, SpaceShipList.class);
+//            startActivity(intent);
 
 
         } catch (IOException e) {
@@ -232,5 +229,20 @@ public class InvoiceActivity extends AppCompatActivity {
 
     }
 
+    private void getCompanyName(){
+
+        FirebaseDatabase.getInstance().getReference("company/" + companyId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        companyName = snapshot.getValue(Company.class).getName();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
 
 }
