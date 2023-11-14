@@ -40,8 +40,8 @@ public class LowRatedCompanyList extends Fragment {
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.activity_low_rated_company_list,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_low_rated_company_list, container, false);
     }
 
     @Override
@@ -61,7 +61,6 @@ public class LowRatedCompanyList extends Fragment {
         loginMode = intent1.getStringExtra("loginMode");
 
 
-
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
             public void onCompaniesClicked(int position) {
@@ -77,6 +76,7 @@ public class LowRatedCompanyList extends Fragment {
             }
         };
 
+        // SearchView to enable searching of companies by name.
         searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -92,6 +92,7 @@ public class LowRatedCompanyList extends Fragment {
 
     }
 
+    // fetch the companies when fragment resumes.
     @Override
     public void onResume() {
         super.onResume();
@@ -100,6 +101,7 @@ public class LowRatedCompanyList extends Fragment {
         getLowRatedCompanies(searchCompany.getQuery().toString());
     }
 
+    // fetch the low rated companies and set them to adapter based upon query in searchView
     private void getLowRatedCompanies(String userQuery) {
         companyArrayList.clear();
         try {

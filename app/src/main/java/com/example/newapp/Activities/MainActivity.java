@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // attaching different variables to their views using view Id's.
         enterAsUser = findViewById(R.id.textView_as_user);
         enterAsOwner = findViewById(R.id.textView_as_owner);
         enterAsAdmin = findViewById(R.id.textView_as_admin);
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+        // for entering in user mode.
         enterAsUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // for entering in admin mode.
         enterAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // for entering in owner mode.
         enterAsOwner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // if firebase user is not null (is logged in) fetch the loginMode of last login
+    // and redirect user to same loginMode.
     private void getCurrentUserLoginMode() {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
         String prevLoginMode = sharedPreferences.getString("loginMode", "");

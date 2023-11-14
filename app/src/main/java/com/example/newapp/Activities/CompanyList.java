@@ -59,7 +59,6 @@ public class CompanyList extends Fragment {
         loginMode = intent1.getStringExtra("loginMode");
 
 
-
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
             @Override
             public void onCompaniesClicked(int position) {
@@ -75,12 +74,15 @@ public class CompanyList extends Fragment {
             }
         };
 
+        // SearchView to enable searching of companies by name.
         searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            // if query in searchView is submitted do nothing
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
             }
 
+            // if query in serachView changes update the data in recyclerView.
             @Override
             public boolean onQueryTextChange(String newText) {
                 getCompanies(newText);
@@ -90,12 +92,14 @@ public class CompanyList extends Fragment {
 
     }
 
+    // fetch the companies when fragment resumes.
     @Override
     public void onResume() {
         super.onResume();
         getCompanies(searchCompany.getQuery().toString());
     }
 
+    // fetch the companies and set them to adapter based upon query in searchView
     private void getCompanies(String userQuery) {
         companyArrayList.clear();
         try {

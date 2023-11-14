@@ -38,9 +38,10 @@ public class UnauthorisedCompanyList extends Fragment {
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.activity_unauthorised_company_list,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_unauthorised_company_list, container, false);
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -68,11 +69,12 @@ public class UnauthorisedCompanyList extends Fragment {
                 intent.putExtra("company_desc", companyArrayList.get(position).getDescription());
                 intent.putExtra("company_img", companyArrayList.get(position).getImageUrl());
                 intent.putExtra("company_license", companyArrayList.get(position).getLicenseUrl());
-                intent.putExtra("isAuthorised",companyArrayList.get(position).getOperational());
+                intent.putExtra("isAuthorised", companyArrayList.get(position).getOperational());
                 startActivity(intent);
             }
         };
 
+        // fetch the companies and set them to adapter based upon query in searchView
         searchCompany.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -88,6 +90,7 @@ public class UnauthorisedCompanyList extends Fragment {
 
     }
 
+    // fetch the companies when fragment resumes.
     @Override
     public void onResume() {
         super.onResume();
@@ -96,6 +99,7 @@ public class UnauthorisedCompanyList extends Fragment {
         getUnauthorizedCompanies(searchCompany.getQuery().toString());
     }
 
+    // fetch the unauthorized companies and set them to adapter based upon query in searchView
     private void getUnauthorizedCompanies(String userQuery) {
         companyArrayList.clear();
         try {

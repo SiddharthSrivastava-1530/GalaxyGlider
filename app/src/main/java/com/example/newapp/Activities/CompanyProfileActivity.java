@@ -76,12 +76,13 @@ public class CompanyProfileActivity extends AppCompatActivity {
         name_tv = findViewById(R.id.name_profile_et_company_profile);
         email_tv = findViewById(R.id.email_profile_et_company_profile);
 
+        // getting data passed with intent
         Intent intent = getIntent();
-
         updateFromAllList = intent.getBooleanExtra("update_from_allList", false);
         licenseUrl = intent.getStringExtra("licenseUrl");
         loginMode = intent.getStringExtra("loginMode");
 
+        // update the view data if already present
         if (updateFromAllList) {
             userPic = intent.getStringExtra("sender_pic");
             name_tv.setText(intent.getStringExtra("sender_name"));
@@ -89,6 +90,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
             description_et.setText(intent.getStringExtra("sender_desc"));
         }
 
+        // set circularProgressDrawable in action to show image being fetched.
         CircularProgressDrawable circularProgressDrawable =
                 new CircularProgressDrawable(CompanyProfileActivity.this);
         circularProgressDrawable.setStrokeWidth(5f);
@@ -101,7 +103,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.GONE);
 
-        //Logout the user.
+        // Update the description of the owner..
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,10 +115,11 @@ public class CompanyProfileActivity extends AppCompatActivity {
             }
         });
 
+        // send intent for image selection for logo (of company) update
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //We specify pick action for intent to take photo from gallery
+                // We specify pick action for intent to take photo from gallery
                 Intent photoIntent = new Intent(Intent.ACTION_PICK);
 
                 //Specifying the type of intent (telling system to open gallery)
@@ -148,7 +151,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //Get the image selected in gallery on icon
+        // Get the image selected in gallery on icon
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
 
             Uri selectedData = data.getData();
@@ -175,12 +178,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //Surrounding the code with try catch block to handle exception (in case image not found!!!)
+        // Surrounding the code with try catch block to handle exception (in case image not found!!!)
         imgProfile.setImageBitmap(bitmap);
-        UploadImage();
+        uploadImage();
     }
 
-    private void UploadImage() {
+    private void uploadImage() {
 
         // Progress dialog to show the percentage of image uploaded while uploading image
         ProgressDialog progressDialog = new ProgressDialog(this);
@@ -196,15 +199,15 @@ public class CompanyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) { //When uploading of photo is complete
 
-                        //If successfully uploaded then show image uploaded
+                        // If successfully uploaded then show image uploaded
                         if (task.isSuccessful()) {
                             task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                //if task is successful download url of image from storage
+                                // if task is successful download url of image from storage
 
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {  //Downloading takes time
 
-                                    //If url downloaded successfully then call method having url as argument
+                                    // If url downloaded successfully then call method having url as argument
                                     if (task.isSuccessful()) {
                                         uploadProfilePicture(task.getResult().toString());
                                     }
@@ -216,7 +219,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
                             Toast.makeText(CompanyProfileActivity.this, task.getException().getLocalizedMessage(),
                                     Toast.LENGTH_SHORT).show();
                         }
-                        progressDialog.dismiss(); //on completion in either case dismiss process dialog
+                        progressDialog.dismiss(); // on completion in either case dismiss process dialog
 
                     }
 
@@ -224,10 +227,10 @@ public class CompanyProfileActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
 
-                        //Calculating the percentage of image uploaded
+                        // Calculating the percentage of image uploaded
                         double progress = 100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount();
 
-                        //Setting up %age of image uploaded on progress dialogue
+                        // Setting up %age of image uploaded on progress dialogue
                         progressDialog.setMessage(" Uploaded " + (int) progress + "%");
                     }
                 });
@@ -247,6 +250,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         userPic = url;
     }
 
+    // update the description to firebaseDatabase.
     private void updateDescription() {
         String description = "";
         if (description_et != null) {
@@ -262,6 +266,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         });
     }
 
+    // select pdf file for uploading as company License.
     private void selectFiles() {
 
         Intent intent = new Intent();
@@ -270,6 +275,8 @@ public class CompanyProfileActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select PDF files..."), 1);
     }
 
+    // uploading company License to firebase storage.
+    // Fetching licenseUrl of pdf stored in firebase and setting url over the database on company class.
     private void uploadFiles(Uri data) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);

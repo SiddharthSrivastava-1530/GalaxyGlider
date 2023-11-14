@@ -159,6 +159,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
     }
 
 
+    // check if all the data fields are filled before updating.
     private boolean checkData() {
         if (nameEditText.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please enter name",

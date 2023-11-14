@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -25,6 +26,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -235,16 +239,20 @@ public class InvoiceActivity extends AppCompatActivity {
         paint.setTextAlign(Paint.Align.LEFT);
 
 
-        // creating file
+        // Creating file
         myPdfDocument.finishPage(myPage);
         String pdfName = spaceShip + name + ".pdf";
-        File file = new File(this.getExternalFilesDir("/"), pdfName);
+
+        File file = new File(getExternalFilesDir("/"), pdfName);
         try {
             myPdfDocument.writeTo(new FileOutputStream(file));
-            // print invoice in new activity
-//            Intent intent = new Intent(InvoiceActivity.this, SpaceShipList.class);
-//            startActivity(intent);
 
+            // Upload the file to Firebase Storage
+            uploadPdfToFirebaseStorage(file);
+
+            // Uncomment the code below if you want to open a new activity after uploading
+            // Intent intent = new Intent(InvoiceActivity.this, SpaceShipList.class);
+            // startActivity(intent);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -252,6 +260,37 @@ public class InvoiceActivity extends AppCompatActivity {
         myPdfDocument.close();
 
     }
+
+    private void uploadPdfToFirebaseStorage(File file) {
+        // Get Firebase Storage reference
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+        // Create a reference to 'pdfs/pdfName'
+        StorageReference pdfRef = storageRef.child("pdfs/" + file.getName());
+
+        // Create upload task
+        UploadTask uploadTask = pdfRef.putFile(Uri.fromFile(file));
+
+        // Register observers to listen for when the upload is done or if it fails
+        uploadTask.addOnFailureListener(exception -> {
+            // Handle unsuccessful uploads
+            exception.printStackTrace();
+        }).addOnSuccessListener(taskSnapshot -> {
+            // Handle successful uploads
+            // You can get the download URL of the uploaded file
+            pdfRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                String downloadUrl = uri.toString();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(downloadUrl), "application/pdf");
+                startActivity(intent);
+                // Now you can use the downloadUrl as needed
+                // For example, you might want to save this URL in your database or use it in your app
+                // for further processing.
+                // Note: The URL is only valid for the duration of the user session unless you save it.
+            });
+        });
+    }
+
 
     private void getCompanyName() {
 

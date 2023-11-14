@@ -141,6 +141,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         attachSeatsListener();
         setServicesViews();
 
+        // Move to checkout activity if user confirms seat configuration.
         confirm_seats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -352,6 +353,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
     }
 
+    // return true if at least one seat is chosen.
     private boolean checkData() {
         int chosenSeats = 0;
         for(int position=0;position<12;position++){
@@ -369,6 +371,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         attachSeatsListener();
     }
 
+    // set the seat configuration to show the user changes in seat configuration in realtime.
     private void setSeatConfigurationViews() {
         for (int i = 0; i < 12; i++) {
             if (i == 0) {
@@ -507,6 +510,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         }
     }
 
+    // set Services Views by traversing over services string to show services offered by spaceship.
     private void setServicesViews() {
         if (services != null) {
             for (int i = 0; i < services.length(); i++) {
@@ -529,12 +533,14 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         }
     }
 
+    // set character at given index of string.
     private String setCharAt(String services, int i, char ch) {
         char[] charArray = services.toCharArray();
         charArray[i] = ch;
         return new String(charArray);
     }
 
+    // fetch the seats in realtime and update the current seat status.
     private void attachSeatsListener() {
 
         try {
