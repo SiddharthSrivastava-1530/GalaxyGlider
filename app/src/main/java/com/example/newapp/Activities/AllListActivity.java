@@ -134,6 +134,7 @@ public class AllListActivity extends AppCompatActivity {
 
     }
 
+    // on Back press show alert dialog box
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -143,6 +144,7 @@ public class AllListActivity extends AppCompatActivity {
             builder.setTitle("Exit the app");
             builder.setMessage("Are you sure you want to exit the app.");
 
+            // if user chooses 'yes' close the application.
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -170,6 +172,7 @@ public class AllListActivity extends AppCompatActivity {
     }
 
 
+    // to get the current user data (name,email,profilePicUrl,etc) for respective loginMode.
     private void getUserData() {
         try {
             String key = "";
@@ -215,6 +218,7 @@ public class AllListActivity extends AppCompatActivity {
 
     }
 
+    // erasing loginMode and email current login stored in SharedPreferences on logout click.
     private void eraseLoginMode() {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

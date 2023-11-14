@@ -53,6 +53,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
+        // getting data from intent.
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
@@ -63,6 +64,8 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         isCompanyAuthorised = intent.getBooleanExtra("isAuthorised", false);
 
 
+        // if not in admin mode set authorization, licenseView and statusOfAuthorization
+        // functionalities as not available (setting their respective views as invisible.
         if (!(loginMode.equals("admin"))) {
             authorizeTextView.setVisibility(View.GONE);
             seeLicenseTextView.setVisibility(View.GONE);
@@ -83,6 +86,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
             }
         });
 
+        // opening license through intent.
         seeLicenseTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +104,8 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         });
     }
 
+
+    // set respective views data for showing company details.
     private void setViewData() {
 
         nameTextView.setText(companyName);
@@ -109,6 +115,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
 
     }
 
+    // onClick over authorize -- authorize and un-authorize company as per currentAuthorizationStatus.
     private void authorizeCompany() {
         if(!isCompanyAuthorised) {
             FirebaseDatabase.getInstance().getReference("company/" + companyId + "/operational").setValue(true);
@@ -121,6 +128,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         setAuthorizationViews();
     }
 
+    // setting views that provide authorization information.
     private void setAuthorizationViews(){
         if (isCompanyAuthorised) {
             authorizeTextView.setText(R.string.unauthorize_company);

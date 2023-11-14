@@ -54,6 +54,7 @@ public class JourneyActivity extends AppCompatActivity {
 
         journeyCompletedTextView = findViewById(R.id.journey_completed_tv);
 
+        // getting data from intent
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
         spaceShipId = intent.getStringExtra("id_ss");
@@ -76,8 +77,10 @@ public class JourneyActivity extends AppCompatActivity {
 
         updatedSeatsConfiguration = seats;
 
+        // update changes in seatConfiguration in realtime.
         attachSeatsListener();
 
+        // if journey completed vacate the seats and update it on database
         journeyCompletedTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +97,7 @@ public class JourneyActivity extends AppCompatActivity {
     }
 
 
+    // vacate the seats and update it on database.
     private void updateSeats() {
 
         SpaceShip currentSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats, services,
@@ -121,7 +125,9 @@ public class JourneyActivity extends AppCompatActivity {
                     }
                 }
 
+                // set updatedSeatConfiguration after seats have been vacated.
                 getChangedSeatConfig();
+
                 currentSpaceShip.setSeatsAvailable(updatedSeatsConfiguration);
 
 
@@ -167,6 +173,8 @@ public class JourneyActivity extends AppCompatActivity {
 
     }
 
+
+    // set updatedSeatConfiguration after seats have been vacated.
     private void getChangedSeatConfig() {
 
         for (int position = 0; position < 12; position++) {
@@ -177,15 +185,17 @@ public class JourneyActivity extends AppCompatActivity {
                 updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, character);
             }
         }
-
     }
 
+    // set character at given index in the string
     private String setCharAt(String services, int i, char ch) {
         char[] charArray = services.toCharArray();
         charArray[i] = ch;
         return new String(charArray);
     }
 
+
+    // fetch the updates in seat configuration in realtime.
     private void attachSeatsListener() {
 
         try {

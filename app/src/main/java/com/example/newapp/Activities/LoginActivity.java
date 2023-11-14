@@ -167,6 +167,8 @@ public class LoginActivity extends AppCompatActivity {
                 }).show();
     }
 
+    // save the current loginMode and currentLoginEmail of current logged in user
+    // so that we can redirect without login next time on opening of app (if not logged out).
     private void saveLoginMode() {
         SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

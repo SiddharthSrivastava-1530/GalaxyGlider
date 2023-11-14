@@ -113,6 +113,13 @@ public class SpaceShipReviews extends AppCompatActivity {
             }
         });
 
+        onReviewClickLiListener = new ReviewAdapter.OnReviewClickLiListener() {
+            @Override
+            public void onReviewsClicked(int position) {
+
+            }
+        };
+
     }
 
     private void setAdapter(ArrayList<Review> arrayList) {

@@ -63,6 +63,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         toLocation = findViewById(R.id.toLocation);
         distance = findViewById(R.id.distance_journey_et);
 
+        // getting data passed by intent
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
         spaceShipId = intent.getStringExtra("id_ss");
@@ -121,28 +122,33 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     @Override
     public void onPaymentSuccess(String s) {
 //        Checkout.clearUserData(this);
-        if(checkData()) {
+        if (checkData()) {
             updateSeats(s);
         }
         Log.d("onSUCCESS", "onPaymentSuccess: " + s);
     }
 
+    // if payment fails redirect user to current activity.
     @Override
     public void onPaymentError(int i, String s) {
         Log.d("onERROR", "onPaymentError: " + s);
     }
 
+
+    /* update the realtime seat availability and match it with chosenSeatConfiguration of user
+     for checking seat availability */
     private void updateSeats(String refId) {
 
         attachSeatsListener();
 
+        // creating current SpaceShip object using available data
         SpaceShip currentSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats, services,
                 haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                 .child(companyId).child("spaceShips");
 
-        // Fetch the existing spaceShips
+        // Fetch the existing SpaceShips
         companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -162,21 +168,23 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 }
 
 
-                if(updateSeatsConfiguration()) {
+                // if seats are available update the seats in currentSpaceShip object.
+                if (updateSeatsConfiguration()) {
                     currentSpaceShip.setSeatsAvailable(updatedSeatsConfiguration);
                 } else {
                     Toast.makeText(CheckoutActivity.this, "Chosen configuration unavailable at moment. Please retry", Toast.LENGTH_SHORT).show();
                 }
 
 
-                // Update the spaceShip
-                    if (index != -1) {
-                        spaceShipArrayList.set(index, currentSpaceShip);
-                        Toast.makeText(CheckoutActivity.this, "Your seats are booked. Enjoy the journey",
-                                Toast.LENGTH_SHORT).show();
-                    }
+                // Update the spaceShipArrayList by adding update currentSpaceShip object.
+                if (index != -1) {
+                    spaceShipArrayList.set(index, currentSpaceShip);
+                    Toast.makeText(CheckoutActivity.this, "Your seats are booked. Enjoy the journey",
+                            Toast.LENGTH_SHORT).show();
+                }
 
-                // Set the updated spaceShips back to the company reference
+                // Set the updated spaceShips back to the company reference and sending intent to
+                // journey activity on completion of task.
                 companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -216,19 +224,19 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
 
+    // update the new seat configuration if its available
+    // if not available return false and retain the original seat configuration.
     private boolean updateSeatsConfiguration() {
         String copy = updatedSeatsConfiguration;
         for (int position = 0; position < 12; position++) {
-            if (chosenSeatConfig.charAt(position) == '1')
-            {
+            if (chosenSeatConfig.charAt(position) == '1') {
                 if (seats.charAt(position) == '1') {
                     updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, '0');
                 } else {
                     updatedSeatsConfiguration = copy;
                     return false;
                 }
-            } else
-            {
+            } else {
                 char character = seats.charAt(position);
                 updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, character);
             }
@@ -236,22 +244,25 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         return true;
     }
 
+    // set given character at specific position of string.
     private String setCharAt(String services, int position, char ch) {
         char[] charArray = services.toCharArray();
         charArray[position] = ch;
         return new String(charArray);
     }
 
+    // updates the seat dynamically on any update in seats configuration data (in realtime).
     private void attachSeatsListener() {
 
         try {
+            // create the original spaceShip object using the original data.
             SpaceShip originalSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats,
                     services, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
             DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                     .child(companyId).child("spaceShips");
 
-            // Fetch the existing spaceShips
+            // Fetching the existing spaceShips from specific database reference.
             companyRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -270,7 +281,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         }
                     }
 
-                    // Update the spaceShip you want to delete
+                    // getting the updated seat configuration
                     try {
                         if (index != -1) {
                             seats = spaceShipArrayList.get(index).getSeatsAvailable();
@@ -294,16 +305,17 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         }
     }
 
-    private boolean checkData(){
-        if(TextUtils.isEmpty(fromLocation.getText().toString())){
+    // checking if data not filled or not, if not return false.
+    private boolean checkData() {
+        if (TextUtils.isEmpty(fromLocation.getText().toString())) {
             Toast.makeText(this, "Please enter source", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(TextUtils.isEmpty(toLocation.getText().toString())){
+        if (TextUtils.isEmpty(toLocation.getText().toString())) {
             Toast.makeText(this, "Please enter destination", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(TextUtils.isEmpty(distance.getText().toString())){
+        if (TextUtils.isEmpty(distance.getText().toString())) {
             Toast.makeText(this, "Please enter approximated distance", Toast.LENGTH_SHORT).show();
             return false;
         }

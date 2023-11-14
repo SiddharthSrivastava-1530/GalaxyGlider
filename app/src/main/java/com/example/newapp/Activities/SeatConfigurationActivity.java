@@ -83,8 +83,10 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_configuration);
 
+        // hide the action bar.
         getSupportActionBar().hide();
 
+        // attach all views with viewVariables using respective viewId's
         seat1 = findViewById(R.id.seat1);
         seat2 = findViewById(R.id.seat2);
         seat3 = findViewById(R.id.seat3);
@@ -121,6 +123,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         confirmSeatConfiguration = findViewById(R.id.confirm_seat_config);
 
 
+        // getting data from intent.
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
         rating = intent.getStringExtra("rating_ss");
@@ -140,6 +143,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         total_seats = 0;
 
 
+        // adding seats on click of '+'.
         addSeatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,6 +177,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
+        // removing seats on click of '-'.
         removeSeatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,6 +211,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
+        // adding food service for spaceship
         food_not.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,6 +221,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
+        // removing food service for spaceship
         food.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -224,6 +231,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
+        // adding music service on spaceShip
         music_not.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,6 +241,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
+        // removing music service on spaceShip
         music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -298,6 +307,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
     }
 
+    // set character at given index of string.
     private String setCharAt(String services, int i, char ch) {
         char[] charArray = services.toCharArray();
         charArray[i] = ch;

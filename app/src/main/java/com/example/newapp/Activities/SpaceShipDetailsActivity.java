@@ -97,6 +97,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
             fab.setVisibility(View.GONE);
         }
 
+        // Move to editor activity for editing spaceship Data.
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +122,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
             }
         });
 
+        // Move to seat configuration activity on booking for choosing seats (user).
         bookSpaceShipTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,6 +155,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
     }
 
+    // set view data in respective views.
     private void setViewData() {
 
 
@@ -167,6 +170,7 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
 
     }
 
+    // get count of seats chosen.
     private int getSeatCount() {
         int seatCount = 0;
         if (seats != null) {

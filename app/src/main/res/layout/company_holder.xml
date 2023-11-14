@@ -66,8 +66,7 @@
             android:fontFamily="@font/inter"
             android:layout_gravity="end|center"
             android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:text="$220" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

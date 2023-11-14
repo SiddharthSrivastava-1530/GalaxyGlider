@@ -55,15 +55,6 @@ public class SpaceShipList extends AppCompatActivity {
     private SpaceShipAdapter spaceShipAdapter;
     SpaceShipAdapter.OnSpaceShipClickListener onSpaceShipClickListener;
     private FloatingActionButton floatingActionButton;
-    private String imageUrl;
-    private String name;
-    private String description;
-    private String ratings;
-    private String seats;
-    private String price;
-    private String speed;
-    private String busyTime;
-    private Boolean haveSharedRide;
     private String currentUserName;
     private String currentUserEmail;
     private String currentUserPic;
