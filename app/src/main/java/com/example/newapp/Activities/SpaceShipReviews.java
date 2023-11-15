@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +34,6 @@ public class SpaceShipReviews extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ReviewAdapter reviewAdapter;
-    ReviewAdapter.OnReviewClickLiListener onReviewClickLiListener;
     private Spinner spinner;
     final private String filtersUsed[] = {"Sort By", "Rating", "Time"};
     private String spaceShipId;
@@ -60,6 +58,8 @@ public class SpaceShipReviews extends AppCompatActivity {
 
 
         // setting up spinner for sorting reviews.
+//        setAdapter(reviewArrayList);
+
         ArrayAdapter arrayAdapter = new ArrayAdapter(SpaceShipReviews.this, android.R.layout.simple_spinner_item, filtersUsed);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
@@ -77,20 +77,13 @@ public class SpaceShipReviews extends AppCompatActivity {
         });
 
 
-        onReviewClickLiListener = new ReviewAdapter.OnReviewClickLiListener() {
-            @Override
-            public void onReviewsClicked(int position) {
-
-            }
-        };
-
 
     }
 
 
     // Set arraylist to given adapter.
     private void setAdapter(ArrayList<Review> arrayList) {
-        reviewAdapter = new ReviewAdapter(arrayList, SpaceShipReviews.this, onReviewClickLiListener);
+        reviewAdapter = new ReviewAdapter(arrayList, SpaceShipReviews.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipReviews.this));
         progressBar.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);

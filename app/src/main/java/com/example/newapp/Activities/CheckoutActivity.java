@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
-    private EditText fromLocation, toLocation, distance;
     private TextView bookRideButton;
     private String userEmail;
     private String userName;
@@ -49,6 +48,11 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private String price;
     private float speed;
     private String busyTime;
+    private String distance;
+
+    private String departure;
+
+    private String destination;
     private Boolean haveSharedRide;
     private String companyId;
     private String loginMode;
@@ -70,9 +74,6 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         getSupportActionBar().hide();
 
         bookRideButton = findViewById(R.id.bookRideButton);
-        fromLocation = findViewById(R.id.fromLocation);
-        toLocation = findViewById(R.id.toLocation);
-        distance = findViewById(R.id.distance_journey_et);
 
         // getting data passed by intent
         Intent intent = getIntent();
@@ -90,7 +91,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         companyId = intent.getStringExtra("companyID");
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
         chosenSeatConfig = intent.getStringExtra("chosen_seat_config");
-
+        distance = intent.getStringExtra("dist");
+        departure = intent.getStringExtra("dept");
+        destination = intent.getStringExtra("dest");
 
         bookRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +115,15 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
 
+
+    private float calculateFair(int countOfGliders) {
+        float journeyDistance = Float.parseFloat(distance);
+        float basePay = 1000;
+        float pricePerLY = Float.parseFloat(price);
+        float serviceCharges = 20;
+        float totalCost = (countOfGliders/100.0f)*basePay+pricePerLY*journeyDistance+serviceCharges;
+        return totalCost;
+    }
 
     private void startPayment() {
         Checkout checkout = new Checkout();
@@ -144,9 +156,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     @Override
     public void onPaymentSuccess(String s) {
 //        Checkout.clearUserData(this);
-        if (checkData()) {
-            updateSeats(s);
-        }
+        updateSeats(s);
         Log.d("onSUCCESS", "onPaymentSuccess: " + s);
     }
 
@@ -223,8 +233,8 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         }
 
                         transactionArrayList.add(new Transaction(userUID,userName,userEmail,refId,companyId,companyName,
-                                spaceShipId, name, chosenSeatConfig, fromLocation.getText().toString(),toLocation.getText().toString(),
-                                distance.getText().toString(), System.currentTimeMillis(),
+                                spaceShipId, name, chosenSeatConfig, departure,destination,
+                                distance, System.currentTimeMillis(),
                                 235667,false));
 
                         FirebaseDatabase.getInstance().getReference("users/" + userUID + "/transactions")
@@ -248,9 +258,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         intent1.putExtra("chosen_seat_config", chosenSeatConfig);
                         intent1.putExtra("reviews_ss", reviews);
                         intent1.putExtra("refId", refId);
-                        intent1.putExtra("source", fromLocation.getText().toString());
-                        intent1.putExtra("destination", toLocation.getText().toString());
-                        intent1.putExtra("distance", distance.getText().toString());
+                        intent1.putExtra("source", departure);
+                        intent1.putExtra("destination", destination);
+                        intent1.putExtra("distance", distance);
                         startActivity(intent1);
                     }
                 });
@@ -329,24 +339,6 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                     Toast.LENGTH_SHORT).show();
         }
     }
-
-    // checking if data not filled or not, if not return false.
-    private boolean checkData() {
-        if (TextUtils.isEmpty(fromLocation.getText().toString())) {
-            Toast.makeText(this, "Please enter source", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (TextUtils.isEmpty(toLocation.getText().toString())) {
-            Toast.makeText(this, "Please enter destination", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (TextUtils.isEmpty(distance.getText().toString())) {
-            Toast.makeText(this, "Please enter approximated distance", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
-
     private void getCompanyName(){
 
         FirebaseDatabase.getInstance().getReference("company/" + companyId )

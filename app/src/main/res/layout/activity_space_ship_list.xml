@@ -17,21 +17,33 @@
         app:menu="@menu/nav_menu"
         android:layout_gravity="start"/>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/companies_constraint"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/companies_constraint"
+        android:layout_width="match_parent"
+        android:background="@color/black"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Gliders"
+            android:textColor="@color/white"
+            android:fontFamily="@font/inter_semibold"
+            android:textSize="22sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ProgressBar
             android:id="@+id/progressbar_spaceship"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:visibility="visible"
-            android:indeterminate="true"
-            android:indeterminateTintMode="src_atop"
-            android:indeterminateTint="#ffffff"
             android:background="#000000"
+            android:indeterminate="true"
+            android:indeterminateTint="#ffffff"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,25 +68,26 @@
             android:layout_marginBottom="35dp"
             android:clickable="true"
             android:src="@drawable/add"
-            tools:ignore="SpeakableTextPresentCheck"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <RelativeLayout
             android:id="@+id/cardView2_spaceship"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@color/black">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline124">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="40dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginTop="5dp">
+                app:cardCornerRadius="40dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -85,13 +98,13 @@
                         android:id="@+id/srchCompany_spaceship"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:layout_marginStart="5dp"
-                        android:queryHint="Search Spaceships..."
                         android:layout_gravity="center_vertical"
-                        android:visibility="visible"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="5"
+                        android:iconifiedByDefault="false"
                         android:queryBackground="@android:color/transparent"
-                        android:iconifiedByDefault="false" />
+                        android:queryHint="Search Spaceships..."
+                        android:visibility="visible" />
 
                     <Spinner
                         android:id="@+id/spinner1_spaceship"
@@ -105,7 +118,20 @@
 
         </RelativeLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline124"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline127"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>
