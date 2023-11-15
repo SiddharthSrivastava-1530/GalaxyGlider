@@ -2,8 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:backgroundTint="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="6dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
-            android:textColor="@color/white"
+            android:textColor="@color/usegray"
             android:padding="10dp"
             android:textSize="16sp"
             tools:text="A review is an evaluation of a publication, product, service." />
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/white"
+            android:textColor="@color/lightgray"
             android:fontFamily="@font/inter"
             android:textSize="16sp"
             android:layout_marginBottom="8dp"

@@ -8,6 +8,69 @@
     tools:context=".Activities.SeatConfigurationActivity">
 
     <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:text="Enter Ride details"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline117"
+        app:layout_constraintEnd_toStartOf="@+id/guideline119"
+        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintTop_toTopOf="@+id/guideline126" />
+
+    <EditText
+        android:id="@+id/dept_et"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:hint="Departure"
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="@color/usegray"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline125"
+        app:layout_constraintEnd_toStartOf="@+id/guideline129"
+        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintTop_toTopOf="@+id/guideline117" />
+
+    <EditText
+        android:id="@+id/dest_et"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:hint="Destination"
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="@color/usegray"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline125"
+        app:layout_constraintEnd_toStartOf="@+id/guideline130"
+        app:layout_constraintStart_toStartOf="@+id/guideline129"
+        app:layout_constraintTop_toTopOf="@+id/guideline117" />
+
+    <EditText
+        android:id="@+id/distance_journey_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:background="@null"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:hint="Distance"
+        android:inputType="number"
+        android:textColor="@color/white"
+        android:textColorHint="@color/usegray"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline125"
+        app:layout_constraintStart_toStartOf="@+id/guideline130"
+        app:layout_constraintTop_toTopOf="@+id/guideline117" />
+
+    <TextView
         android:id="@+id/seat1_show"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -58,7 +121,7 @@
         android:fontFamily="@font/inter"
         android:text="Select seats for your ride"
         android:textColor="#ffffff"
-        android:textSize="22sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline118"
         app:layout_constraintEnd_toStartOf="@+id/guideline119"
         app:layout_constraintStart_toStartOf="@+id/guideline111" />
@@ -417,14 +480,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.03" />
+        app:layout_constraintGuide_percent="0.09" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline126"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline125"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.14" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline118"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        app:layout_constraintGuide_percent="0.21" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline104"
@@ -439,6 +516,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.29" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline129"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.34" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline111"
@@ -460,6 +544,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.93" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline130"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.61" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline105"
@@ -495,6 +586,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.7798" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline128"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.87" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline113"

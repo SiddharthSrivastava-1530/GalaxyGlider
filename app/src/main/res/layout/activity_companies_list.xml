@@ -29,32 +29,29 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-            android:id="@+id/cardView2"
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:cardCornerRadius="30dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                app:cardCornerRadius="30dp">
-                <SearchView
-                    android:id="@+id/srchCompany"
-                    android:layout_width="match_parent"
-                    android:queryBackground="@android:color/transparent"
-                    android:layout_height="match_parent"
-                    android:queryHint="Search company here..."
-                    android:iconifiedByDefault="false"
-                    android:background="@color/white"/>
+            <SearchView
+                android:id="@+id/srchCompany"
+                android:layout_width="280dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:iconifiedByDefault="false"
+                android:queryBackground="@android:color/transparent"
+                android:queryHint="Search company here..." />
 
-            </androidx.cardview.widget.CardView>
-
-        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+

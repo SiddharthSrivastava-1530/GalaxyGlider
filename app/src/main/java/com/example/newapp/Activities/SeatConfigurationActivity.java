@@ -346,7 +346,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
                         if (task.isComplete()) {
                             Toast.makeText(SeatConfigurationActivity.this, "SpaceShip added...",
                                     Toast.LENGTH_SHORT).show();
-                            Intent intent1 = new Intent(SeatConfigurationActivity.this, AllSpaceShipsListActivity.class);
+                            Intent intent1 = new Intent(SeatConfigurationActivity.this, SelectSlotsActivity.class);
                             intent1.putExtra("loginMode", "owner");
                             intent1.putExtra("companyID", companyId);
                             intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

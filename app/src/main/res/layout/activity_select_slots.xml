@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:background="@color/black">
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:stretchColumns="*"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Table Header -->
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/starting_time"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/ending_time"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/select_slots"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <!-- Rows 1-8 -->
+        <TableRow>
+            <!-- Row 1 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot03"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 1 here -->
+        </TableRow>
+
+        <!-- Repeat TableRow for Rows 2-8 with appropriate time values and slot selection widgets -->
+
+        <!-- Example for Row 2 -->
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="06:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot36"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="06:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot69"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots"/>
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot9_12"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot12_15"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot15_18"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="21:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot18_21"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="21:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="24:00"
+                android:theme="@style/TableTextView" />
+
+            <TextView
+                android:id="@+id/slot21_24"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:theme="@style/TableTextViewForSlots" />
+            <!-- Add your slot selection widget for Row 2 here -->
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/confirm_time_slots"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fontFamily="@font/inter_semibold"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Confirm Time Slots"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

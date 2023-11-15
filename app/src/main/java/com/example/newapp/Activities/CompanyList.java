@@ -3,7 +3,6 @@ package com.example.newapp.Activities;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,6 +56,17 @@ public class CompanyList extends Fragment {
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
+
+        Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
+
+
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                getCompanies(searchCompany.getQuery().toString());
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {

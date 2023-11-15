@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class ShowSeatConfigurationActivity extends AppCompatActivity {
-
+    private EditText fromLocation, toLocation, distance;
     private TextView seat1;
     private TextView seat2;
     private TextView seat3;
@@ -81,6 +83,10 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_seat_configuration);
 
         getSupportActionBar().hide();
+
+        fromLocation = findViewById(R.id.dept_et);
+        toLocation = findViewById(R.id.dest_et);
+        distance = findViewById(R.id.distance_journey_et);
 
         seat1 = findViewById(R.id.seat1_show);
         seat2 = findViewById(R.id.seat2_show);
@@ -167,6 +173,11 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                     intent1.putExtra("companyID", companyId);
                     intent1.putExtra("update_spaceship", false);
                     intent1.putExtra("reviews_ss", reviews);
+                    intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
+                    intent1.putExtra("dept",fromLocation.getText().toString());
+                    intent1.putExtra("dest",toLocation.getText().toString());
+                    intent1.putExtra("dist",distance.getText().toString());
+                    startActivity(intent1);
                     if (!haveSharedRide) {
                         if(getAllSeatConfig()){
                             intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
@@ -383,7 +394,19 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                 chosenSeats++;
             }
         }
-        return chosenSeats > 0;
+        if (TextUtils.isEmpty(fromLocation.getText().toString())) {
+            Toast.makeText(this, "Please enter source", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(toLocation.getText().toString())) {
+            Toast.makeText(this, "Please enter destination", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(distance.getText().toString())) {
+            Toast.makeText(this, "Please enter approximated distance", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return chosenSeats>0;
     }
 
 
