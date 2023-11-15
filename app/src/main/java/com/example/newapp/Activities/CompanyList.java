@@ -82,7 +82,7 @@ public class CompanyList extends Fragment {
                 return false;
             }
 
-            // if query in serachView changes update the data in recyclerView.
+            // if query in searchView changes update the data in recyclerView.
             @Override
             public boolean onQueryTextChange(String newText) {
                 getCompanies(newText);
@@ -117,9 +117,9 @@ public class CompanyList extends Fragment {
                                     companyArrayList.add(company);
                                 }
                             }
-                            setAdapter(companyArrayList);
                         }
                     }
+                    setAdapter(companyArrayList);
                 }
 
                 @Override

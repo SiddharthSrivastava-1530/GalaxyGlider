@@ -13,16 +13,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.newapp.DataModel.Company;
+import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
+import com.example.newapp.DataModel.Transaction;
 import com.example.newapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
@@ -30,10 +35,13 @@ import com.razorpay.PaymentResultListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
     private EditText fromLocation, toLocation, distance;
     private TextView bookRideButton;
+    private String userEmail;
+    private String userName;
     private String name;
     private String spaceShipRating;
     private String description;
@@ -49,6 +57,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private ArrayList<Review> reviews;
     private String updatedSeatsConfiguration;
     private String spaceShipId;
+    private String companyName;
+    private SpaceShip currentSpaceShip;
+    private ArrayList<Transaction> transactionArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +91,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
         chosenSeatConfig = intent.getStringExtra("chosen_seat_config");
 
+
         bookRideButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,10 +101,17 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 //                intent.putExtra("date", date.getText().toString());
 //                intent.putExtra("time", time.getText().toString());
 //                startPayment();
-                onPaymentSuccess("h2njdfk456iowGFbjsvd");
+                String refId = UUID.randomUUID().toString();
+                onPaymentSuccess(refId);
             }
         });
+
+        getUserData();
+        getCompanyName();
+
     }
+
+
 
     private void startPayment() {
         Checkout checkout = new Checkout();
@@ -119,6 +138,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         }
     }
 
+
+
+
     @Override
     public void onPaymentSuccess(String s) {
 //        Checkout.clearUserData(this);
@@ -128,6 +150,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         Log.d("onSUCCESS", "onPaymentSuccess: " + s);
     }
 
+
+
+
     // if payment fails redirect user to current activity.
     @Override
     public void onPaymentError(int i, String s) {
@@ -135,15 +160,14 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
 
+
+
+
     /* update the realtime seat availability and match it with chosenSeatConfiguration of user
      for checking seat availability */
     private void updateSeats(String refId) {
 
         attachSeatsListener();
-
-        // creating current SpaceShip object using available data
-        SpaceShip currentSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats, services,
-                haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                 .child(companyId).child("spaceShips");
@@ -159,8 +183,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                         if (spaceShip != null) {
                             spaceShipArrayList.add(spaceShip);
-                            if (currentSpaceShip.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
+                            if (spaceShip.getSpaceShipId().equals(spaceShipId)) {
                                 index = counter;
+                                currentSpaceShip = spaceShip;
                             }
                             counter++;
                         }
@@ -189,7 +214,25 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(CheckoutActivity.this, "Seats confirmed", Toast.LENGTH_SHORT).show();
-                        Intent intent1 = new Intent(CheckoutActivity.this, JourneyActivity.class);
+
+
+                        // Set this ride as an ongoing transaction object in database in users node.
+                        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        if(transactionArrayList == null){
+                            transactionArrayList = new ArrayList<>();
+                        }
+
+                        transactionArrayList.add(new Transaction(userUID,userName,userEmail,refId,companyId,companyName,
+                                spaceShipId, name, chosenSeatConfig, fromLocation.getText().toString(),toLocation.getText().toString(),
+                                distance.getText().toString(), System.currentTimeMillis(),
+                                235667,false));
+
+                        FirebaseDatabase.getInstance().getReference("users/" + userUID + "/transactions")
+                                .setValue(transactionArrayList);
+
+
+                        // Start the journey and move further to review activity.
+                        Intent intent1 = new Intent(CheckoutActivity.this, UserReviewsActivity.class);
                         intent1.putExtra("name_ss", name);
                         intent1.putExtra("id_ss", spaceShipId);
                         intent1.putExtra("description_ss", description);
@@ -244,6 +287,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         return true;
     }
 
+
     // set given character at specific position of string.
     private String setCharAt(String services, int position, char ch) {
         char[] charArray = services.toCharArray();
@@ -251,14 +295,12 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         return new String(charArray);
     }
 
+
+
     // updates the seat dynamically on any update in seats configuration data (in realtime).
     private void attachSeatsListener() {
 
         try {
-            // create the original spaceShip object using the original data.
-            SpaceShip originalSpaceShip = new SpaceShip(name, description, spaceShipId, spaceShipRating, seats,
-                    services, haveSharedRide, Long.parseLong(busyTime), Float.parseFloat(price), speed, reviews);
-
             DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                     .child(companyId).child("spaceShips");
 
@@ -266,37 +308,20 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
             companyRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
-                    int index = -1, counter = 0;
+
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                            if (spaceShip != null) {
-                                spaceShipArrayList.add(spaceShip);
-                                if (spaceShip.getSpaceShipId().equals(originalSpaceShip.getSpaceShipId())) {
-                                    index = counter;
-                                }
-                                counter++;
+                            if (spaceShip != null && spaceShip.getSpaceShipId().equals(spaceShipId)) {
+                                seats = spaceShip.getSeatsAvailable();
+                                updatedSeatsConfiguration = seats;
                             }
                         }
                     }
-
-                    // getting the updated seat configuration
-                    try {
-                        if (index != -1) {
-                            seats = spaceShipArrayList.get(index).getSeatsAvailable();
-                            updatedSeatsConfiguration = seats;
-                        }
-                    } catch (IndexOutOfBoundsException e) {
-                        Toast.makeText(CheckoutActivity.this, "Data not updated. Please retry",
-                                Toast.LENGTH_SHORT).show();
-                    }
-
                 }
-
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    // Handle any errors here
+
                 }
             });
         } catch (Exception e) {
@@ -321,5 +346,39 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         }
         return true;
     }
+
+    private void getCompanyName(){
+
+        FirebaseDatabase.getInstance().getReference("company/" + companyId )
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        companyName = snapshot.getValue(Company.class).getName();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void getUserData(){
+        FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        userName = snapshot.getValue(Company.class).getName();
+                        userEmail = snapshot.getValue(Company.class).getEmail();
+                        transactionArrayList = snapshot.getValue(Customer.class).getTransactions();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
 
 }

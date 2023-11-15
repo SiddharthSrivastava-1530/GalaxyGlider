@@ -224,7 +224,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         Toast.makeText(SpaceShipEditorActivity.this, "SpaceShip Deleted...",
                                                 Toast.LENGTH_SHORT).show();
-                                        Intent intent1 = new Intent(SpaceShipEditorActivity.this, SpaceShipList.class);
+                                        Intent intent1 = new Intent(SpaceShipEditorActivity.this, AllSpaceShipsListActivity.class);
                                         intent1.putExtra("loginMode", "owner");
                                         intent1.putExtra("companyID", companyId);
                                         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -305,7 +305,7 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
                                         if (task.isComplete()) {
                                             Toast.makeText(SpaceShipEditorActivity.this, "SpaceShip Updated...",
                                                     Toast.LENGTH_SHORT).show();
-                                            Intent intent1 = new Intent(SpaceShipEditorActivity.this, SpaceShipList.class);
+                                            Intent intent1 = new Intent(SpaceShipEditorActivity.this, AllSpaceShipsListActivity.class);
                                             intent1.putExtra("loginMode", "owner");
                                             intent1.putExtra("companyID", companyId);
                                             intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

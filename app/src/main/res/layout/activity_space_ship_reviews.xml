@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/companies_constraint_reviews"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/swip_reviews"
     android:background="@color/black"
     tools:context=".Activities.SpaceShipReviews">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/companies_constraint_reviews"
-        android:layout_width="600dp"
-        android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -62,10 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.06" />
+            app:layout_constraintGuide_percent="0.06"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

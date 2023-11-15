@@ -119,9 +119,9 @@ public class UnauthorisedCompanyList extends Fragment {
                                     companyArrayList.add(company);
                                 }
                             }
-                            setAdapter(companyArrayList);
                         }
                     }
+                    setAdapter(companyArrayList);
                 }
 
                 @Override

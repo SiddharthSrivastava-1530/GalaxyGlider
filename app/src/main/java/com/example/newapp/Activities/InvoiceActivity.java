@@ -87,7 +87,7 @@ public class InvoiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 printPdf();
                 Toast.makeText(InvoiceActivity.this, "Invoice Generated and downloaded", Toast.LENGTH_SHORT).show();
-                Intent intent1 = new Intent(InvoiceActivity.this, SpaceShipList.class);
+                Intent intent1 = new Intent(InvoiceActivity.this, AllSpaceShipsListActivity.class);
                 intent1.putExtra("loginMode", "user");
                 intent1.putExtra("companyID", companyId);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -112,7 +112,7 @@ public class InvoiceActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent1 = new Intent(InvoiceActivity.this, SpaceShipList.class);
+                Intent intent1 = new Intent(InvoiceActivity.this, AllSpaceShipsListActivity.class);
                 intent1.putExtra("loginMode", "user");
                 intent1.putExtra("companyID", companyId);
                 intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -251,7 +251,7 @@ public class InvoiceActivity extends AppCompatActivity {
             uploadPdfToFirebaseStorage(file);
 
             // Uncomment the code below if you want to open a new activity after uploading
-            // Intent intent = new Intent(InvoiceActivity.this, SpaceShipList.class);
+            // Intent intent = new Intent(InvoiceActivity.this, AllSpaceShipListActivity.class);
             // startActivity(intent);
 
         } catch (IOException e) {

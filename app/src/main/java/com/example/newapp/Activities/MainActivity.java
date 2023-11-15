@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             getCurrentUserLoginMode();
             if (loginMode.equals("owner")) {
                 String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                intent = new Intent(MainActivity.this, SpaceShipList.class);
+                intent = new Intent(MainActivity.this, AllSpaceShipsListActivity.class);
                 intent.putExtra("companyID", companyId);
 
             } else {

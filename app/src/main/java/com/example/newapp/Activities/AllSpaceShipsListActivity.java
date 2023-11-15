@@ -1,5 +1,13 @@
 package com.example.newapp.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,14 +17,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.newapp.Adapter.VPAdapter;
 import com.example.newapp.DataModel.Admin;
@@ -31,7 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class AllListActivity extends AppCompatActivity {
+public class AllSpaceShipsListActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -47,7 +47,8 @@ public class AllListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_all_list);
+        setContentView(R.layout.activity_all_space_ships_list);
+
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -59,10 +60,10 @@ public class AllListActivity extends AppCompatActivity {
 //        // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
-        tabLayout = findViewById(R.id.tablayout);
-        viewPager = findViewById(R.id.viewpager);
-        drawerLayout = findViewById(R.id.drawer_layout1_companies);
-        navigationView = findViewById(R.id.nav_items_companies);
+        tabLayout = findViewById(R.id.tablayout_all);
+        viewPager = findViewById(R.id.viewpager_all);
+        drawerLayout = findViewById(R.id.drawer_layout1_spaceShips_all);
+        navigationView = findViewById(R.id.nav_items_spaceShips_all);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_nav_drawer, R.string.close_nav_drawer);
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -80,13 +81,8 @@ public class AllListActivity extends AppCompatActivity {
         VPAdapter vPadapter = new VPAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        vPadapter.addFragment(new CompanyList(), "Companies");
-
-
-        if (loginMode.equals("admin")) {
-            vPadapter.addFragment(new UnauthorisedCompanyList(), "Pending");
-            vPadapter.addFragment(new LowRatedCompanyList(), "Low Rated");
-        }
+        vPadapter.addFragment(new SpaceShipList(), "Unshared Gliders");
+        vPadapter.addFragment(new SharedRideSpaceShips() , "Shared Gliders");
         viewPager.setAdapter(vPadapter);
 
         getUserData();
@@ -98,21 +94,21 @@ public class AllListActivity extends AppCompatActivity {
                     // Sending data to profile activity if received.
                     // Moving to respective profile activity as per loginMode.
                     if (loginMode.equals("admin")) {
-                        Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
+                        Intent intent = new Intent(AllSpaceShipsListActivity.this, UserProfileActivity.class);
                         intent.putExtra("update_from_allList", true);
                         intent.putExtra("loginMode", loginMode);
                         intent.putExtra("sender_name", currentUserName);
                         intent.putExtra("sender_number", currentUserEmail);
                         startActivity(intent);
                     } else if (loginMode.equals("owner")) {
-                        Intent intent = new Intent(AllListActivity.this, CompanyProfileActivity.class);
+                        Intent intent = new Intent(AllSpaceShipsListActivity.this, CompanyProfileActivity.class);
                         intent.putExtra("update_from_allList", false);
                         intent.putExtra("sender_pic", currentUserPic);
                         intent.putExtra("sender_name", currentUserName);
                         intent.putExtra("licenseUrl", currentLicenseUrl);
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
+                        Intent intent = new Intent(AllSpaceShipsListActivity.this, UserProfileActivity.class);
                         intent.putExtra("update_from_allList", true);
                         intent.putExtra("sender_pic", currentUserPic);
                         intent.putExtra("sender_name", currentUserName);
@@ -124,19 +120,22 @@ public class AllListActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.logout1) {
                     eraseLoginMode();
                     FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(AllListActivity.this, MainActivity.class)
+                    startActivity(new Intent(AllSpaceShipsListActivity.this, MainActivity.class)
                             .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
                 }
                 if(item.getItemId() == R.id.your_rides){
-                    Intent intent1 = new Intent(AllListActivity.this, AllTransactionsList.class);
+                    Intent intent1 = new Intent(AllSpaceShipsListActivity.this, AllTransactionsList.class);
                     startActivity(intent1);
                 }
                 return false;
             }
         });
 
+
     }
+
+
 
     // on Back press show alert dialog box
     @Override
@@ -144,26 +143,30 @@ public class AllListActivity extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-            builder.setTitle("Exit the app");
-            builder.setMessage("Are you sure you want to exit the app.");
+            if(loginMode.equals("owner")) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                builder.setTitle("Exit the app");
+                builder.setMessage("Are you sure you want to exit the app.");
 
-            // if user chooses 'yes' close the application.
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    AllListActivity.super.onBackPressed();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+                // if user chooses 'yes' close the application.
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AllSpaceShipsListActivity.super.onBackPressed();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                }
-            });
+                    }
+                });
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -216,7 +219,7 @@ public class AllListActivity extends AppCompatActivity {
                     });
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(AllListActivity.this, "Slow Internet Connection",
+            Toast.makeText(AllSpaceShipsListActivity.this, "Slow Internet Connection",
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -230,5 +233,6 @@ public class AllListActivity extends AppCompatActivity {
         editor.putString("email", "");
         editor.apply();
     }
+
 
 }

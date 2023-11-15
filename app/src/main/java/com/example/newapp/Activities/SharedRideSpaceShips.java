@@ -8,9 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +16,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +28,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.SpaceShipAdapter;
-import com.example.newapp.DataModel.Admin;
-import com.example.newapp.DataModel.Company;
-import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,7 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SpaceShipList extends Fragment {
+public class SharedRideSpaceShips extends Fragment {
 
     private ArrayList<SpaceShip> spaceShipArrayList;
     private Spinner spinner;
@@ -59,19 +51,14 @@ public class SpaceShipList extends Fragment {
     private SpaceShipAdapter spaceShipAdapter;
     SpaceShipAdapter.OnSpaceShipClickListener onSpaceShipClickListener;
     private FloatingActionButton floatingActionButton;
-    private String currentUserName;
-    private String currentUserEmail;
-    private String currentUserPic;
-    private String currentLicenseUrl;
     private boolean currentUserAuthStatus;
     private String companyId;
     private String loginMode;
-    private String currentUserDescription;
     final private String filtersUsed[] = {"Sort By", "Rating", "Price"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_space_ship_list, container, false);
+        return inflater.inflate(R.layout.activity_shared_ride_space_ships, container, false);
     }
 
 
@@ -82,14 +69,15 @@ public class SpaceShipList extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
 
-        spinner = getView().findViewById(R.id.spinner1_spaceship);
+        spinner = getView().findViewById(R.id.spinner1_spaceship_shared_ride);
 
-        searchSpaceship = getView().findViewById(R.id.srchCompany_spaceship);
+        searchSpaceship = getView().findViewById(R.id.srchCompany_spaceship_shared_ride);
         spaceShipArrayList = new ArrayList<>();
 
-        progressBar = getView().findViewById(R.id.progressbar_spaceship);
-        recyclerView = getView().findViewById(R.id.recycler_spaceship);
-        floatingActionButton = getView().findViewById(R.id.fab_spaceship);
+        progressBar = getView().findViewById(R.id.progressbar_spaceship_shared_ride);
+        recyclerView = getView().findViewById(R.id.recycler_spaceship_shared_ride);
+        floatingActionButton = getView().findViewById(R.id.fab_spaceship_shared_ride);
+
 
         Intent intent = getActivity().getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -148,7 +136,7 @@ public class SpaceShipList extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                getSpaceShips(newText);
+                getSpaceShipsWithSharedRide(newText);
                 return false;
             }
         });
@@ -160,7 +148,7 @@ public class SpaceShipList extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getSpaceShips(searchSpaceship.getQuery().toString());
+                getSpaceShipsWithSharedRide(searchSpaceship.getQuery().toString());
             }
 
             @Override
@@ -173,16 +161,15 @@ public class SpaceShipList extends Fragment {
     }
 
 
-
     @Override
     public void onResume() {
         super.onResume();
         searchSpaceship.setQuery("", false);
-        getSpaceShips("");
+        getSpaceShipsWithSharedRide("");
     }
 
 
-    private void getSpaceShips(String userQuery) {
+    private void getSpaceShipsWithSharedRide(String userQuery) {
         spaceShipArrayList.clear();
         try {
             int spinnerPosition = spinner.getSelectedItemPosition();
@@ -206,7 +193,7 @@ public class SpaceShipList extends Fragment {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                            if (spaceShip != null) {
+                            if (spaceShip != null && spaceShip.isHaveRideSharing()) {
                                 if (spaceShip.getSpaceShipName().toLowerCase().contains(userQuery.toLowerCase())) {
                                     spaceShipArrayList.add(spaceShip);
                                 }

@@ -1,5 +1,7 @@
 package com.example.newapp.DataModel;
 
+import java.util.ArrayList;
+
 public class Customer {
 
     private String name;
@@ -7,16 +9,19 @@ public class Customer {
     private String email;
     private String profilePic;
     private String loginMode;
+    ArrayList<Transaction> transactions;
 
     public Customer(){
 
     }
-    public Customer(String name, String number, String email, String profilePic, String loginMode) {
+
+    public Customer(String name, String number, String email, String profilePic, String loginMode, ArrayList<Transaction> transactions) {
         this.name = name;
         this.number = number;
         this.email = email;
         this.profilePic = profilePic;
         this.loginMode = loginMode;
+        this.transactions = transactions;
     }
 
     public String getName() {
@@ -57,6 +62,14 @@ public class Customer {
 
     public void setLoginMode(String loginMode) {
         this.loginMode = loginMode;
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(ArrayList<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
 

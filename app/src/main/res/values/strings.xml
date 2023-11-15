@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NewApp</string>
+    <string name="app_name">Galaxy Glider</string>
     <string name="title_activity_location">LocationActivity</string>
 
     <string name="ChatActivity_intent_petKey">PetKey</string>

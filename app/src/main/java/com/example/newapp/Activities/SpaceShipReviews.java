@@ -1,5 +1,6 @@
 package com.example.newapp.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,10 +13,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.newapp.Adapter.ReviewAdapter;
+import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Review;
+import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,11 +35,11 @@ public class SpaceShipReviews extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private ReviewAdapter reviewAdapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
     ReviewAdapter.OnReviewClickLiListener onReviewClickLiListener;
     private Spinner spinner;
     final private String filtersUsed[] = {"Sort By", "Rating", "Time"};
-    private ArrayList<Review> backUpReviewsList;
+    private String spaceShipId;
+    private String companyID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,33 +48,18 @@ public class SpaceShipReviews extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        reviewArrayList = new ArrayList<>();
         spinner = findViewById(R.id.spinner_reviews);
-        backUpReviewsList = new ArrayList<>();
         reviewArrayList = new ArrayList<>();
 
         progressBar = findViewById(R.id.progressbar_reviews);
         recyclerView = findViewById(R.id.recycler_reviews);
-        swipeRefreshLayout = findViewById(R.id.swip_reviews);
 
         Intent intent = getIntent();
-        reviewArrayList = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
+        spaceShipId = intent.getStringExtra("id_ss");
+        companyID = intent.getStringExtra("companyID");
 
-        if (reviewArrayList == null) {
-            reviewArrayList = new ArrayList<>();
-        }
 
-//        setAdapter(reviewArrayList);
-        backUpReviewsList.addAll(reviewArrayList);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setAdapter(reviewArrayList);
-                spinner.setSelection(0);
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
-
+        // setting up spinner for sorting reviews.
         ArrayAdapter arrayAdapter = new ArrayAdapter(SpaceShipReviews.this, android.R.layout.simple_spinner_item, filtersUsed);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
@@ -74,37 +67,7 @@ public class SpaceShipReviews extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    reviewArrayList.clear();
-                    reviewArrayList.addAll(backUpReviewsList);
-                    setAdapter(reviewArrayList);
-                } else if (position == 1) {
-                    reviewArrayList.clear();
-                    reviewArrayList.addAll(backUpReviewsList);
-                    Collections.sort(reviewArrayList, new Comparator<Review>() {
-                        @Override
-                        public int compare(Review review, Review t1) {
-                            return (-1) * review.getRating().compareTo(t1.getRating());
-                        }
-                    });
-                    setAdapter(reviewArrayList);
-                } else if (position == 2) {
-                    reviewArrayList.clear();
-                    reviewArrayList.addAll(backUpReviewsList);
-                    Collections.sort(reviewArrayList, new Comparator<Review>() {
-                        @Override
-                        public int compare(Review review, Review t1) {
-                            if (review.getTime() == t1.getTime()) {
-                                return 0;
-                            } else if (review.getTime() > t1.getTime()) {
-                                return -1;
-                            } else {
-                                return 1;
-                            }
-                        }
-                    });
-                    setAdapter(reviewArrayList);
-                }
+                getSpaceShipReviews();
             }
 
             @Override
@@ -113,6 +76,7 @@ public class SpaceShipReviews extends AppCompatActivity {
             }
         });
 
+
         onReviewClickLiListener = new ReviewAdapter.OnReviewClickLiListener() {
             @Override
             public void onReviewsClicked(int position) {
@@ -120,8 +84,11 @@ public class SpaceShipReviews extends AppCompatActivity {
             }
         };
 
+
     }
 
+
+    // Set arraylist to given adapter.
     private void setAdapter(ArrayList<Review> arrayList) {
         reviewAdapter = new ReviewAdapter(arrayList, SpaceShipReviews.this, onReviewClickLiListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipReviews.this));
@@ -131,5 +98,54 @@ public class SpaceShipReviews extends AppCompatActivity {
         reviewAdapter.notifyDataSetChanged();
 
     }
+
+
+    // fetches the update in spaceShipReviews in realtime and sort it as per spinner selection.
+    private void getSpaceShipReviews() {
+
+        FirebaseDatabase.getInstance().getReference("company/" + companyID + "/spaceShips")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        reviewArrayList.clear();
+                        // get reviewsArrayList from database.
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            SpaceShip spaceShip = dataSnapshot.getValue(SpaceShip.class);
+                            if (spaceShip != null && spaceShip.getSpaceShipId().equals(spaceShipId)) {
+                                reviewArrayList = spaceShip.getReviews();
+                            }
+                        }
+
+                        // sort the list as per spinner selection
+                        if (reviewArrayList != null) {
+                            if (spinner.getSelectedItemPosition() == 1) {
+                                Collections.sort(reviewArrayList, new Comparator<Review>() {
+                                    @Override
+                                    public int compare(Review review, Review t1) {
+                                        return (-1) * review.getRating().compareTo(t1.getRating());
+                                    }
+                                });
+
+                            } else if (spinner.getSelectedItemPosition() == 2) {
+                                Collections.reverse(reviewArrayList);
+                            }
+                            // set the sorted list to adapter
+                            setAdapter(reviewArrayList);
+
+                        } else {
+                            Toast.makeText(SpaceShipReviews.this, "No reviews given yet...",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
 
 }

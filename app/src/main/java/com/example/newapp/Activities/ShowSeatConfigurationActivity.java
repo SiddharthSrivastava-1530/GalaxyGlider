@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private TextView food;
     private TextView food_not;
     private TextView confirm_seats;
+    private TextView noRideSharingMessage;
     private String name;
     private String description;
     private String ratings;
@@ -119,6 +121,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         fitness_not = findViewById(R.id.fitness_not_tv_show);
 
         confirm_seats = findViewById(R.id.confirm_seats);
+        noRideSharingMessage = findViewById(R.id.no_ride_sharing_message_tv);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name_ss");
@@ -141,11 +144,15 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         attachSeatsListener();
         setServicesViews();
 
+        if(haveSharedRide){
+            noRideSharingMessage.setVisibility(View.GONE);
+        }
+
         // Move to checkout activity if user confirms seat configuration.
         confirm_seats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(checkData()) {
+                if (checkData()) {
                     Intent intent1 = new Intent(ShowSeatConfigurationActivity.this, CheckoutActivity.class);
                     intent1.putExtra("name_ss", name);
                     intent1.putExtra("id_ss", spaceShipId);
@@ -160,8 +167,19 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                     intent1.putExtra("companyID", companyId);
                     intent1.putExtra("update_spaceship", false);
                     intent1.putExtra("reviews_ss", reviews);
-                    intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
-                    startActivity(intent1);
+                    if (!haveSharedRide) {
+                        if(getAllSeatConfig()){
+                            intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
+                            startActivity(intent1);
+                        } else {
+                            Toast.makeText(ShowSeatConfigurationActivity.this, "No " +
+                                    "seats available...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
+                        startActivity(intent1);
+                    }
                 } else {
                     Toast.makeText(ShowSeatConfigurationActivity.this, "Please choose at least 1 seat...",
                             Toast.LENGTH_SHORT).show();
@@ -170,198 +188,202 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         });
 
 
-        seat1_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(0) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 0, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 0, '1');
-                    seat1_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 0, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 0, '0');
-                    seat1_trans.setBackgroundResource(R.drawable.transparent_seat);
+        if(haveSharedRide) {
+            seat1_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(0) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 0, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 0, '1');
+                        seat1_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 0, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 0, '0');
+                        seat1_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat2_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(1) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 1, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 1, '1');
-                    seat2_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 1, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 1, '0');
-                    seat2_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat2_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(1) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 1, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 1, '1');
+                        seat2_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 1, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 1, '0');
+                        seat2_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat3_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(2) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 2, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 2, '1');
-                    seat3_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 2, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 2, '0');
-                    seat3_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat3_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(2) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 2, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 2, '1');
+                        seat3_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 2, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 2, '0');
+                        seat3_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat4_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(3) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 3, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 3, '1');
-                    seat4_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 3, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 3, '0');
-                    seat4_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat4_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(3) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 3, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 3, '1');
+                        seat4_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 3, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 3, '0');
+                        seat4_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat5_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(4) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 4, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 4, '1');
-                    seat5_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 4, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 4, '0');
-                    seat5_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat5_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(4) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 4, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 4, '1');
+                        seat5_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 4, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 4, '0');
+                        seat5_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat6_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(5) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 5, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 5, '1');
-                    seat6_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 5, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 5, '0');
-                    seat6_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat6_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(5) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 5, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 5, '1');
+                        seat6_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 5, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 5, '0');
+                        seat6_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat7_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(6) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 6, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 6, '1');
-                    seat7_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 6, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 6, '0');
-                    seat7_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat7_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(6) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 6, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 6, '1');
+                        seat7_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 6, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 6, '0');
+                        seat7_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat8_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(7) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 7, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 7, '1');
-                    seat8_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 7, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 7, '0');
-                    seat8_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat8_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(7) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 7, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 7, '1');
+                        seat8_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 7, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 7, '0');
+                        seat8_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat9_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(8) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 8, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 8, '1');
-                    seat9_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 8, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 8, '0');
-                    seat9_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat9_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(8) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 8, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 8, '1');
+                        seat9_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 8, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 8, '0');
+                        seat9_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat10_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(9) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 9, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 9, '1');
-                    seat10_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 9, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 9, '0');
-                    seat10_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat10_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(9) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 9, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 9, '1');
+                        seat10_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 9, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 9, '0');
+                        seat10_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat11_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(10) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 10, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 10, '1');
-                    seat11_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 10, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 10, '0');
-                    seat11_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat11_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(10) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 10, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 10, '1');
+                        seat11_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 10, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 10, '0');
+                        seat11_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
 
-        seat12_trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSeatConfiguration.charAt(11) == '1') {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 11, '0');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 11, '1');
-                    seat12_trans.setBackgroundResource(R.drawable.colored_seats);
-                } else {
-                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, 11, '1');
-                    chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 11, '0');
-                    seat12_trans.setBackgroundResource(R.drawable.transparent_seat);
+            seat12_trans.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (currentSeatConfiguration.charAt(11) == '1') {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 11, '0');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 11, '1');
+                        seat12_trans.setBackgroundResource(R.drawable.colored_seats);
+                    } else {
+                        currentSeatConfiguration = setCharAt(currentSeatConfiguration, 11, '1');
+                        chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, 11, '0');
+                        seat12_trans.setBackgroundResource(R.drawable.transparent_seat);
+                    }
                 }
-            }
-        });
+            });
+
+        }
 
 
     }
 
     // return true if at least one seat is chosen.
     private boolean checkData() {
+        if(!haveSharedRide) return true;
         int chosenSeats = 0;
-        for(int position=0;position<12;position++){
-            if(chosenSeatConfiguration.charAt(position)=='1') {
+        for (int position = 0; position < 12; position++) {
+            if (chosenSeatConfiguration.charAt(position) == '1') {
                 chosenSeats++;
             }
         }
-        return chosenSeats>0;
+        return chosenSeats > 0;
     }
 
 
@@ -589,5 +611,20 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         }
     }
 
+
+    private boolean getAllSeatConfig(){
+        String copy = currentSeatConfiguration;
+        for(int position=0; position < 12; position++){
+            if(seats.charAt(position) == '1'){
+                chosenSeatConfiguration = setCharAt(chosenSeatConfiguration, position, '1');
+                currentSeatConfiguration = setCharAt(currentSeatConfiguration, position, '0');
+            } else if(seats.charAt(position) == '0'){
+                chosenSeatConfiguration = "000000000000";
+                currentSeatConfiguration = copy;
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

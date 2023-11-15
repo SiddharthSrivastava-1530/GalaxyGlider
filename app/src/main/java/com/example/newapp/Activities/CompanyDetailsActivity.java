@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
@@ -79,7 +78,7 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         allTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(CompanyDetailsActivity.this, SpaceShipList.class);
+                Intent intent1 = new Intent(CompanyDetailsActivity.this, AllSpaceShipsListActivity.class);
                 intent1.putExtra("companyID", companyId);
                 intent1.putExtra("loginMode", loginMode);
                 startActivity(intent1);

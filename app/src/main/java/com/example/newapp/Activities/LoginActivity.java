@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                                     intent1 = new Intent(LoginActivity.this, AllListActivity.class);
                                 } else if (loginMode.equals("owner")) {
                                     String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                    intent1 = new Intent(LoginActivity.this, SpaceShipList.class);
+                                    intent1 = new Intent(LoginActivity.this, AllSpaceShipsListActivity.class);
                                     intent1.putExtra("companyID", companyId);
                                 } else {
                                     intent1 = new Intent(LoginActivity.this, AllListActivity.class);

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
+import com.example.newapp.DataModel.Transaction;
 import com.example.newapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -234,10 +235,11 @@ public class SignUpActivity extends AppCompatActivity {
                             saveLoginMode();
 
                             // Setting data into the database.
+                            ArrayList<Transaction> transactions = new ArrayList<>();
                             FirebaseDatabase.getInstance().getReference("users/" +
                                             FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(new Customer(name.getText().toString(), "",
-                                            email.getText().toString(), "", loginMode))
+                                            email.getText().toString(), "", loginMode,transactions))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

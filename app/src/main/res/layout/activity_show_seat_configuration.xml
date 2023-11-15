@@ -503,4 +503,17 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.9" />
 
+    <TextView
+        android:id="@+id/no_ride_sharing_message_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No seats sharing. All seats will be booked."
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_semibold"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline113"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline109" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

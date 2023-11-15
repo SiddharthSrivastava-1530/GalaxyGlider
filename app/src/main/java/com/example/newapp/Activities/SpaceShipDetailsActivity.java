@@ -148,7 +148,8 @@ public class SpaceShipDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(SpaceShipDetailsActivity.this, SpaceShipReviews.class);
-                intent1.putExtra("reviews_ss", reviews);
+                intent1.putExtra("companyID", companyId);
+                intent1.putExtra("id_ss", spaceShipId);
                 startActivity(intent1);
             }
         });
