@@ -38,28 +38,20 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
-    private EditText fromLocation, toLocation, distance;
     private TextView bookRideButton;
     private String userEmail;
     private String userName;
-    private String name;
-    private String spaceShipRating;
-    private String description;
-    private String seats;
-    private String price;
-    private float speed;
-    private String busyTime;
-    private Boolean haveSharedRide;
+    private String distance;
+    private String departure;
+    private String destination;
     private String companyId;
-    private String loginMode;
-    private String services;
     private String chosenSeatConfig;
-    private ArrayList<Review> reviews;
-    private String updatedSeatsConfiguration;
-    private String spaceShipId;
     private String companyName;
+    private String selectedSlotNumber;
     private SpaceShip currentSpaceShip;
-    private ArrayList<Transaction> transactionArrayList;
+    private String currentSeatConfiguration;
+    private ArrayList<String> spaceShipTransactionIds;
+    private ArrayList<String> userTransactionIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,48 +62,42 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         getSupportActionBar().hide();
 
         bookRideButton = findViewById(R.id.bookRideButton);
-        fromLocation = findViewById(R.id.fromLocation);
-        toLocation = findViewById(R.id.toLocation);
-        distance = findViewById(R.id.distance_journey_et);
 
         // getting data passed by intent
         Intent intent = getIntent();
-        name = intent.getStringExtra("name_ss");
-        spaceShipId = intent.getStringExtra("id_ss");
-        spaceShipRating = intent.getStringExtra("rating_ss");
-        description = intent.getStringExtra("description_ss");
-        price = intent.getStringExtra("price_ss");
-        speed = intent.getFloatExtra("speed_ss", 0);
-        busyTime = intent.getStringExtra("busyTime_ss");
-        seats = intent.getStringExtra("seats_ss");
-        services = intent.getStringExtra("services_ss");
-        haveSharedRide = intent.getBooleanExtra("shared_ride_ss", false);
-        loginMode = intent.getStringExtra("loginMode");
+        currentSpaceShip = (SpaceShip) intent.getSerializableExtra("spaceship");
         companyId = intent.getStringExtra("companyID");
-        reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
         chosenSeatConfig = intent.getStringExtra("chosen_seat_config");
+        selectedSlotNumber = intent.getStringExtra("slot_number");
+        distance = intent.getStringExtra("dist");
+        departure = intent.getStringExtra("dept");
+        destination = intent.getStringExtra("dest");
 
-
-        bookRideButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(CheckoutActivity.this, UserReviewsActivity.class);
-//                intent.putExtra("from", fromLocation.getText().toString());
-//                intent.putExtra("to", toLocation.getText().toString());
-//                intent.putExtra("date", date.getText().toString());
-//                intent.putExtra("time", time.getText().toString());
-//                startPayment();
-                String refId = UUID.randomUUID().toString();
-                onPaymentSuccess(refId);
-            }
-        });
-
+//        Intent intent = new Intent(CheckoutActivity.this, UserReviewsActivity.class);
+//        intent.putExtra("from", fromLocation.getText().toString());
+//        intent.putExtra("to", toLocation.getText().toString());
+//        intent.putExtra("date", date.getText().toString());
+//        intent.putExtra("time", time.getText().toString());
+//        startPayment();
         getUserData();
         getCompanyName();
+
+        attachSpaceShipListener();
+
+        String refId = UUID.randomUUID().toString();
+        onPaymentSuccess(refId);
 
     }
 
 
+    private float calculateFair(int countOfGliders) {
+        float journeyDistance = Float.parseFloat(distance);
+        float basePay = 1000;
+        float pricePerLY = currentSpaceShip.getPrice();
+        float serviceCharges = 20;
+        float totalCost = (countOfGliders / 100.0f) * basePay + pricePerLY * journeyDistance + serviceCharges;
+        return totalCost;
+    }
 
     private void startPayment() {
         Checkout checkout = new Checkout();
@@ -139,18 +125,12 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
 
-
-
     @Override
     public void onPaymentSuccess(String s) {
 //        Checkout.clearUserData(this);
-        if (checkData()) {
-            updateSeats(s);
-        }
+        updateSeats(s);
         Log.d("onSUCCESS", "onPaymentSuccess: " + s);
     }
-
-
 
 
     // if payment fails redirect user to current activity.
@@ -160,98 +140,98 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     }
 
 
-
-
-
     /* update the realtime seat availability and match it with chosenSeatConfiguration of user
      for checking seat availability */
     private void updateSeats(String refId) {
 
-        attachSeatsListener();
-
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
                 .child(companyId).child("spaceShips");
+
 
         // Fetch the existing SpaceShips
         companyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
-                int index = -1, counter = 0;
+                int index = -1, position = 0;
+                boolean canUpdate = false;
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                         SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                         if (spaceShip != null) {
                             spaceShipArrayList.add(spaceShip);
-                            if (spaceShip.getSpaceShipId().equals(spaceShipId)) {
-                                index = counter;
+                            if (spaceShip.getSpaceShipId().equals(currentSpaceShip.getSpaceShipId())) {
                                 currentSpaceShip = spaceShip;
+                                spaceShipTransactionIds = spaceShip.getTransactionIds();
+                                if (spaceShipTransactionIds == null) {
+                                    spaceShipTransactionIds = new ArrayList<>();
+                                }
+                                index = position;
+                                // fetches current seat configuration and updates current spaceship.
+                                getSlotConfiguration();
+                                // if seats are available update the seats in currentSpaceShip object.
+                                canUpdate = canUpdateSeatsConfiguration();
                             }
-                            counter++;
                         }
+                        position++;
                     }
                 }
 
-
-                // if seats are available update the seats in currentSpaceShip object.
-                if (updateSeatsConfiguration()) {
-                    currentSpaceShip.setSeatsAvailable(updatedSeatsConfiguration);
-                } else {
-                    Toast.makeText(CheckoutActivity.this, "Chosen configuration unavailable at moment. Please retry", Toast.LENGTH_SHORT).show();
-                }
-
-
-                // Update the spaceShipArrayList by adding update currentSpaceShip object.
-                if (index != -1) {
+                if (index != -1 && canUpdate) {
+                    setSlotConfiguration();
+                    // add current transactionId to spaceShip transaction list.
+                    spaceShipTransactionIds.add(refId);
+                    currentSpaceShip.setTransactionIds(spaceShipTransactionIds);
+                    // add spaceship to arraylist.
                     spaceShipArrayList.set(index, currentSpaceShip);
-                    Toast.makeText(CheckoutActivity.this, "Your seats are booked. Enjoy the journey",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckoutActivity.this, "Seats booked...", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CheckoutActivity.this, "Chosen configuration unavailable at moment." +
+                            " Please retry", Toast.LENGTH_SHORT).show();
                 }
+
 
                 // Set the updated spaceShips back to the company reference and sending intent to
                 // journey activity on completion of task.
                 companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(CheckoutActivity.this, "Seats confirmed", Toast.LENGTH_SHORT).show();
 
-
-                        // Set this ride as an ongoing transaction object in database in users node.
                         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        if(transactionArrayList == null){
-                            transactionArrayList = new ArrayList<>();
-                        }
 
-                        transactionArrayList.add(new Transaction(userUID,userName,userEmail,refId,companyId,companyName,
-                                spaceShipId, name, chosenSeatConfig, fromLocation.getText().toString(),toLocation.getText().toString(),
-                                distance.getText().toString(), System.currentTimeMillis(),
-                                235667,false));
+                        // Set this ride as an ongoing transaction object in database in separate node.
+                        Review review = new Review();
+                        Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
+                                companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
+                                chosenSeatConfig, departure, destination, distance, selectedSlotNumber,
+                                System.currentTimeMillis(), calculateFair(4), false, review);
 
-                        FirebaseDatabase.getInstance().getReference("users/" + userUID + "/transactions")
-                                .setValue(transactionArrayList);
+                        // add transaction to database in node - 'transactions'
+                        FirebaseDatabase.getInstance().getReference("transactions/" + refId)
+                                .setValue(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
 
+                                    }
+                                });
 
-                        // Start the journey and move further to review activity.
-                        Intent intent1 = new Intent(CheckoutActivity.this, UserReviewsActivity.class);
-                        intent1.putExtra("name_ss", name);
-                        intent1.putExtra("id_ss", spaceShipId);
-                        intent1.putExtra("description_ss", description);
-                        intent1.putExtra("price_ss", price);
-                        intent1.putExtra("rating_ss", spaceShipRating);
-                        intent1.putExtra("speed_ss", speed);
-                        intent1.putExtra("busyTime_ss", busyTime);
-                        intent1.putExtra("seats_ss", seats);
-                        intent1.putExtra("shared_ride_ss", haveSharedRide);
-                        intent1.putExtra("loginMode", loginMode);
-                        intent1.putExtra("companyID", companyId);
-                        intent1.putExtra("update_spaceship", false);
-                        intent1.putExtra("chosen_seat_config", chosenSeatConfig);
-                        intent1.putExtra("reviews_ss", reviews);
-                        intent1.putExtra("refId", refId);
-                        intent1.putExtra("source", fromLocation.getText().toString());
-                        intent1.putExtra("destination", toLocation.getText().toString());
-                        intent1.putExtra("distance", distance.getText().toString());
-                        startActivity(intent1);
+                        // add userTransactionsIds arraylist to 'users' node
+                        Log.e("transaction List size", String.valueOf(userTransactionIds.size()));
+                        userTransactionIds.add(refId);
+
+                        FirebaseDatabase.getInstance().getReference("users/" + userUID + "/transactionIds")
+                                .setValue(userTransactionIds).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isComplete()) {
+                                            // Start the journey and move further to review activity.
+                                            Intent intent1 = new Intent(CheckoutActivity.this, AllSpaceShipsListActivity.class);
+                                            intent1.putExtra("companyID", companyId);
+                                            intent1.putExtra("loginMode", "user");
+                                            startActivity(intent1);
+                                        }
+                                    }
+                                });
                     }
                 });
 
@@ -269,87 +249,102 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
 
     // update the new seat configuration if its available
     // if not available return false and retain the original seat configuration.
-    private boolean updateSeatsConfiguration() {
-        String copy = updatedSeatsConfiguration;
+    private boolean canUpdateSeatsConfiguration() {
         for (int position = 0; position < 12; position++) {
             if (chosenSeatConfig.charAt(position) == '1') {
-                if (seats.charAt(position) == '1') {
-                    updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, '0');
+                Log.e("-----------> chosen Yes", String.valueOf(position));
+                if (currentSeatConfiguration.charAt(position) == '1') {
+                    currentSeatConfiguration = setCharAt(currentSeatConfiguration, position, '0');
+                    Log.e("-----------> is Available", String.valueOf(position));
                 } else {
-                    updatedSeatsConfiguration = copy;
                     return false;
                 }
-            } else {
-                char character = seats.charAt(position);
-                updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, character);
             }
         }
         return true;
     }
 
+    private void getSlotConfiguration() {
+
+        if (selectedSlotNumber.equals("0")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot1();
+        } else if (selectedSlotNumber.equals("1")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot2();
+        } else if (selectedSlotNumber.equals("2")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot3();
+        } else if (selectedSlotNumber.equals("3")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot4();
+        } else if (selectedSlotNumber.equals("4")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot5();
+        } else if (selectedSlotNumber.equals("5")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot6();
+        } else if (selectedSlotNumber.equals("6")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot7();
+        } else if (selectedSlotNumber.equals("7")) {
+            currentSeatConfiguration = currentSpaceShip.getSlot8();
+        }
+
+    }
+
+    private void setSlotConfiguration() {
+
+        if (selectedSlotNumber.equals("0")) {
+            currentSpaceShip.setSlot1(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("1")) {
+            currentSpaceShip.setSlot2(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("2")) {
+            currentSpaceShip.setSlot3(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("3")) {
+            currentSpaceShip.setSlot4(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("4")) {
+            currentSpaceShip.setSlot5(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("5")) {
+            currentSpaceShip.setSlot6(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("6")) {
+            currentSpaceShip.setSlot7(currentSeatConfiguration);
+        } else if (selectedSlotNumber.equals("7")) {
+            currentSpaceShip.setSlot8(currentSeatConfiguration);
+        }
+
+    }
+
 
     // set given character at specific position of string.
-    private String setCharAt(String services, int position, char ch) {
-        char[] charArray = services.toCharArray();
+    private String setCharAt(String string, int position, char ch) {
+        char[] charArray = string.toCharArray();
         charArray[position] = ch;
         return new String(charArray);
     }
 
 
+    private void attachSpaceShipListener() {
 
-    // updates the seat dynamically on any update in seats configuration data (in realtime).
-    private void attachSeatsListener() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users/"
+                + companyId + "/spaceShips");
 
-        try {
-            DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company")
-                    .child(companyId).child("spaceShips");
-
-            // Fetching the existing spaceShips from specific database reference.
-            companyRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
-                            SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                            if (spaceShip != null && spaceShip.getSpaceShipId().equals(spaceShipId)) {
-                                seats = spaceShip.getSeatsAvailable();
-                                updatedSeatsConfiguration = seats;
-                            }
-                        }
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    SpaceShip spaceShip = dataSnapshot.getValue(SpaceShip.class);
+                    if (spaceShip != null && spaceShip.getSpaceShipId().equals(currentSpaceShip.getSpaceShipId())) {
+                        currentSpaceShip = spaceShip;
                     }
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            }
 
-                }
-            });
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Slow Internet Connection",
-                    Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
-    // checking if data not filled or not, if not return false.
-    private boolean checkData() {
-        if (TextUtils.isEmpty(fromLocation.getText().toString())) {
-            Toast.makeText(this, "Please enter source", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (TextUtils.isEmpty(toLocation.getText().toString())) {
-            Toast.makeText(this, "Please enter destination", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (TextUtils.isEmpty(distance.getText().toString())) {
-            Toast.makeText(this, "Please enter approximated distance", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
 
-    private void getCompanyName(){
+    private void getCompanyName() {
 
-        FirebaseDatabase.getInstance().getReference("company/" + companyId )
+        FirebaseDatabase.getInstance().getReference("company/" + companyId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -363,14 +358,17 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                 });
     }
 
-    private void getUserData(){
+    private void getUserData() {
         FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        userName = snapshot.getValue(Company.class).getName();
-                        userEmail = snapshot.getValue(Company.class).getEmail();
-                        transactionArrayList = snapshot.getValue(Customer.class).getTransactions();
+                        userName = snapshot.getValue(Customer.class).getName();
+                        userEmail = snapshot.getValue(Customer.class).getEmail();
+                        userTransactionIds = snapshot.getValue(Customer.class).getTransactionIds();
+                        if (userTransactionIds == null) {
+                            userTransactionIds = new ArrayList<>();
+                        }
                     }
 
                     @Override

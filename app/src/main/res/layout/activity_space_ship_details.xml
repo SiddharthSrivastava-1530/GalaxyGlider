@@ -124,37 +124,6 @@
         android:layout_height="60dp"
         android:backgroundTint="@color/white"
         app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline99"
-        app:layout_constraintEnd_toStartOf="@+id/guideline46"
-        app:layout_constraintStart_toStartOf="@+id/guideline44"
-        app:layout_constraintTop_toTopOf="@+id/guideline98">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            app:cardCornerRadius="12dp"
-            android:backgroundTint="#000000">
-
-            <TextView
-                android:id="@+id/schedule_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/inter_semibold"
-                android:gravity="center"
-                android:text="View Glider Schedule"
-                android:textColor="#ffffff"
-                android:textSize="23sp" />
-
-        </androidx.cardview.widget.CardView>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="310dp"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/white"
-        app:cardCornerRadius="12dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline42"
         app:layout_constraintEnd_toStartOf="@+id/guideline46"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
@@ -289,7 +258,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.81" />
+        app:layout_constraintGuide_percent="0.87" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline100"
@@ -303,14 +272,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72" />
+        app:layout_constraintGuide_percent="0.78" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline98"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.63" />
+        app:layout_constraintGuide_percent="0.67" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline43"

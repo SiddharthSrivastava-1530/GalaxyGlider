@@ -43,6 +43,7 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private String companyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
+        companyId = intent.getStringExtra("companyID");
 
         // Setting tab layout to show viewPager
         tabLayout.setupWithViewPager(viewPager);
@@ -152,7 +154,7 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        AllSpaceShipsListActivity.super.onBackPressed();
+                        finish();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

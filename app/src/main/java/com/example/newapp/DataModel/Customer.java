@@ -1,27 +1,28 @@
 package com.example.newapp.DataModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Customer {
+public class Customer implements Serializable {
 
     private String name;
     private String number;
     private String email;
     private String profilePic;
     private String loginMode;
-    ArrayList<Transaction> transactions;
+    ArrayList<String> transactionIds;
 
     public Customer(){
 
     }
 
-    public Customer(String name, String number, String email, String profilePic, String loginMode, ArrayList<Transaction> transactions) {
+    public Customer(String name, String number, String email, String profilePic, String loginMode, ArrayList<String> transactionIds) {
         this.name = name;
         this.number = number;
         this.email = email;
         this.profilePic = profilePic;
         this.loginMode = loginMode;
-        this.transactions = transactions;
+        this.transactionIds = transactionIds;
     }
 
     public String getName() {
@@ -64,12 +65,13 @@ public class Customer {
         this.loginMode = loginMode;
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        return transactions;
+    public ArrayList<String> getTransactionIds() {
+        return transactionIds;
     }
 
-    public void setTransactions(ArrayList<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setTransactionIds(ArrayList<String> transactionIds) {
+        this.transactionIds = transactionIds;
     }
+
 }
 

@@ -235,11 +235,11 @@ public class SignUpActivity extends AppCompatActivity {
                             saveLoginMode();
 
                             // Setting data into the database.
-                            ArrayList<Transaction> transactions = new ArrayList<>();
+                            ArrayList<String> transactionIds = new ArrayList<>();
                             FirebaseDatabase.getInstance().getReference("users/" +
                                             FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(new Customer(name.getText().toString(), "",
-                                            email.getText().toString(), "", loginMode,transactions))
+                                            email.getText().toString(), "", loginMode,transactionIds))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

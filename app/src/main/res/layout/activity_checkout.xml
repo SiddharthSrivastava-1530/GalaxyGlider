@@ -7,58 +7,16 @@
     android:background="@drawable/spaceship_details"
     tools:context=".Activities.CheckoutActivity">
 
-    <EditText
-        android:id="@+id/fromLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:padding="10dp"
-        android:textSize="24sp"
-        android:hint="Mention your starting planet"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/toLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:hint="Mention your destination planet"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fromLocation" />
-
-    <EditText
-        android:id="@+id/distance_journey_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:hint="Mention distance of journey"
-        android:inputType="number"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toLocation" />
-
     <TextView
         android:id="@+id/bookRideButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
         android:text="BOOK RIDE"
-        android:textSize="32sp"
         android:textColor="@color/white"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/distance_journey_et" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

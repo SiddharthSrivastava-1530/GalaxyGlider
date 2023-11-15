@@ -74,38 +74,29 @@ public class OngoingTransactionsList extends Fragment {
     }
 
 
-
     private void getUserTransactions() {
 
-        try {
-
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-            Query query = databaseReference;
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    transactions.clear();
-                    ArrayList<Transaction> transactionArrayList = dataSnapshot.getValue(Customer.class).getTransactions();
-                    for(Transaction transaction : transactionArrayList){
-                        if(!transaction.isTransactionComplete()){
-                            transactions.add(transaction);
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions");
+        databaseReference.orderByChild("userUID").equalTo(userUID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        transactions.clear();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Transaction transaction = dataSnapshot.getValue(Transaction.class);
+                            if (transaction != null && !transaction.isTransactionComplete()) {
+                                transactions.add(transaction);
+                            }
                         }
+                        setAdapter(transactions);
                     }
-                    setAdapter(transactions);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
-        }
+                    }
+                });
 
     }
 

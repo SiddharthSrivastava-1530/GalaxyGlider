@@ -41,42 +41,36 @@ public class SeatConfigurationActivity extends AppCompatActivity {
     private TextView seat10;
     private TextView seat11;
     private TextView seat12;
-
     private TextView music;
-
     private TextView music_not;
     private TextView sleep;
     private TextView sleep_not;
     private TextView fitness;
-
     private TextView fitness_not;
     private TextView food;
     private TextView food_not;
     private ImageView addSeatbtn;
-
     private ImageView removeSeatbtn;
-
     private int total_seats;
-
     private TextView confirmSeatConfiguration;
-
-    private Boolean booleanUpdate;
-    private SpaceShip spaceShip;
-    private String spaceShipKey;
-    private String name;
-    private String rating;
-    private String description;
-    private String seats;
-    private String price;
-    private float speed;
-    private String busyTime;
-    private Boolean haveSharedRide;
     private String companyId;
-    private String loginMode;
+    private SpaceShip currentSpaceShip;
+    private String slotsSelected;
     private String services;
     private String seatsAvailable;
-    ArrayList<Review> reviews;
-    private String spaceShipId;
+    private String slot1;
+    private String slot2;
+    private String slot3;
+    private String slot4;
+    private String slot5;
+    private String slot6;
+    private String slot7;
+    private String slot8;
+    private String name;
+    private String description;
+    private String price;
+    private boolean booleanUpdate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,25 +113,14 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
         addSeatbtn = findViewById(R.id.add_btn_seats);
         removeSeatbtn = findViewById(R.id.remove_seat);
-
         confirmSeatConfiguration = findViewById(R.id.confirm_seat_config);
 
 
         // getting data from intent.
         Intent intent = getIntent();
-        name = intent.getStringExtra("name_ss");
-        rating = intent.getStringExtra("rating_ss");
-        spaceShipId = intent.getStringExtra("id_ss");
-        description = intent.getStringExtra("description_ss");
-        price = intent.getStringExtra("price_ss");
-        speed = intent.getFloatExtra("speed_ss", 0);
-        busyTime = intent.getStringExtra("busyTime_ss");
-        seats = intent.getStringExtra("seats_ss");
-        haveSharedRide = intent.getBooleanExtra("shared_ride_ss", false);
-        loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
-        booleanUpdate = intent.getBooleanExtra("update_spaceship", false);
-        reviews = (ArrayList<Review>) intent.getSerializableExtra("reviews_ss");
+        currentSpaceShip = (SpaceShip) intent.getSerializableExtra("spaceship_ss");
+        slotsSelected = intent.getStringExtra("slot_ss");
 
 
         total_seats = 0;
@@ -295,11 +278,11 @@ public class SeatConfigurationActivity extends AppCompatActivity {
                     for (int position = 0; position < total_seats; position++) {
                         seatsAvailable = setCharAt(seatsAvailable, position, '1');
                     }
-                    if(total_seats > 0) {
+                    if (total_seats > 0) {
                         saveSpaceShipsData();
                     } else {
                         Toast.makeText(SeatConfigurationActivity.this, "Please add a seat configuration " +
-                                        "for your spaceship", Toast.LENGTH_SHORT).show();
+                                "for your spaceship", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -317,12 +300,25 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
     // save the new spaceship data in database
     private void saveSpaceShipsData() {
+        getSlotsSelected();
+
+        currentSpaceShip.setSpaceShipRating("0.0");
+        currentSpaceShip.setNextSlotConfig(slotsSelected);
+        currentSpaceShip.setBusyTime(0);
+        currentSpaceShip.setTransactionIds(new ArrayList<String>());
+        currentSpaceShip.setSpaceShipId(UUID.randomUUID().toString());
+        currentSpaceShip.setServicesAvailable(services);
+        currentSpaceShip.setSeatConfiguration(seatsAvailable);
+        currentSpaceShip.setSlot1(slot1);
+        currentSpaceShip.setSlot2(slot2);
+        currentSpaceShip.setSlot3(slot3);
+        currentSpaceShip.setSlot4(slot4);
+        currentSpaceShip.setSlot5(slot5);
+        currentSpaceShip.setSlot6(slot6);
+        currentSpaceShip.setSlot7(slot7);
+        currentSpaceShip.setSlot8(slot8);
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
-        ArrayList<Review> reviews = new ArrayList<>();
-        String id = UUID.randomUUID().toString();
-        spaceShip = new SpaceShip(name, description, id, "0.0", seatsAvailable, services,
-                haveSharedRide, Long.parseLong("0"), Float.parseFloat(price), 0, reviews);
 
         companyRef.child("spaceShips").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -331,13 +327,12 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
                 // Check if the spaceShips field exists
                 if (dataSnapshot.exists()) {
-                    GenericTypeIndicator<ArrayList<SpaceShip>> t = new GenericTypeIndicator<ArrayList<SpaceShip>>() {
-                    };
+                    GenericTypeIndicator<ArrayList<SpaceShip>> t = new GenericTypeIndicator<ArrayList<SpaceShip>>(){};
                     spaceShips = dataSnapshot.getValue(t);
                 }
 
                 // Add the new spaceShip to the ArrayList
-                spaceShips.add(spaceShip);
+                spaceShips.add(currentSpaceShip);
 
                 // Set the updated spaceShips ArrayList back to the company reference
                 companyRef.child("spaceShips").setValue(spaceShips).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -363,5 +358,51 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private void getSlotsSelected() {
+        Toast.makeText(this, slotsSelected, Toast.LENGTH_SHORT).show();
+        if (slotsSelected.charAt(0) == '1') {
+            slot1 = seatsAvailable;
+        } else {
+            slot1 = "000000000000";
+        }
+        if (slotsSelected.charAt(1) == '1') {
+            slot2 = seatsAvailable;
+        } else {
+            slot2 = "000000000000";
+        }
+        if (slotsSelected.charAt(2) == '1') {
+            slot3 = seatsAvailable;
+        } else {
+            slot3 = "000000000000";
+        }
+        if (slotsSelected.charAt(3) == '1') {
+            slot4 = seatsAvailable;
+        } else {
+            slot4 = "000000000000";
+        }
+        if (slotsSelected.charAt(4) == '1') {
+            slot5 = seatsAvailable;
+        } else {
+            slot5 = "000000000000";
+        }
+        if (slotsSelected.charAt(5) == '1') {
+            slot6 = seatsAvailable;
+        } else {
+            slot6 = "000000000000";
+        }
+        if (slotsSelected.charAt(6) == '1') {
+            slot7 = seatsAvailable;
+        } else {
+            slot7 = "000000000000";
+        }
+        if (slotsSelected.charAt(7) == '1') {
+            slot8 = seatsAvailable;
+        } else {
+            slot8 = "000000000000";
+        }
+    }
+
 
 }

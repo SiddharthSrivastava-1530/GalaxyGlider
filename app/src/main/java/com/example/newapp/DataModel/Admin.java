@@ -1,6 +1,8 @@
 package com.example.newapp.DataModel;
 
-public class Admin {
+import java.io.Serializable;
+
+public class Admin implements Serializable {
     private String name;
     private String email;
     private String number;

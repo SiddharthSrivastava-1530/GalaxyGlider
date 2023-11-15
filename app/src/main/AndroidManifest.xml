@@ -48,6 +48,12 @@
             android:name=".Activities.UserTransactionList"
             android:exported="false" />
         <activity
+            android:name=".Activities.ShowSeatScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SelectSlotsActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.ShowSeatConfigurationActivity"
             android:exported="false" />
         <activity

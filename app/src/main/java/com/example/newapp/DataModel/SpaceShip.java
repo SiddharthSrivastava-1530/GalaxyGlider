@@ -1,37 +1,55 @@
 package com.example.newapp.DataModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SpaceShip {
+public class SpaceShip implements Serializable {
     private String spaceShipName;
     private String description;
     private String spaceShipId;
     private String spaceShipRating;
-    private String seatsAvailable;
+    private String slot1;
+    private String slot2;
+    private String slot3;
+    private String slot4;
+    private String slot5;
+    private String slot6;
+    private String slot7;
+    private String slot8;
     private String servicesAvailable;
     private boolean haveRideSharing;
     private long busyTime;
     private float price;
-    private float speed;
-    private ArrayList<Review> reviews;
+    private String nextSlotConfig;
+    private String seatConfiguration;
+    private ArrayList<String> transactionIds;
 
     public SpaceShip(){
 
     }
 
-    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String seatsAvailable, String servicesAvailable, boolean haveRideSharing, long busyTime, float price, float speed, ArrayList<Review> reviews) {
+    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String slot1, String slot2, String slot3, String slot4, String slot5, String slot6, String slot7, String slot8, String servicesAvailable, boolean haveRideSharing, long busyTime, float price, String nextSlotConfig, String seatConfiguration, ArrayList<String> transactionIds) {
         this.spaceShipName = spaceShipName;
         this.description = description;
         this.spaceShipId = spaceShipId;
         this.spaceShipRating = spaceShipRating;
-        this.seatsAvailable = seatsAvailable;
+        this.slot1 = slot1;
+        this.slot2 = slot2;
+        this.slot3 = slot3;
+        this.slot4 = slot4;
+        this.slot5 = slot5;
+        this.slot6 = slot6;
+        this.slot7 = slot7;
+        this.slot8 = slot8;
         this.servicesAvailable = servicesAvailable;
         this.haveRideSharing = haveRideSharing;
         this.busyTime = busyTime;
         this.price = price;
-        this.speed = speed;
-        this.reviews = reviews;
+        this.nextSlotConfig = nextSlotConfig;
+        this.seatConfiguration = seatConfiguration;
+        this.transactionIds = transactionIds;
     }
+
 
     public String getSpaceShipName() {
         return spaceShipName;
@@ -65,12 +83,68 @@ public class SpaceShip {
         this.spaceShipRating = spaceShipRating;
     }
 
-    public String getSeatsAvailable() {
-        return seatsAvailable;
+    public String getSlot1() {
+        return slot1;
     }
 
-    public void setSeatsAvailable(String seatsAvailable) {
-        this.seatsAvailable = seatsAvailable;
+    public void setSlot1(String slot1) {
+        this.slot1 = slot1;
+    }
+
+    public String getSlot2() {
+        return slot2;
+    }
+
+    public void setSlot2(String slot2) {
+        this.slot2 = slot2;
+    }
+
+    public String getSlot3() {
+        return slot3;
+    }
+
+    public void setSlot3(String slot3) {
+        this.slot3 = slot3;
+    }
+
+    public String getSlot4() {
+        return slot4;
+    }
+
+    public void setSlot4(String slot4) {
+        this.slot4 = slot4;
+    }
+
+    public String getSlot5() {
+        return slot5;
+    }
+
+    public void setSlot5(String slot5) {
+        this.slot5 = slot5;
+    }
+
+    public String getSlot6() {
+        return slot6;
+    }
+
+    public void setSlot6(String slot6) {
+        this.slot6 = slot6;
+    }
+
+    public String getSlot7() {
+        return slot7;
+    }
+
+    public void setSlot7(String slot7) {
+        this.slot7 = slot7;
+    }
+
+    public String getSlot8() {
+        return slot8;
+    }
+
+    public void setSlot8(String slot8) {
+        this.slot8 = slot8;
     }
 
     public String getServicesAvailable() {
@@ -105,19 +179,27 @@ public class SpaceShip {
         this.price = price;
     }
 
-    public float getSpeed() {
-        return speed;
+    public String getNextSlotConfig() {
+        return nextSlotConfig;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void setNextSlotConfig(String nextSlotConfig) {
+        this.nextSlotConfig = nextSlotConfig;
     }
 
-    public ArrayList<Review> getReviews() {
-        return reviews;
+    public String getSeatConfiguration() {
+        return seatConfiguration;
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
-        this.reviews = reviews;
+    public void setSeatConfiguration(String seatConfiguration) {
+        this.seatConfiguration = seatConfiguration;
+    }
+
+    public ArrayList<String> getTransactionIds() {
+        return transactionIds;
+    }
+
+    public void setTransactionIds(ArrayList<String> transactionIds) {
+        this.transactionIds = transactionIds;
     }
 }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +31,10 @@ import java.util.ArrayList;
 
 public class UserTransactionDetailsActivity extends AppCompatActivity {
 
-    private TextView userNameTextView;
-    private TextView userEmailTextView;
+    private TextView reviews_et;
+    private TextView reviews_tv;
+    private TextView submitReview_tv;
+    private RatingBar ratingBar;
     private TextView companyNameTextView;
     private TextView spaceShipNameTextView;
     private TextView transactionIdTextView;
@@ -44,17 +47,17 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     private TextView isTransactionComplete_tv;
     private TextView completeJourneyTextView;
     private Transaction currentTransaction;
-    private String seats;
+    private SpaceShip transactionSpaceShip;
     private String chosenSeatConfig;
+    private String currentSeatConfiguration;
     private ArrayList<Transaction> transactionArrayList;
+    private Float rating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_transaction_details);
 
-        userEmailTextView = findViewById(R.id.userEmail_transaction_details);
-        userNameTextView = findViewById(R.id.userName_transaction_details);
         companyNameTextView = findViewById(R.id.companyName_transaction_details);
         spaceShipNameTextView = findViewById(R.id.spaceShipName_transaction_details);
         fromTextView = findViewById(R.id.from_transaction_details);
@@ -66,6 +69,10 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         isTransactionComplete_tv = findViewById(R.id.isOngoing_transaction_details);
         completeJourneyTextView = findViewById(R.id.complete_transaction_details);
         seatsConfig = findViewById(R.id.seatsChosen_transaction_details);
+        reviews_et = findViewById(R.id.user_review_et);
+        reviews_tv = findViewById(R.id.user_review_tv);
+        ratingBar = findViewById(R.id.ratingBar);
+        submitReview_tv = findViewById(R.id.submit_review_tv);
 
         Intent intent = getIntent();
         currentTransaction = (Transaction) intent.getSerializableExtra("transaction");
@@ -75,8 +82,19 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         setDataViews();
         attachSeatsListener();
 
-        if(currentTransaction.isTransactionComplete()) {
+        if (currentTransaction.isTransactionComplete()) {
             completeJourneyTextView.setVisibility(View.GONE);
+            if(currentTransaction.getReview().getTime()==0){
+                reviews_tv.setVisibility(View.GONE);
+            } else {
+                reviews_et.setVisibility(View.GONE);
+                submitReview_tv.setVisibility(View.GONE);
+            }
+        } else {
+            reviews_et.setVisibility(View.GONE);
+            ratingBar.setVisibility(View.GONE);
+            submitReview_tv.setVisibility(View.GONE);
+            reviews_tv.setVisibility(View.GONE);
         }
 
         completeJourneyTextView.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +104,25 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float chosenRating, boolean fromUser) {
+                rating = chosenRating;
+            }
+        });
+
+        submitReview_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateReviews();
+            }
+        });
+
+
     }
 
-    private void setDataViews(){
+    private void setDataViews() {
 
         spaceShipNameTextView.setText(currentTransaction.getSpaceShipName());
         companyNameTextView.setText(currentTransaction.getCompanyName());
@@ -96,12 +130,14 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         toTextView.setText(currentTransaction.getDestination());
         distanceTextView.setText(currentTransaction.getDistance());
         totalCostTextView.setText(String.valueOf(currentTransaction.getTotalFare()));
-        userNameTextView.setText(currentTransaction.getUserName());
-        userEmailTextView.setText(currentTransaction.getUserEmail());
         transactionIdTextView.setText(currentTransaction.getTransactionId());
         timeTextView.setText(String.valueOf(currentTransaction.getTransactionTime()));
         isTransactionComplete_tv.setText(String.valueOf(currentTransaction.isTransactionComplete()));
         seatsConfig.setText(currentTransaction.getChosenSeatConfiguration());
+        if(currentTransaction.getReview().getTime() > 0) {
+            ratingBar.setRating(Float.parseFloat(currentTransaction.getReview().getRating()));
+            reviews_tv.setText(currentTransaction.getReview().getReview());
+        }
 
     }
 
@@ -117,36 +153,27 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
-                SpaceShip currentSpaceShip = new SpaceShip();
 
-                int index = -1, counter = 0;
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                         SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                         if (spaceShip != null) {
-                            spaceShipArrayList.add(spaceShip);
                             if (spaceShip.getSpaceShipId().equals(currentTransaction.getSpaceShipId())) {
-                                index = counter;
-                                currentSpaceShip = spaceShip;
+                                // set updatedSeatConfiguration after seats have been vacated.
+                                transactionSpaceShip = spaceShip;
+                                setSeatsVacated();
+                                spaceShipArrayList.add(transactionSpaceShip);
+                            } else {
+                                spaceShipArrayList.add(spaceShip);
                             }
-                            counter++;
                         }
                     }
-                }
-
-                // set updatedSeatConfiguration after seats have been vacated.
-                currentSpaceShip.setSeatsAvailable(getChangedSeatConfig());
-
-                // Update the spaceShip
-                if (index != -1) {
-                    spaceShipArrayList.set(index, currentSpaceShip);
                 }
 
                 // Set the updated spaceShips back to the company reference
                 companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-
                         updateTransactionStatus();
                     }
                 });
@@ -157,54 +184,27 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
         });
-
     }
+
 
     private void updateTransactionStatus() {
 
         try {
 
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions")
+                    .child(currentTransaction.getTransactionId());
 
-            Query query = databaseReference;
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                    transactionArrayList = dataSnapshot.getValue(Customer.class).getTransactions();
-
-                    int position = 0;
-                    for(Transaction transaction : transactionArrayList){
-                        if(transaction.getTransactionId().equals(currentTransaction.getTransactionId())){
-                            currentTransaction.setTransactionComplete(true);
-                            transactionArrayList.set(position, currentTransaction);
-                        }
-                        position += 1;
-                    }
-
-                    databaseReference.child("transactions").setValue(transactionArrayList)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+            databaseReference.child("transactionComplete").setValue(true)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-
                             completeJourneyTextView.setVisibility(View.GONE);
-
-                            Intent intent1 = new Intent(UserTransactionDetailsActivity.this,AllTransactionsList.class);
-                            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            Intent intent1 = new Intent(UserTransactionDetailsActivity.this, AllTransactionsList.class);
+                            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent1);
                         }
                     });
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,14 +213,49 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
     }
 
+
+    private void updateReviews() {
+
+        updateSpaceShipRating();
+
+        try {
+            String reviewString = "";
+            if (reviews_et != null) {
+                reviewString = reviews_et.getText().toString();
+            }
+
+            Review newReview = new Review(reviewString, String.valueOf(rating), currentTransaction.getUserName(), currentTransaction.getUserEmail(),
+                    System.currentTimeMillis());
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions")
+                    .child(currentTransaction.getTransactionId());
+
+            databaseReference.child("review").setValue(newReview)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent intent1 = new Intent(UserTransactionDetailsActivity.this, AllTransactionsList.class);
+                            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent1);
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
     // get the changes seat configuration by vacating seat chosen seats
     private String getChangedSeatConfig() {
-       String updatedSeatsConfiguration = seats;
+        String updatedSeatsConfiguration = currentSeatConfiguration;
         for (int position = 0; position < 12; position++) {
             if (chosenSeatConfig.charAt(position) == '1') {
                 updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, '1');
             } else {
-                char character = seats.charAt(position);
+                char character = currentSeatConfiguration.charAt(position);
                 updatedSeatsConfiguration = setCharAt(updatedSeatsConfiguration, position, character);
             }
         }
@@ -250,11 +285,13 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
                         for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
                             if (spaceShip != null && currentTransaction.getSpaceShipId().equals(spaceShip.getSpaceShipId())) {
-                                seats = spaceShip.getSeatsAvailable();
+                                transactionSpaceShip = spaceShip;
+                                getSlotConfiguration();
                             }
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
@@ -267,5 +304,95 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
     }
 
+
+    private void getSlotConfiguration() {
+
+        if (currentTransaction.getSlotNo().equals("0")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot1();
+        } else if (currentTransaction.getSlotNo().equals("1")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot2();
+        } else if (currentTransaction.getSlotNo().equals("2")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot3();
+        } else if (currentTransaction.getSlotNo().equals("3")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot4();
+        } else if (currentTransaction.getSlotNo().equals("4")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot5();
+        } else if (currentTransaction.getSlotNo().equals("5")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot6();
+        } else if (currentTransaction.getSlotNo().equals("6")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot7();
+        } else if (currentTransaction.getSlotNo().equals("7")) {
+            currentSeatConfiguration = transactionSpaceShip.getSlot8();
+        }
+
+    }
+
+
+    private void setSeatsVacated() {
+
+        if (currentTransaction.getSlotNo().equals("0")) {
+            transactionSpaceShip.setSlot1(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("1")) {
+            transactionSpaceShip.setSlot2(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("2")) {
+            transactionSpaceShip.setSlot3(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("3")) {
+            transactionSpaceShip.setSlot4(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("4")) {
+            transactionSpaceShip.setSlot5(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("5")) {
+            transactionSpaceShip.setSlot6(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("6")) {
+            transactionSpaceShip.setSlot7(getChangedSeatConfig());
+        } else if (currentTransaction.getSlotNo().equals("7")) {
+            transactionSpaceShip.setSlot8(getChangedSeatConfig());
+        }
+
+    }
+
+
+    private String updatedCompanyRating(SpaceShip currentSpaceShip) {
+        float reviewCount = 0;
+//        if(currentSpaceShip.getReviews() != null) {
+//            reviewCount  = currentSpaceShip.getReviews().size();
+//        }
+        float currentRating = Float.parseFloat(currentSpaceShip.getSpaceShipRating());
+        return String.valueOf(((currentRating * reviewCount) + rating) / (reviewCount + 1));
+    }
+
+
+    private void updateSpaceShipRating() {
+
+
+        FirebaseDatabase.getInstance().getReference("company/" + currentTransaction.getCompanyId() + "spaceShips")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            SpaceShip spaceShip = dataSnapshot.getValue(SpaceShip.class);
+                            if (spaceShip != null && spaceShip.getSpaceShipId().equals(currentTransaction.getSpaceShipId())) {
+                                spaceShip.setSpaceShipRating(updatedCompanyRating(spaceShip));
+                            }
+                            spaceShipArrayList.add(spaceShip);
+                        }
+
+                        FirebaseDatabase.getInstance().getReference("company/" + currentTransaction.getCompanyId()
+                                + "spaceShips")
+                                .setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+    }
 
 }

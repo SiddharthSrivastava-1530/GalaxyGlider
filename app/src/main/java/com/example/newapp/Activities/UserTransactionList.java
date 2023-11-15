@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 public class UserTransactionList extends Fragment {
 
+    private ArrayList<String> userTransactionIds;
     private ArrayList<Transaction> transactions;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -43,6 +44,7 @@ public class UserTransactionList extends Fragment {
         return inflater.inflate(R.layout.activity_user_transaction_list, container, false);
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -51,6 +53,7 @@ public class UserTransactionList extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
 
+        userTransactionIds = new ArrayList<>();
         transactions = new ArrayList<>();
 
         progressBar = getView().findViewById(R.id.progressbar_transaction_list);
@@ -66,46 +69,34 @@ public class UserTransactionList extends Fragment {
             }
         };
 
-
         getUserTransactions();
-
 
     }
 
 
-
     private void getUserTransactions() {
 
-        try {
-
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
-            Query query = databaseReference;
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    transactions.clear();
-                    ArrayList<Transaction> transactionArrayList = dataSnapshot.getValue(Customer.class).getTransactions();
-                    for(Transaction transaction : transactionArrayList){
-                        if(transaction.isTransactionComplete()){
-                            transactions.add(transaction);
+        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions");
+        databaseReference.orderByChild("userUID").equalTo(userUID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        transactions.clear();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Transaction transaction = dataSnapshot.getValue(Transaction.class);
+                            if (transaction != null && transaction.isTransactionComplete()) {
+                                transactions.add(transaction);
+                            }
                         }
+                        setAdapter(transactions);
                     }
-                    setAdapter(transactions);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
-        }
-
+                    }
+                });
     }
 
 

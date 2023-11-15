@@ -1,22 +1,13 @@
 package com.example.newapp.Activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -28,9 +19,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.SpaceShipAdapter;
+import com.example.newapp.DataModel.Admin;
+import com.example.newapp.DataModel.Company;
+import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +49,11 @@ public class SharedRideSpaceShips extends Fragment {
     private boolean currentUserAuthStatus;
     private String companyId;
     private String loginMode;
+    private String currentUserName;
+    private String currentUserEmail;
+    private String currentUserPic;
+    private String currentLicenseUrl;
+    private String currentUserDescription;
     final private String filtersUsed[] = {"Sort By", "Rating", "Price"};
 
     @Override
@@ -83,6 +83,7 @@ public class SharedRideSpaceShips extends Fragment {
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
 
+        getUserData();
 
         if (!loginMode.equals("owner")) {
             floatingActionButton.setVisibility(View.GONE);
@@ -111,19 +112,19 @@ public class SharedRideSpaceShips extends Fragment {
             @Override
             public void onSpaceShipsClicked(int position) {
                 Intent intent1 = new Intent(getActivity(), SpaceShipDetailsActivity.class);
-                intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
-                intent1.putExtra("id_ss", spaceShipArrayList.get(position).getSpaceShipId());
-                intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getSpaceShipRating());
-                intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
-                intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
-                intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
-                intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
-                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatsAvailable());
-                intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
-                intent1.putExtra("reviews_ss", spaceShipArrayList.get(position).getReviews());
-                intent1.putExtra("loginMode", loginMode);
-                intent1.putExtra("companyID", companyId);
-                intent1.putExtra("services_ss", spaceShipArrayList.get(position).getServicesAvailable());
+//                intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
+//                intent1.putExtra("id_ss", spaceShipArrayList.get(position).getSpaceShipId());
+//                intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getSpaceShipRating());
+//                intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
+//                intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
+////                intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
+//                intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
+////                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatsAvailable());
+//                intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
+//                intent1.putExtra("reviews_ss", spaceShipArrayList.get(position).getReviews());
+//                intent1.putExtra("loginMode", loginMode);
+//                intent1.putExtra("companyID", companyId);
+//                intent1.putExtra("services_ss", spaceShipArrayList.get(position).getServicesAvailable());
                 startActivity(intent1);
             }
         };
@@ -226,6 +227,53 @@ public class SharedRideSpaceShips extends Fragment {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(spaceShipAdapter);
         spaceShipAdapter.notifyDataSetChanged();
+
+    }
+
+    // to get the current user data (name,email,profilePicUrl,etc) for respective loginMode.
+    private void getUserData() {
+        try {
+            String key = "";
+            if (loginMode.equals("admin")) {
+                key = "admin";
+            } else if (loginMode.equals("owner")) {
+                key = "company";
+            } else if (loginMode.equals("user")) {
+                key = "users";
+            }
+
+            // Getting data about user from database.
+            FirebaseDatabase.getInstance().getReference(key + "/" +
+                            FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (loginMode.equals("admin")) {
+                                currentUserName = snapshot.getValue(Admin.class).getName();
+                                currentUserEmail = snapshot.getValue(Admin.class).getEmail();
+                            } else if (loginMode.equals("owner")) {
+                                currentUserName = snapshot.getValue(Company.class).getName();
+                                currentUserEmail = snapshot.getValue(Company.class).getEmail();
+                                currentUserPic = snapshot.getValue(Company.class).getImageUrl();
+                                currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
+                                currentUserAuthStatus = snapshot.getValue(Company.class).getOperational();
+                            } else if (loginMode.equals("user")) {
+                                currentUserName = snapshot.getValue(Customer.class).getName();
+                                currentUserEmail = snapshot.getValue(Customer.class).getEmail();
+                                currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Slow Internet Connection",
+                    Toast.LENGTH_SHORT).show();
+        }
 
     }
 
