@@ -1,5 +1,6 @@
 package com.example.newapp.Activities;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.UploadTask;
+
 
 import java.io.IOException;
 import java.util.UUID;
@@ -46,10 +49,13 @@ public class UserProfileActivity extends AppCompatActivity {
     private Uri imagePath;   // global variable to store the image from gallery and then show it on profile photo icon
     private String loginMode;
 
+    ActivityResultLauncher<Intent> imgPickLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+
 
         // associating variables with views using corresponding id(s)
         imgProfile = findViewById(R.id.uploadImage_b);
@@ -98,13 +104,11 @@ public class UserProfileActivity extends AppCompatActivity {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //We specify pick action for intent to take photo from gallery
-                Intent photoIntent = new Intent(Intent.ACTION_PICK);
-
-                //Specifying the type of intent (telling system to open gallery)
-                photoIntent.setType("image/*");
-
-                startActivityForResult(photoIntent, 1);
+                ImagePicker.with(UserProfileActivity.this)
+                        .crop()
+                        .compress(512)
+                        .maxResultSize(512, 512)	//Final image resolution
+                        .start();
             }
         });
     }
@@ -114,7 +118,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         //Get the image selected in gallery on icon
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+        if (resultCode == RESULT_OK && data != null) {
 
             // Store image file in form of Uri type data
             imagePath = data.getData();
