@@ -1,8 +1,10 @@
 package com.example.newapp.DataModel;
 
+import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 
-public class Company {
+public class Company implements Serializable {
 
     private String name;
     private String email;
@@ -102,4 +104,6 @@ public class Company {
     public void setSpaceShips(ArrayList<SpaceShip> spaceShips) {
         this.spaceShips = spaceShips;
     }
+
+
 }

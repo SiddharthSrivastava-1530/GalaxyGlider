@@ -16,15 +16,18 @@ public class Transaction implements Serializable {
     private String departure;
     private String destination;
     private String distance;
+    private String slotNo;
     private long transactionTime;
     private float totalFare;
     private boolean isTransactionComplete;
+    Review review;
+
 
     public Transaction(){
 
     }
 
-    public Transaction(String userUID, String userName, String userEmail, String transactionId, String companyId, String companyName, String spaceShipId, String spaceShipName, String chosenSeatConfiguration, String departure, String destination, String distance, long transactionTime, float totalFare, boolean isTransactionComplete) {
+    public Transaction(String userUID, String userName, String userEmail, String transactionId, String companyId, String companyName, String spaceShipId, String spaceShipName, String chosenSeatConfiguration, String departure, String destination, String distance, String slotNo, long transactionTime, float totalFare, boolean isTransactionComplete, Review review) {
         this.userUID = userUID;
         this.userName = userName;
         this.userEmail = userEmail;
@@ -37,10 +40,13 @@ public class Transaction implements Serializable {
         this.departure = departure;
         this.destination = destination;
         this.distance = distance;
+        this.slotNo = slotNo;
         this.transactionTime = transactionTime;
         this.totalFare = totalFare;
         this.isTransactionComplete = isTransactionComplete;
+        this.review = review;
     }
+
 
     public String getUserUID() {
         return userUID;
@@ -138,6 +144,14 @@ public class Transaction implements Serializable {
         this.distance = distance;
     }
 
+    public String getSlotNo() {
+        return slotNo;
+    }
+
+    public void setSlotNo(String slotNo) {
+        this.slotNo = slotNo;
+    }
+
     public long getTransactionTime() {
         return transactionTime;
     }
@@ -160,6 +174,14 @@ public class Transaction implements Serializable {
 
     public void setTransactionComplete(boolean transactionComplete) {
         isTransactionComplete = transactionComplete;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
     }
 
 }

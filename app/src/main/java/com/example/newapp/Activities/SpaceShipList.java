@@ -99,6 +99,8 @@ public class SpaceShipList extends Fragment {
             floatingActionButton.setVisibility(View.GONE);
         }
 
+        getUserData();
+
         // enable adding new spaceship if owner (move to editor activity)
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,19 +124,9 @@ public class SpaceShipList extends Fragment {
             @Override
             public void onSpaceShipsClicked(int position) {
                 Intent intent1 = new Intent(getActivity(), SpaceShipDetailsActivity.class);
-                intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
-                intent1.putExtra("id_ss", spaceShipArrayList.get(position).getSpaceShipId());
-                intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getSpaceShipRating());
-                intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
-                intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
-                intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
-                intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
-                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatsAvailable());
-                intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
-                intent1.putExtra("reviews_ss", spaceShipArrayList.get(position).getReviews());
+                intent1.putExtra("spaceship_ss", spaceShipArrayList.get(position));
                 intent1.putExtra("loginMode", loginMode);
                 intent1.putExtra("companyID", companyId);
-                intent1.putExtra("services_ss", spaceShipArrayList.get(position).getServicesAvailable());
                 startActivity(intent1);
             }
         };
@@ -241,5 +233,51 @@ public class SpaceShipList extends Fragment {
 
     }
 
+    // to get the current user data (name,email,profilePicUrl,etc) for respective loginMode.
+    private void getUserData() {
+        try {
+            String key = "";
+            if (loginMode.equals("admin")) {
+                key = "admin";
+            } else if (loginMode.equals("owner")) {
+                key = "company";
+            } else if (loginMode.equals("user")) {
+                key = "users";
+            }
+
+            // Getting data about user from database.
+            FirebaseDatabase.getInstance().getReference(key + "/" +
+                            FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (loginMode.equals("admin")) {
+                                currentUserName = snapshot.getValue(Admin.class).getName();
+                                currentUserEmail = snapshot.getValue(Admin.class).getEmail();
+                            } else if (loginMode.equals("owner")) {
+                                currentUserName = snapshot.getValue(Company.class).getName();
+                                currentUserEmail = snapshot.getValue(Company.class).getEmail();
+                                currentUserPic = snapshot.getValue(Company.class).getImageUrl();
+                                currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
+                                currentUserAuthStatus = snapshot.getValue(Company.class).getOperational();
+                            } else if (loginMode.equals("user")) {
+                                currentUserName = snapshot.getValue(Customer.class).getName();
+                                currentUserEmail = snapshot.getValue(Customer.class).getEmail();
+                                currentUserPic = snapshot.getValue(Customer.class).getProfilePic();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Slow Internet Connection",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 }

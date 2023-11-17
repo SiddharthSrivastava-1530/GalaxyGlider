@@ -1,5 +1,6 @@
 package com.example.newapp.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,17 +10,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ShowSeatScheduleActivity extends AppCompatActivity {
 
     private TextView[] slots;
+    private SpaceShip currentSpaceShip;
+    private String companyId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_seat_schedule);
 
         getSupportActionBar().hide();
+
+        Intent intent = getIntent();
+        currentSpaceShip = (SpaceShip) intent.getSerializableExtra("spaceship_ss");
+        companyId = intent.getStringExtra("companyID");
 
         // Initialize your TextView array
         slots = new TextView[]{
@@ -35,20 +49,85 @@ public class ShowSeatScheduleActivity extends AppCompatActivity {
 
 
         // Set up click listeners for all TextViews
-        for (TextView slot : slots) {
-            slot.setOnClickListener(new View.OnClickListener() {
+        for (int position=0; position < 8; position++) {
+            final int pos = position;
+            slots[position].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clicked(slot);
+                    clicked(slots[pos],pos);
                 }
             });
         }
+
+        attachSpaceShipListener();
+
+
     }
-    private void clicked(TextView textView) {
-//        textView.setText("12"); //Set seat available text here after fetching from firebase.
-//
-//        //Each textview will show this intent on clicking but will have different seat configurations
-//        Intent intent = new Intent(ShowSeatScheduleActivity.this,ShowSeatConfigurationActivity.class);
-//        startActivity(intent);
+
+
+    private void clicked(TextView textView,int position) {
+        Intent intent1 = new Intent(ShowSeatScheduleActivity.this,ShowSeatConfigurationActivity.class);
+        intent1.putExtra("spaceship_ss", currentSpaceShip);
+        intent1.putExtra("companyID", companyId);
+        intent1.putExtra("slot_number", String.valueOf(position));
+        startActivity(intent1);
     }
+
+
+    // set character at given index of string.
+    private String setCharAt(String services, int i, char ch) {
+        char[] charArray = services.toCharArray();
+        charArray[i] = ch;
+        return new String(charArray);
+    }
+
+
+
+    private void attachSpaceShipListener(){
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users/"
+                + companyId + "/spaceShips");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    SpaceShip spaceShip = dataSnapshot.getValue(SpaceShip.class);
+                    if(spaceShip != null && spaceShip.getSpaceShipId().equals(currentSpaceShip.getSpaceShipId())){
+                        currentSpaceShip = spaceShip;
+                    }
+                }
+                setSlotSeatCountView();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+    private void setSlotSeatCountView(){
+
+        slots[0].setText(getAvailableSeatCount(currentSpaceShip.getSlot1()));
+        slots[1].setText(getAvailableSeatCount(currentSpaceShip.getSlot2()));
+        slots[2].setText(getAvailableSeatCount(currentSpaceShip.getSlot3()));
+        slots[3].setText(getAvailableSeatCount(currentSpaceShip.getSlot4()));
+        slots[4].setText(getAvailableSeatCount(currentSpaceShip.getSlot5()));
+        slots[5].setText(getAvailableSeatCount(currentSpaceShip.getSlot6()));
+        slots[6].setText(getAvailableSeatCount(currentSpaceShip.getSlot7()));
+        slots[7].setText(getAvailableSeatCount(currentSpaceShip.getSlot8()));
+
+    }
+
+    private String getAvailableSeatCount(String seatsAvailable){
+        int count = 0;
+        for(int position=0; position<12; position++){
+            if(seatsAvailable.charAt(position)=='1') count++;
+        }
+        return String.valueOf(count);
+    }
+
 }
