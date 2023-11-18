@@ -17,6 +17,7 @@ public class Transaction implements Serializable {
     private String destination;
     private String distance;
     private String slotNo;
+    private String invoiceUrl;
     private long transactionTime;
     private float totalFare;
     private boolean isTransactionComplete;
@@ -27,7 +28,7 @@ public class Transaction implements Serializable {
 
     }
 
-    public Transaction(String userUID, String userName, String userEmail, String transactionId, String companyId, String companyName, String spaceShipId, String spaceShipName, String chosenSeatConfiguration, String departure, String destination, String distance, String slotNo, long transactionTime, float totalFare, boolean isTransactionComplete, Review review) {
+    public Transaction(String userUID, String userName, String userEmail, String transactionId, String companyId, String companyName, String spaceShipId, String spaceShipName, String chosenSeatConfiguration, String departure, String destination, String distance, String slotNo, String invoiceUrl, long transactionTime, float totalFare, boolean isTransactionComplete, Review review) {
         this.userUID = userUID;
         this.userName = userName;
         this.userEmail = userEmail;
@@ -41,6 +42,7 @@ public class Transaction implements Serializable {
         this.destination = destination;
         this.distance = distance;
         this.slotNo = slotNo;
+        this.invoiceUrl = invoiceUrl;
         this.transactionTime = transactionTime;
         this.totalFare = totalFare;
         this.isTransactionComplete = isTransactionComplete;
@@ -150,6 +152,14 @@ public class Transaction implements Serializable {
 
     public void setSlotNo(String slotNo) {
         this.slotNo = slotNo;
+    }
+
+    public String getInvoiceUrl() {
+        return invoiceUrl;
+    }
+
+    public void setInvoiceUrl(String invoiceUrl) {
+        this.invoiceUrl = invoiceUrl;
     }
 
     public long getTransactionTime() {

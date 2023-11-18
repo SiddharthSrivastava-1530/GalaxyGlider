@@ -203,7 +203,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         Review review = new Review();
                         Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
                                 companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
-                                chosenSeatConfig, departure, destination, distance, selectedSlotNumber,
+                                chosenSeatConfig, departure, destination, distance, selectedSlotNumber,"",
                                 System.currentTimeMillis(), calculateFair(4), false, review);
 
                         // add transaction to database in node - 'transactions'
@@ -226,6 +226,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                                         if (task.isComplete()) {
                                             // Start the journey and move further to review activity.
                                             Intent intent1 = new Intent(CheckoutActivity.this, AllSpaceShipsListActivity.class);
+                                            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                             intent1.putExtra("companyID", companyId);
                                             intent1.putExtra("loginMode", "user");
                                             startActivity(intent1);
