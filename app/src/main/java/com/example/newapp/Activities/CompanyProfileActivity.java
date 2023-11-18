@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -119,13 +120,11 @@ public class CompanyProfileActivity extends AppCompatActivity {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // We specify pick action for intent to take photo from gallery
-                Intent photoIntent = new Intent(Intent.ACTION_PICK);
-
-                //Specifying the type of intent (telling system to open gallery)
-                photoIntent.setType("image/*");
-
-                startActivityForResult(photoIntent, 1);
+                ImagePicker.with(CompanyProfileActivity.this)
+                        .crop()
+                        .compress(512)
+                        .maxResultSize(512, 512)	//Final image resolution
+                        .start();
             }
         });
 
@@ -152,7 +151,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Get the image selected in gallery on icon
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+        if (resultCode == RESULT_OK && data != null) {
 
             Uri selectedData = data.getData();
             String mimeType = getContentResolver().getType(selectedData);
