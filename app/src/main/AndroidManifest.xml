@@ -96,9 +96,6 @@
             android:name=".Activities.SpaceShipReviews"
             android:exported="false" />
         <activity
-            android:name=".Activities.UserReviewsActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activities.AllListActivity"
             android:exported="true" />
         <activity

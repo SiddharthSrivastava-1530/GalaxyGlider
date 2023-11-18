@@ -124,9 +124,9 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         selectedSlotNumber = intent.getStringExtra("slot_number");
         companyId = intent.getStringExtra("companyID");
 
-        distance.setText("123");
-        fromLocation.setText("dis");
-        toLocation.setText("dis");
+//        distance.setText("123");
+//        fromLocation.setText("dis");
+//        toLocation.setText("dis");
 
 
         chosenSeatConfiguration = "000000000000";
