@@ -1,5 +1,6 @@
 package com.example.newapp.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -9,10 +10,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class CompanyDetailsActivity extends AppCompatActivity {
 
@@ -61,7 +74,6 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         companyImageUrl = intent.getStringExtra("company_img");
         companyLicenseUrl = intent.getStringExtra("company_license");
         isCompanyAuthorised = intent.getBooleanExtra("isAuthorised", false);
-
 
         // if not in admin mode set authorization, licenseView and statusOfAuthorization
         // functionalities as not available (setting their respective views as invisible.

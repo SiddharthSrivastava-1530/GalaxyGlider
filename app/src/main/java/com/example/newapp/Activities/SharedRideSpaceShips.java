@@ -1,13 +1,24 @@
 package com.example.newapp.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -25,6 +36,7 @@ import com.example.newapp.DataModel.Customer;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,13 +58,13 @@ public class SharedRideSpaceShips extends Fragment {
     private SpaceShipAdapter spaceShipAdapter;
     SpaceShipAdapter.OnSpaceShipClickListener onSpaceShipClickListener;
     private FloatingActionButton floatingActionButton;
-    private boolean currentUserAuthStatus;
-    private String companyId;
-    private String loginMode;
     private String currentUserName;
     private String currentUserEmail;
     private String currentUserPic;
     private String currentLicenseUrl;
+    private boolean currentUserAuthStatus;
+    private String companyId;
+    private String loginMode;
     private String currentUserDescription;
     final private String filtersUsed[] = {"Sort By", "Rating", "Price"};
 
@@ -78,16 +90,16 @@ public class SharedRideSpaceShips extends Fragment {
         recyclerView = getView().findViewById(R.id.recycler_spaceship_shared_ride);
         floatingActionButton = getView().findViewById(R.id.fab_spaceship_shared_ride);
 
-
         Intent intent = getActivity().getIntent();
         loginMode = intent.getStringExtra("loginMode");
         companyId = intent.getStringExtra("companyID");
 
-        getUserData();
 
         if (!loginMode.equals("owner")) {
             floatingActionButton.setVisibility(View.GONE);
         }
+
+        getUserData();
 
         // enable adding new spaceship if owner (move to editor activity)
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -112,19 +124,9 @@ public class SharedRideSpaceShips extends Fragment {
             @Override
             public void onSpaceShipsClicked(int position) {
                 Intent intent1 = new Intent(getActivity(), SpaceShipDetailsActivity.class);
-//                intent1.putExtra("name_ss", spaceShipArrayList.get(position).getSpaceShipName());
-//                intent1.putExtra("id_ss", spaceShipArrayList.get(position).getSpaceShipId());
-//                intent1.putExtra("rating_ss", spaceShipArrayList.get(position).getSpaceShipRating());
-//                intent1.putExtra("description_ss", spaceShipArrayList.get(position).getDescription());
-//                intent1.putExtra("price_ss", String.valueOf(spaceShipArrayList.get(position).getPrice()));
-////                intent1.putExtra("speed_ss", spaceShipArrayList.get(position).getSpeed());
-//                intent1.putExtra("busyTime_ss", String.valueOf(spaceShipArrayList.get(position).getBusyTime()));
-////                intent1.putExtra("seats_ss", spaceShipArrayList.get(position).getSeatsAvailable());
-//                intent1.putExtra("shared_ride_ss", spaceShipArrayList.get(position).isHaveRideSharing());
-//                intent1.putExtra("reviews_ss", spaceShipArrayList.get(position).getReviews());
-//                intent1.putExtra("loginMode", loginMode);
-//                intent1.putExtra("companyID", companyId);
-//                intent1.putExtra("services_ss", spaceShipArrayList.get(position).getServicesAvailable());
+                intent1.putExtra("spaceship_ss", spaceShipArrayList.get(position));
+                intent1.putExtra("loginMode", loginMode);
+                intent1.putExtra("companyID", companyId);
                 startActivity(intent1);
             }
         };
@@ -137,7 +139,7 @@ public class SharedRideSpaceShips extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                getSpaceShipsWithSharedRide(newText);
+                getSpaceShips(newText);
                 return false;
             }
         });
@@ -149,7 +151,7 @@ public class SharedRideSpaceShips extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getSpaceShipsWithSharedRide(searchSpaceship.getQuery().toString());
+                getSpaceShips(searchSpaceship.getQuery().toString());
             }
 
             @Override
@@ -162,15 +164,16 @@ public class SharedRideSpaceShips extends Fragment {
     }
 
 
+
     @Override
     public void onResume() {
         super.onResume();
         searchSpaceship.setQuery("", false);
-        getSpaceShipsWithSharedRide("");
+        getSpaceShips("");
     }
 
 
-    private void getSpaceShipsWithSharedRide(String userQuery) {
+    private void getSpaceShips(String userQuery) {
         spaceShipArrayList.clear();
         try {
             int spinnerPosition = spinner.getSelectedItemPosition();
@@ -245,7 +248,7 @@ public class SharedRideSpaceShips extends Fragment {
             // Getting data about user from database.
             FirebaseDatabase.getInstance().getReference(key + "/" +
                             FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (loginMode.equals("admin")) {
@@ -276,6 +279,5 @@ public class SharedRideSpaceShips extends Fragment {
         }
 
     }
-
 
 }

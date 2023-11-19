@@ -23,6 +23,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -115,23 +119,34 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                             String currentUserEmail = firebaseUser.getEmail();
                             //If the user's email is verified then send him to allListsActivity
-                            if (firebaseUser.isEmailVerified() || currentUserEmail.equals("admin2@gmail.com")) {
-                                saveLoginMode();
-                                Toast.makeText(getApplicationContext(), "Logged in successful", Toast.LENGTH_SHORT).show();
-                                Intent intent1 = null;
+                            if (firebaseUser.isEmailVerified()) {
+                                // path to check for user's existence in his chosen loginMode
+                                String key = "users/" + firebaseUser.getUid();
                                 if (loginMode.equals("admin")) {
-                                    intent1 = new Intent(LoginActivity.this, AllListActivity.class);
+                                    key = "admin/" + firebaseUser.getUid();
                                 } else if (loginMode.equals("owner")) {
-                                    String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                    intent1 = new Intent(LoginActivity.this, AllSpaceShipsListActivity.class);
-                                    intent1.putExtra("companyID", companyId);
-                                } else {
-                                    intent1 = new Intent(LoginActivity.this, AllListActivity.class);
+                                    key = "company/" + firebaseUser.getUid();
                                 }
-                                intent1.putExtra("loginMode", loginMode);
-                                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent1);
-                                finish();
+
+                                // check if user exists in same mode in database.
+                                FirebaseDatabase.getInstance().getReference(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.exists()){
+                                            login();
+                                            finish();
+                                        } else {
+                                            FirebaseAuth.getInstance().signOut();
+                                            Toast.makeText(LoginActivity.this, "It seems you are trying to enter " +
+                                                    "in wrong mode. Please enter in correct mode.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                             } else {
                                 //If the user's email is not verified then send him another email and sign out him.
                                 firebaseUser.sendEmailVerification();
@@ -175,6 +190,27 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("loginMode", loginMode);
         editor.putString("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
         editor.apply();
+    }
+
+
+    private void login() {
+
+        saveLoginMode();
+        Toast.makeText(getApplicationContext(), "Logged in successful", Toast.LENGTH_SHORT).show();
+        Intent intent1 = null;
+        if (loginMode.equals("admin")) {
+            intent1 = new Intent(LoginActivity.this, AllListActivity.class);
+        } else if (loginMode.equals("owner")) {
+            String companyId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            intent1 = new Intent(LoginActivity.this, AllSpaceShipsListActivity.class);
+            intent1.putExtra("companyID", companyId);
+        } else {
+            intent1 = new Intent(LoginActivity.this, AllListActivity.class);
+        }
+        intent1.putExtra("loginMode", loginMode);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent1);
+
     }
 
 }
