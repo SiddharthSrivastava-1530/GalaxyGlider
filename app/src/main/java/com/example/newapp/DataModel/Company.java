@@ -15,13 +15,14 @@ public class Company implements Serializable {
     private String imageUrl;
     private Boolean isOperational;
     private ArrayList<SpaceShip> spaceShips;
+    private boolean isCurrentSlotUpdated;
 
 
     public Company() {
 
     }
 
-    public Company(String name, String email, String loginMode, String companyId, String licenseUrl, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips) {
+    public Company(String name, String email, String loginMode, String companyId, String licenseUrl, String description, String imageUrl, Boolean isOperational, ArrayList<SpaceShip> spaceShips, boolean isCurrentSlotUpdated) {
         this.name = name;
         this.email = email;
         this.loginMode = loginMode;
@@ -31,6 +32,7 @@ public class Company implements Serializable {
         this.imageUrl = imageUrl;
         this.isOperational = isOperational;
         this.spaceShips = spaceShips;
+        this.isCurrentSlotUpdated = isCurrentSlotUpdated;
     }
 
     public String getName() {
@@ -105,5 +107,12 @@ public class Company implements Serializable {
         this.spaceShips = spaceShips;
     }
 
+    public boolean isCurrentSlotUpdated() {
+        return isCurrentSlotUpdated;
+    }
+
+    public void setCurrentSlotUpdated(boolean currentSlotUpdated) {
+        isCurrentSlotUpdated = currentSlotUpdated;
+    }
 
 }

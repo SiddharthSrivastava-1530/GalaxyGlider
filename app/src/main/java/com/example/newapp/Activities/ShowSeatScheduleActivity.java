@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
@@ -66,11 +67,15 @@ public class ShowSeatScheduleActivity extends AppCompatActivity {
 
 
     private void clicked(TextView textView,int position) {
-        Intent intent1 = new Intent(ShowSeatScheduleActivity.this,ShowSeatConfigurationActivity.class);
-        intent1.putExtra("spaceship_ss", currentSpaceShip);
-        intent1.putExtra("companyID", companyId);
-        intent1.putExtra("slot_number", String.valueOf(position));
-        startActivity(intent1);
+        if(Integer.parseInt(textView.getText().toString()) > 0) {
+            Intent intent1 = new Intent(ShowSeatScheduleActivity.this, ShowSeatConfigurationActivity.class);
+            intent1.putExtra("spaceship_ss", currentSpaceShip);
+            intent1.putExtra("companyID", companyId);
+            intent1.putExtra("slot_number", String.valueOf(position));
+            startActivity(intent1);
+        } else {
+            Toast.makeText(this, "No seats available for this time slot...", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

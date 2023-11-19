@@ -171,7 +171,7 @@ public class SignUpActivity extends AppCompatActivity {
                                     .setValue(new Company(name.getText().toString(),
                                             email.getText().toString(), loginMode, key,
                                             "", "", "",
-                                            false, spaceShips))
+                                            false, spaceShips,false))
 
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

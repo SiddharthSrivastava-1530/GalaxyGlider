@@ -197,7 +197,7 @@ public class SpaceShipList extends Fragment {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
                             SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                            if (spaceShip != null) {
+                            if (spaceShip != null && !spaceShip.isHaveRideSharing()) {
                                 if (spaceShip.getSpaceShipName().toLowerCase().contains(userQuery.toLowerCase())) {
                                     spaceShipArrayList.add(spaceShip);
                                 }
