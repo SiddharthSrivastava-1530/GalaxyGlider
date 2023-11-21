@@ -52,6 +52,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
     private String currentSeatConfiguration;
     private ArrayList<String> spaceShipTransactionIds;
     private ArrayList<String> userTransactionIds;
+    private boolean isRideRecurring;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,8 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         distance = intent.getStringExtra("dist");
         departure = intent.getStringExtra("dept");
         destination = intent.getStringExtra("dest");
+        isRideRecurring = intent.getBooleanExtra("isRecurring", false);
+        Log.e("recurring ride -->", String.valueOf(isRideRecurring));
 
 //        Intent intent = new Intent(CheckoutActivity.this, UserReviewsActivity.class);
 //        intent.putExtra("from", fromLocation.getText().toString());
@@ -203,8 +206,9 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         Review review = new Review();
                         Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
                                 companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
-                                chosenSeatConfig, departure, destination, distance, selectedSlotNumber,"",
-                                System.currentTimeMillis(), calculateFair(4), false, review);
+                                chosenSeatConfig, departure, destination, distance, selectedSlotNumber, "",
+                                System.currentTimeMillis(), calculateFair(4), false,
+                                isRideRecurring, review);
 
                         // add transaction to database in node - 'transactions'
                         FirebaseDatabase.getInstance().getReference("transactions/" + refId)
@@ -261,6 +265,22 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                     return false;
                 }
             }
+        }
+        if (isRideRecurring) {
+            int slotNo = Integer.parseInt(selectedSlotNumber);
+            String currentRecurringConfig = currentSpaceShip.getNextSeatConfigurations().get(slotNo);
+            for (int position = 0; position < 12; position++) {
+                if (chosenSeatConfig.charAt(position) == '1') {
+                    if (currentRecurringConfig.charAt(position) == '1') {
+                        currentRecurringConfig = setCharAt(currentRecurringConfig, position, '0');
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            ArrayList<String> nextSeatConfig = currentSpaceShip.getNextSeatConfigurations();
+            nextSeatConfig.set(slotNo, currentRecurringConfig);
+            currentSpaceShip.setNextSeatConfigurations(nextSeatConfig);
         }
         return true;
     }

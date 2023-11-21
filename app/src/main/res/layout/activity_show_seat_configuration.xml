@@ -605,13 +605,26 @@
         android:id="@+id/no_ride_sharing_message_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
         android:text="No seats sharing. All seats will be booked."
         android:textColor="@color/white"
-        android:fontFamily="@font/inter_semibold"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline113"
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline109" />
+
+    <TextView
+        android:id="@+id/recurring_ride_selection_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
+        android:text="YES"
+        android:textColor="@color/white"
+        android:textSize="28dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline109"
+        app:layout_constraintEnd_toStartOf="@+id/guideline119"
+        app:layout_constraintStart_toStartOf="@+id/guideline130"
+        app:layout_constraintTop_toTopOf="@+id/guideline108" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

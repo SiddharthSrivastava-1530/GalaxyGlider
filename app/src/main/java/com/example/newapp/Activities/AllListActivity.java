@@ -101,6 +101,7 @@ public class AllListActivity extends AppCompatActivity {
                         Intent intent = new Intent(AllListActivity.this, UserProfileActivity.class);
                         intent.putExtra("update_from_allList", true);
                         intent.putExtra("loginMode", loginMode);
+                        intent.putExtra("sender_pic", currentUserPic);
                         intent.putExtra("sender_name", currentUserName);
                         intent.putExtra("sender_number", currentUserEmail);
                         startActivity(intent);
@@ -131,6 +132,14 @@ public class AllListActivity extends AppCompatActivity {
                 if(item.getItemId() == R.id.your_rides){
                     Intent intent1 = new Intent(AllListActivity.this, AllTransactionsList.class);
                     startActivity(intent1);
+                }
+                if(item.getItemId() == R.id.share1){
+                    // Creating a share intent
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out my awesome app!");
+                    // shareIntent.setPackage("com.whatsapp");
+                    startActivity(Intent.createChooser(shareIntent, "Share using"));
                 }
                 return false;
             }
@@ -197,6 +206,7 @@ public class AllListActivity extends AppCompatActivity {
                             if (loginMode.equals("admin")) {
                                 currentUserName = snapshot.getValue(Admin.class).getName();
                                 currentUserEmail = snapshot.getValue(Admin.class).getEmail();
+                                currentUserPic = snapshot.getValue(Company.class).getImageUrl();
                             } else if (loginMode.equals("owner")) {
                                 currentUserName = snapshot.getValue(Company.class).getName();
                                 currentUserEmail = snapshot.getValue(Company.class).getEmail();
