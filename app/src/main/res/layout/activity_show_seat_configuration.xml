@@ -4,10 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/seats"
+    android:background="@color/blackPrimaryShade"
     tools:context=".Activities.SeatConfigurationActivity">
 
     <TextView
+        android:id="@+id/prev_ride_detail"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_awesome_solid"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="&#xf053;"
+        android:textColor="@color/impureWhite"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline125"
+        app:layout_constraintEnd_toStartOf="@+id/guideline153"
+        app:layout_constraintTop_toTopOf="@+id/guideline117" />
+
+    <TextView
+        android:id="@+id/next_ride_detail"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_awesome_solid"
+        android:gravity="center"
+        android:text="&#xf054;"
+        android:textColor="@color/impureWhite"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline125"
+        app:layout_constraintStart_toStartOf="@+id/guideline126"
+        app:layout_constraintTop_toTopOf="@+id/guideline117" />
+
+    <ViewFlipper
+        android:id="@+id/ride_detail_viewFlipper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline125"
+        app:layout_constraintEnd_toStartOf="@+id/guideline126"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
+        app:layout_constraintTop_toTopOf="@+id/guideline117">
+
+        <EditText
+            android:id="@+id/dept_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:fontFamily="@font/inter"
+            android:hint="Departure"
+            android:inputType="text"
+            android:textColor="@color/impureWhite"
+            android:textColorHint="@color/usegray"
+            android:textCursorDrawable="@null"
+            android:textSize="26sp" />
+
+        <EditText
+            android:id="@+id/dest_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@null"
+            android:fontFamily="@font/inter"
+            android:hint="Destination"
+            android:inputType="text"
+            android:textColor="@color/impureWhite"
+            android:textColorHint="@color/usegray"
+            android:textCursorDrawable="@null"
+            android:textSize="26sp" />
+
+        <EditText
+            android:id="@+id/distance_journey_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:background="@null"
+            android:fontFamily="@font/inter"
+            android:hint="Distance"
+            android:inputType="number"
+            android:textColor="@color/impureWhite"
+            android:textColorHint="@color/usegray"
+            android:textCursorDrawable="@null"
+            android:textSize="26sp" />
+
+    </ViewFlipper>
+
+    <TextView
+        android:id="@+id/textView17"
+        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter"
@@ -16,59 +98,8 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline117"
         app:layout_constraintEnd_toStartOf="@+id/guideline119"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
-        app:layout_constraintTop_toTopOf="@+id/guideline126" />
+        app:layout_constraintStart_toStartOf="@+id/guideline111" />
 
-    <EditText
-        android:id="@+id/dept_et"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@null"
-        android:fontFamily="@font/inter"
-        android:gravity="center"
-        android:hint="Departure"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/usegray"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline125"
-        app:layout_constraintEnd_toStartOf="@+id/guideline129"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
-        app:layout_constraintTop_toTopOf="@+id/guideline117" />
-
-    <EditText
-        android:id="@+id/dest_et"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@null"
-        android:fontFamily="@font/inter"
-        android:gravity="center"
-        android:hint="Destination"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textColorHint="@color/usegray"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline125"
-        app:layout_constraintEnd_toStartOf="@+id/guideline130"
-        app:layout_constraintStart_toStartOf="@+id/guideline129"
-        app:layout_constraintTop_toTopOf="@+id/guideline117" />
-
-    <EditText
-        android:id="@+id/distance_journey_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:background="@null"
-        android:fontFamily="@font/inter"
-        android:gravity="center"
-        android:hint="Distance"
-        android:inputType="number"
-        android:textColor="@color/white"
-        android:textColorHint="@color/usegray"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline125"
-        app:layout_constraintStart_toStartOf="@+id/guideline130"
-        app:layout_constraintTop_toTopOf="@+id/guideline117" />
 
     <TextView
         android:id="@+id/seat1_show"
@@ -480,14 +511,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.09" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline126"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.06" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline125"
@@ -553,6 +577,20 @@
         app:layout_constraintGuide_percent="0.61" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline126"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline153"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline105"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -605,11 +643,11 @@
         android:id="@+id/no_ride_sharing_message_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/inter_semibold"
-        android:text="No seats sharing. All seats will be booked."
+        android:text="Seat sharing not allowed"
         android:textColor="@color/white"
+        android:fontFamily="@font/inter"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintBottom_toTopOf="@+id/guideline113"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline109" />

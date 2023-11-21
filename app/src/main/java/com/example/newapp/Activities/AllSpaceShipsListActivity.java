@@ -65,12 +65,6 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-//        View decorView = getWindow().getDecorView();
-//        // Hide the status bar.
-//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-//        decorView.setSystemUiVisibility(uiOptions);
-//        // Remember that you should never show the action bar if the
-//        // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
         spaceShipArrayList = new ArrayList<>();
@@ -97,8 +91,8 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
         VPAdapter vPadapter = new VPAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        vPadapter.addFragment(new SharedRideSpaceShips() , "Shared Gliders");
-        vPadapter.addFragment(new SpaceShipList(), "Unshared Gliders");
+        vPadapter.addFragment(new SharedRideSpaceShips() , "SHARED");
+        vPadapter.addFragment(new SpaceShipList(), "PRIVATE");
         viewPager.setAdapter(vPadapter);
 
         getUserData();

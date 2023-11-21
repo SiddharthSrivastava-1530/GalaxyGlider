@@ -5,7 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.CompanyProfileActivity"
-    android:background="@drawable/profilepg">
+    android:background="@color/blackPrimaryShade">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:hint="Enter Website here..."
+        android:inputType="text"
+        android:background="@null"
+        android:textColor="@color/white"
+        android:textColorHint="@color/usegray"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline164"
+        app:layout_constraintStart_toStartOf="@+id/guideline80"
+        app:layout_constraintTop_toTopOf="@+id/guideline79" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:hint="Enter mobile no. here..."
+        android:inputType="text"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/usegray"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline87"
+        app:layout_constraintStart_toStartOf="@+id/guideline80"
+        app:layout_constraintTop_toTopOf="@+id/guideline164" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:text="Company Profile"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline156"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView_company_profile"
@@ -115,26 +156,33 @@
     </androidx.cardview.widget.CardView>
 
 
-
     <TextView
         android:id="@+id/mode_info2_user_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Company"
-        android:textSize="20sp"
+        android:gravity="center"
+        android:text="Contact Info"
         android:textColor="@color/white"
+        android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline79"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline80"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline72" />
 
     <TextView
         android:id="@+id/update_tv_company_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline87"
-        app:layout_constraintEnd_toStartOf="@+id/guideline85"
-        app:layout_constraintStart_toStartOf="@+id/guideline122"
+        android:background="@color/white"
+        android:fontFamily="@font/inter_semibold"
+        android:gravity="center"
+        android:text="Update"
+        android:textSize="28sp"
+        android:textColor="@color/blackPrimaryShade"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline88" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -149,21 +197,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.77" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline88"
+        android:id="@+id/guideline164"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.855" />
+        app:layout_constraintGuide_percent="0.82" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline87"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.92" />
+        app:layout_constraintGuide_percent="0.87" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline88"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.93" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline90"
@@ -185,6 +240,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline156"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.07" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline94"
@@ -212,28 +274,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.62" />
+        app:layout_constraintGuide_percent="0.59" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline77"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72" />
+        app:layout_constraintGuide_percent="0.64" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline72"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.76" />
+        app:layout_constraintGuide_percent="0.7" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline78"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline80"
@@ -296,7 +358,7 @@
         android:id="@+id/name_profile_et_company_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:text="Arsh Jeet Singh"
         android:fontFamily="@font/inter"
         android:textSize="20sp"

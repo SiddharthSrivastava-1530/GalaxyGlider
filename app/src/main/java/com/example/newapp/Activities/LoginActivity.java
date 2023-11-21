@@ -101,9 +101,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent1 = new Intent(new Intent(LoginActivity.this, SignUpActivity.class));
                 intent1.putExtra("loginMode", loginMode);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent1);
+                overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
     }

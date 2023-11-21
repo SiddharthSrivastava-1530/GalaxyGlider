@@ -19,6 +19,7 @@ import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.DataModel.Transaction;
 import com.example.newapp.R;
+import com.example.newapp.utils.ServiceSettingsUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -228,6 +229,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isComplete()) {
+                                            ServiceSettingsUtil.startRideService(getApplicationContext());
                                             // Start the journey and move further to review activity.
                                             Intent intent1 = new Intent(CheckoutActivity.this, AllSpaceShipsListActivity.class);
                                             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);

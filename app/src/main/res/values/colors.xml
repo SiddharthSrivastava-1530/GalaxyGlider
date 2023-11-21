@@ -11,4 +11,11 @@
     <color name="lightgray">#CAC8C8</color>
     <color name="usegray">#ACA9A9</color>
 
+    <color name="blackPrimaryShade">#181818</color>
+    <color name="impureWhite">#E1DFDF</color>
+    <color name="awesome_gray">#272626</color>
+    <color name="green">#00C853</color>
+    <color name="rating_color">#FFD740</color>
+    <color name="red">#FF5252</color>
+
 </resources>

@@ -2,85 +2,91 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:backgroundTint="@color/black"
+    android:backgroundTint="@color/blackPrimaryShade"
+    android:layout_marginBottom="2dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/black"
-        android:paddingStart="10dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="1dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:background="@color/blackPrimaryShade"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/reviewer_name_holder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
             android:fontFamily="@font/inter_semibold"
-            android:textColor="@color/white"
-            android:padding="10dp"
+            android:textColor="@color/impureWhite"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline124"
+            app:layout_constraintStart_toStartOf="@+id/guideline147"
             tools:text="Reviewer Name" />
+
 
         <TextView
             android:id="@+id/reviewer_holder"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
+            android:layout_marginTop="10dp"
+            android:text="Customer Reviews help customers to learn more about the product and decide whether it is the right product for them. Customer Reviews should give customers genuine product feedback from fellow shoppers. We have a zero tolerance policy for any review designed to mislead or manipulate customers"
             android:textColor="@color/usegray"
-            android:padding="10dp"
-            android:textSize="16sp"
-            tools:text="A review is an evaluation of a publication, product, service." />
+            android:textSize="19sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline147"
+            app:layout_constraintTop_toTopOf="@+id/guideline145" />
 
-        <LinearLayout
+        <RatingBar
+            android:id="@+id/ratingBar_userReview_holder"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:backgroundTint="@color/blackPrimaryShade"
+            android:progressBackgroundTint="@color/blackPrimaryShade"
+            android:progressTint="@color/rating_color"
+            android:rating="2"
+            android:stepSize="0.5"
+            app:layout_constraintBottom_toTopOf="@+id/guideline145"
+            app:layout_constraintStart_toStartOf="@+id/guideline147" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:textSize="18sp"
-                android:paddingStart="10dp"
-                android:paddingRight="10dp"
-                android:text="Rating"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="@color/white" />
-
-            <RatingBar
-                android:id="@+id/ratingBar_userReview_holder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/black"
-                android:progressBackgroundTint="@color/black"
-                android:progressTint="@color/white"
-                android:stepSize="0.5"
-                android:rating="2"
-                style="?android:attr/ratingBarStyleSmall"
-                android:background="@color/white"
-                />
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/date_holder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/lightgray"
             android:fontFamily="@font/inter"
+            android:textColor="@color/white"
             android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="22/04/2023 18:45 hrs" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline124"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline145"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.18" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline147"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.03" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

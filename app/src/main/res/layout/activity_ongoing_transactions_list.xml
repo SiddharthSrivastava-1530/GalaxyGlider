@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/companies_constraint"
-    android:background="@color/white"
+    android:background="@color/blackPrimaryShade"
     tools:context=".Activities.OngoingTransactionsList">
 
     <ProgressBar
@@ -26,7 +26,7 @@
         android:id="@+id/recycler_transaction_list_current"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/black"
+        android:background="@color/blackPrimaryShade"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

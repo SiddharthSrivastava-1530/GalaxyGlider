@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
-import com.github.dhaval2404.imagepicker.ImagePicker;
+//import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,12 +65,6 @@ public class UserProfileActivity extends AppCompatActivity {
         name_tv = findViewById(R.id.name_profile_et);
         email_tv = findViewById(R.id.email_profile_et);
 
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
         Intent intent = getIntent();
@@ -104,11 +98,11 @@ public class UserProfileActivity extends AppCompatActivity {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.with(UserProfileActivity.this)
-                        .crop()
-                        .compress(512)
-                        .maxResultSize(512, 512)	//Final image resolution
-                        .start();
+//                ImagePicker.with(UserProfileActivity.this)
+//                        .crop()
+//                        .compress(512)
+//                        .maxResultSize(512, 512)	//Final image resolution
+//                        .start();
             }
         });
     }

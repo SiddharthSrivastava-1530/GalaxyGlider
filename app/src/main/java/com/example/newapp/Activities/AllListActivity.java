@@ -22,7 +22,10 @@ import com.example.newapp.Adapter.VPAdapter;
 import com.example.newapp.DataModel.Admin;
 import com.example.newapp.DataModel.Company;
 import com.example.newapp.DataModel.Customer;
+import com.example.newapp.DataModel.Token;
 import com.example.newapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class AllListActivity extends AppCompatActivity {
 
@@ -51,13 +55,8 @@ public class AllListActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-//        View decorView = getWindow().getDecorView();
-//        // Hide the status bar.
-//        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-//        decorView.setSystemUiVisibility(uiOptions);
-//        // Remember that you should never show the action bar if the
-//        // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
+        UpdateToken();
 
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
@@ -145,6 +144,28 @@ public class AllListActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    //Updating the user tokens to send notifications
+    private void UpdateToken() {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if(!task.isSuccessful()){
+                            return;
+                        }
+                        String token = task.getResult();
+                        updateToken(token);
+                    }
+                });
+    }
+
+    private void updateToken(String token) {
+        Token token1 = new Token(token);
+        //Adding the token to the database so that it can be retrieved to send notifications to the user.
+        FirebaseDatabase.getInstance().getReference("Tokens")
+                .child(FirebaseAuth.getInstance().getUid()).setValue(token1);
     }
 
     // on Back press show alert dialog box

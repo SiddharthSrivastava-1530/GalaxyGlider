@@ -78,7 +78,6 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_configuration);
 
-        // hide the action bar.
         getSupportActionBar().hide();
 
         nextSeatConfigurations = new ArrayList<>();

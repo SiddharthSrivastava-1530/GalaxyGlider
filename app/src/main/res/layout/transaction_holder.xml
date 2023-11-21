@@ -4,115 +4,207 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    android:backgroundTint="#000000">
+    android:backgroundTint="#272626"
+    android:layout_marginBottom="1dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
-        android:padding="8dp">
+        android:padding="10dp"
+        android:paddingStart="10dp">
 
-
-        <TextView
-            android:id="@+id/userName_transaction_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="name"
-            android:textColor="@color/white"
-            android:textSize="22sp"/>
-
-        <TextView
-            android:id="@+id/userEmail_transaction_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="mail@gmail.com"
-            android:textColor="@color/white"
-            android:textSize="22sp"/>
 
         <TextView
             android:id="@+id/companyName_transaction_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semibold"
             android:text="SpaceX"
             android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline138"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline136" />
 
 
         <TextView
             android:id="@+id/spaceShipName_transaction_list"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:fontFamily="@font/inter"
             android:text="Gagan Yaan"
-            android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:textColor="@color/usegray"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline137"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline138" />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/baseline_arrow_right_alt_24"
+            app:layout_constraintBottom_toTopOf="@+id/guideline131"
+            app:layout_constraintStart_toStartOf="@+id/guideline133"
+            app:layout_constraintTop_toTopOf="@+id/guideline132" />
 
         <TextView
             android:id="@+id/from_transaction_list"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="from"
+            android:layout_height="0dp"
+            android:fontFamily="@font/inter"
+            android:gravity="right"
+            android:text="Earth"
             android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline131"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline132" />
 
         <TextView
             android:id="@+id/to_transaction_list"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="to"
+            android:layout_height="0dp"
+            android:fontFamily="@font/inter"
+            android:text="Jupiter"
             android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline131"
+            app:layout_constraintStart_toStartOf="@+id/guideline134"
+            app:layout_constraintTop_toTopOf="@+id/guideline132" />
 
         <TextView
             android:id="@+id/distance_transaction_list"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="distance"
+            android:layout_height="0dp"
+            android:fontFamily="@font/inter"
+            android:text="12 ly"
             android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline131"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline135"
+            app:layout_constraintTop_toTopOf="@+id/guideline132" />
 
         <TextView
             android:id="@+id/price_transaction_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="price"
-            android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:fontFamily="@font/inter"
+            android:text="$125"
+            android:textColor="@color/green"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline138"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline135"
+            app:layout_constraintTop_toTopOf="@+id/guideline136" />
 
-
-        <TextView
-            android:id="@+id/seatsChosen_transaction_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="seatsChosen"
-            android:textColor="@color/white"
-            android:textSize="22sp"/>
 
         <TextView
             android:id="@+id/time_transaction_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="time"
+            android:text="Tue, Aug 29, 05:51 PM"
             android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline139"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/transactionId_transaction_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="transaction id"
-            android:textColor="@color/white"
-            android:textSize="22sp"/>
+            android:text="RefId - 7637625638"
+            android:textColor="@color/usegray"
+            android:textSize="9sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline140"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline139" />
 
         <TextView
             android:id="@+id/isOngoing_transaction_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Not completed"
-            android:textColor="@color/purple_700"
-            android:textSize="22sp"/>
+            android:text="Ongoing"
+            android:textColor="#FF1744"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline139"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline135"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline131"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.92" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline133"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline134"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.42" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline135"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.76" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline132"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.71" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline136"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.34" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline140"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.29" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline139"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline138"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline137"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

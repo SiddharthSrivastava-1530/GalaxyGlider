@@ -70,5 +70,7 @@
     <string name="ending_time"><u>Ending Time</u></string>
     <string name="select_slots"><u>Select Slots</u></string>
     <string name="seat_available"><u>Seats Available</u></string>
+    <string name="fa_regular_sun"><![CDATA[&#xf185;]]></string>
+    <string name="invoice"><u>Invoice</u></string>
 
 </resources>

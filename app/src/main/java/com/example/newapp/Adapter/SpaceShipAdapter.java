@@ -43,7 +43,7 @@ public class SpaceShipAdapter extends RecyclerView.Adapter<SpaceShipAdapter.Spac
     public void onBindViewHolder(@NonNull SpaceShipAdapter.SpaceShipHolder holder, int position) {
 
         holder.spaceShipName.setText(spaceships.get(position).getSpaceShipName());
-        holder.price.setText(String.valueOf(spaceships.get(position).getPrice()));
+        holder.price.setText("$"+String.valueOf(spaceships.get(position).getPrice()));
         holder.desc_spaceShip.setText(spaceships.get(position).getDescription());
         float ratingVal = Float.parseFloat(spaceships.get(position).getSpaceShipRating());
         holder.ratingBar.setRating(ratingVal);

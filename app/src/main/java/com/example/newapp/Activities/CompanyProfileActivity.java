@@ -15,12 +15,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
-import com.github.dhaval2404.imagepicker.ImagePicker;
+//import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -32,8 +34,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -117,11 +117,11 @@ public class CompanyProfileActivity extends AppCompatActivity {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImagePicker.with(CompanyProfileActivity.this)
-                        .crop()
-                        .compress(512)
-                        .maxResultSize(512, 512)	//Final image resolution
-                        .start();
+//                ImagePicker.with(CompanyProfileActivity.this)
+//                        .crop()
+//                        .compress(512)
+//                        .maxResultSize(512, 512)	//Final image resolution
+//                        .start();
             }
         });
 

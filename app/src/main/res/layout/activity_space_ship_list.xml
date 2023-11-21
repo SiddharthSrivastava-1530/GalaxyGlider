@@ -1,31 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/companies_constraint"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".Activities.SpaceShipList">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Gliders"
-            android:textColor="@color/white"
-            android:fontFamily="@font/inter_semibold"
-            android:textSize="22sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+        android:id="@+id/companies_constraint"
+        android:layout_width="match_parent"
+        android:background="@color/blackPrimaryShade"
+        android:layout_height="match_parent">
 
         <ProgressBar
             android:id="@+id/progressbar_spaceship"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="#000000"
+            android:background="@color/blackPrimaryShade"
             android:indeterminate="true"
             android:indeterminateTint="#ffffff"
             android:indeterminateTintMode="src_atop"
@@ -39,7 +26,7 @@
             android:id="@+id/recycler_spaceship"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/black"
+            android:background="@color/blackPrimaryShade"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +40,7 @@
             android:layout_marginEnd="35dp"
             android:layout_marginBottom="35dp"
             android:clickable="true"
+            android:backgroundTint="@color/white"
             android:src="@drawable/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,10 +50,10 @@
             android:id="@+id/cardView2_spaceship"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/blackPrimaryShade"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline124">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -105,17 +93,10 @@
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline124"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.1" />
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline127"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
