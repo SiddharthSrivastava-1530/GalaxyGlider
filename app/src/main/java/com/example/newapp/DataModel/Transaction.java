@@ -21,6 +21,7 @@ public class Transaction implements Serializable {
     private long transactionTime;
     private float totalFare;
     private boolean isTransactionComplete;
+    private boolean isTransactionRecurring;
     Review review;
 
 
@@ -28,7 +29,7 @@ public class Transaction implements Serializable {
 
     }
 
-    public Transaction(String userUID, String userName, String userEmail, String transactionId, String companyId, String companyName, String spaceShipId, String spaceShipName, String chosenSeatConfiguration, String departure, String destination, String distance, String slotNo, String invoiceUrl, long transactionTime, float totalFare, boolean isTransactionComplete, Review review) {
+    public Transaction(String userUID, String userName, String userEmail, String transactionId, String companyId, String companyName, String spaceShipId, String spaceShipName, String chosenSeatConfiguration, String departure, String destination, String distance, String slotNo, String invoiceUrl, long transactionTime, float totalFare, boolean isTransactionComplete, boolean isTransactionRecurring, Review review) {
         this.userUID = userUID;
         this.userName = userName;
         this.userEmail = userEmail;
@@ -46,9 +47,9 @@ public class Transaction implements Serializable {
         this.transactionTime = transactionTime;
         this.totalFare = totalFare;
         this.isTransactionComplete = isTransactionComplete;
+        this.isTransactionRecurring = isTransactionRecurring;
         this.review = review;
     }
-
 
     public String getUserUID() {
         return userUID;
@@ -184,6 +185,14 @@ public class Transaction implements Serializable {
 
     public void setTransactionComplete(boolean transactionComplete) {
         isTransactionComplete = transactionComplete;
+    }
+
+    public boolean isTransactionRecurring() {
+        return isTransactionRecurring;
+    }
+
+    public void setTransactionRecurring(boolean transactionRecurring) {
+        isTransactionRecurring = transactionRecurring;
     }
 
     public Review getReview() {

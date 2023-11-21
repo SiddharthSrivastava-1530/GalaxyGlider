@@ -350,42 +350,42 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
 
         String nextSlotConfig = spaceShip.getNextSlotConfig();
         if(nextSlotConfig.charAt(0)=='1'){
-            spaceShip.setSlot1(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(0));
         } else {
             spaceShip.setSlot1("000000000000");
         }
         if(nextSlotConfig.charAt(1)=='1'){
-            spaceShip.setSlot2(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(1));
         } else {
             spaceShip.setSlot2("000000000000");
         }
         if(nextSlotConfig.charAt(2)=='1'){
-            spaceShip.setSlot3(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(2));
         } else {
             spaceShip.setSlot3("000000000000");
         }
         if(nextSlotConfig.charAt(3)=='1'){
-            spaceShip.setSlot4(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(3));
         } else {
             spaceShip.setSlot4("000000000000");
         }
         if(nextSlotConfig.charAt(4)=='1'){
-            spaceShip.setSlot5(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(4));
         } else {
             spaceShip.setSlot5("000000000000");
         }
         if(nextSlotConfig.charAt(5)=='1'){
-            spaceShip.setSlot6(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(5));
         } else {
             spaceShip.setSlot6("000000000000");
         }
         if(nextSlotConfig.charAt(6)=='1'){
-            spaceShip.setSlot7(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(6));
         } else {
             spaceShip.setSlot7("000000000000");
         }
         if(nextSlotConfig.charAt(7)=='1'){
-            spaceShip.setSlot8(spaceShip.getSeatConfiguration());
+            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(7));
         } else {
             spaceShip.setSlot8("000000000000");
         }

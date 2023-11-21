@@ -175,10 +175,34 @@
                 android:text="SUBMIT"
                 android:fontFamily="@font/inter_semibold"
                 android:textStyle="bold"
-                android:textSize="22sp"
+                android:textSize="18sp"
                 android:padding="8dp"/>
 
-            </LinearLayout>
+        <TextView
+            android:id="@+id/recurring_ride_end_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/black"
+            android:text="END RECURRING RIDE BOOKINGS"
+            android:fontFamily="@font/inter_semibold"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/invoice_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:text="Get INVOICE"
+        android:fontFamily="@font/inter_semibold"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:padding="8dp"/>
 
 
 </androidx.cardview.widget.CardView>

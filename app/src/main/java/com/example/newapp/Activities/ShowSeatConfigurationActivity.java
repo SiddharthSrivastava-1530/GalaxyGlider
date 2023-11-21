@@ -61,11 +61,13 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private TextView food_not;
     private TextView confirm_seats;
     private TextView noRideSharingMessage;
+    private TextView selectRecurringTextView;
     private SpaceShip currentSpaceShip;
     private String companyId;
     private String selectedSlotNumber;
     private String currentSeatConfiguration;
     private String chosenSeatConfiguration;
+    private boolean isRideRecurring;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
         confirm_seats = findViewById(R.id.confirm_seats);
         noRideSharingMessage = findViewById(R.id.no_ride_sharing_message_tv);
+        selectRecurringTextView = findViewById(R.id.recurring_ride_selection_tv);
 
         Intent intent = getIntent();
         currentSpaceShip = (SpaceShip) intent.getSerializableExtra("spaceship_ss");
@@ -137,6 +140,19 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
             noRideSharingMessage.setVisibility(View.GONE);
         }
 
+        selectRecurringTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectRecurringTextView.getText().toString().equals("YES")){
+                    isRideRecurring = true;
+                    selectRecurringTextView.setText("NO");
+                } else {
+                    isRideRecurring = false;
+                    selectRecurringTextView.setText("YES");
+                }
+            }
+        });
+
         // Move to checkout activity if user confirms seat configuration.
         confirm_seats.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,14 +161,17 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(ShowSeatConfigurationActivity.this, CheckoutActivity.class);
                     intent1.putExtra("companyID", companyId);
                     intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
-                    intent1.putExtra("spaceship", currentSpaceShip);
                     intent1.putExtra("slot_number", selectedSlotNumber);
                     intent1.putExtra("dept", fromLocation.getText().toString());
                     intent1.putExtra("dest", toLocation.getText().toString());
                     intent1.putExtra("dist", distance.getText().toString());
-                    startActivity(intent1);
+//                    startActivity(intent1);
                     if (!currentSpaceShip.isHaveRideSharing()) {
                         if (isPossibleToBookSeats()) {
+                            if(isRideRecurring){
+                                intent1.putExtra("isRecurring", isRideRecurring);
+                            }
+                            intent1.putExtra("spaceship", currentSpaceShip);
                             intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
                             startActivity(intent1);
                         } else {
@@ -160,6 +179,10 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                                     "seats available...", Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        if(isRideRecurring){
+                            intent1.putExtra("isRecurring", isRideRecurring);
+                        }
+                        intent1.putExtra("spaceship", currentSpaceShip);
                         intent1.putExtra("chosen_seat_config", chosenSeatConfiguration);
                         startActivity(intent1);
                     }
@@ -335,13 +358,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
     // return true if at least one seat is chosen.
     private boolean checkData() {
-        if (!currentSpaceShip.isHaveRideSharing()) return true;
-        int chosenSeats = 0;
-        for (int position = 0; position < 12; position++) {
-            if (chosenSeatConfiguration.charAt(position) == '1') {
-                chosenSeats++;
-            }
-        }
+
         if (TextUtils.isEmpty(fromLocation.getText().toString())) {
             Toast.makeText(this, "Please enter source", Toast.LENGTH_SHORT).show();
             return false;
@@ -354,7 +371,16 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter approximated distance", Toast.LENGTH_SHORT).show();
             return false;
         }
+        if (!currentSpaceShip.isHaveRideSharing()) return true;
+
+        int chosenSeats = 0;
+        for (int position = 0; position < 12; position++) {
+            if (chosenSeatConfiguration.charAt(position) == '1') {
+                chosenSeats++;
+            }
+        }
         return chosenSeats > 0;
+
     }
 
 

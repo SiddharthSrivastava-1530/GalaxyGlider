@@ -22,13 +22,14 @@ public class SpaceShip implements Serializable {
     private float price;
     private String nextSlotConfig;
     private String seatConfiguration;
+    private ArrayList<String> nextSeatConfigurations;
     private ArrayList<String> transactionIds;
 
     public SpaceShip(){
 
     }
 
-    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String slot1, String slot2, String slot3, String slot4, String slot5, String slot6, String slot7, String slot8, String servicesAvailable, boolean haveRideSharing, long busyTime, float price, String nextSlotConfig, String seatConfiguration, ArrayList<String> transactionIds) {
+    public SpaceShip(String spaceShipName, String description, String spaceShipId, String spaceShipRating, String slot1, String slot2, String slot3, String slot4, String slot5, String slot6, String slot7, String slot8, String servicesAvailable, boolean haveRideSharing, long busyTime, float price, String nextSlotConfig, String seatConfiguration, ArrayList<String> nextSeatConfigurations, ArrayList<String> transactionIds) {
         this.spaceShipName = spaceShipName;
         this.description = description;
         this.spaceShipId = spaceShipId;
@@ -47,6 +48,7 @@ public class SpaceShip implements Serializable {
         this.price = price;
         this.nextSlotConfig = nextSlotConfig;
         this.seatConfiguration = seatConfiguration;
+        this.nextSeatConfigurations = nextSeatConfigurations;
         this.transactionIds = transactionIds;
     }
 
@@ -195,6 +197,14 @@ public class SpaceShip implements Serializable {
         this.seatConfiguration = seatConfiguration;
     }
 
+    public ArrayList<String> getNextSeatConfigurations() {
+        return nextSeatConfigurations;
+    }
+
+    public void setNextSeatConfigurations(ArrayList<String> nextSeatConfigurations) {
+        this.nextSeatConfigurations = nextSeatConfigurations;
+    }
+
     public ArrayList<String> getTransactionIds() {
         return transactionIds;
     }
@@ -202,4 +212,5 @@ public class SpaceShip implements Serializable {
     public void setTransactionIds(ArrayList<String> transactionIds) {
         this.transactionIds = transactionIds;
     }
+
 }

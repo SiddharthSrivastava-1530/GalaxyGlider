@@ -90,10 +90,10 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (rideSharingTextView.getText().toString().equals("YES")) {
                     rideSharingTextView.setText("NO");
-                    haveRideSharing = false;
+                    haveRideSharing = true;
                 } else {
                     rideSharingTextView.setText("YES");
-                    haveRideSharing = true;
+                    haveRideSharing = false;
                 }
             }
         });

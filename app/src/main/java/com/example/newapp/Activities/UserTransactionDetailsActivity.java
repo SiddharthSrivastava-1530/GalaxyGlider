@@ -68,6 +68,8 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     private TextView timeTextView;
     private TextView isTransactionComplete_tv;
     private TextView completeJourneyTextView;
+    private TextView endRecurringRideTextView;
+    private TextView invoiceTextView;
     private Transaction currentTransaction;
     private SpaceShip transactionSpaceShip;
     private String chosenSeatConfig;
@@ -96,6 +98,8 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         reviews_tv = findViewById(R.id.user_review_tv);
         ratingBar = findViewById(R.id.ratingBar);
         submitReview_tv = findViewById(R.id.submit_review_tv);
+        endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
+        invoiceTextView = findViewById(R.id.invoice_tv);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
         scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 60, false);
 
@@ -106,6 +110,10 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
         setDataViews();
         attachSeatsListener();
+
+        if(!currentTransaction.isTransactionRecurring()){
+            endRecurringRideTextView.setVisibility(View.GONE);
+        }
 
         if (currentTransaction.isTransactionComplete()) {
             completeJourneyTextView.setVisibility(View.GONE);
@@ -120,6 +128,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             ratingBar.setVisibility(View.GONE);
             submitReview_tv.setVisibility(View.GONE);
             reviews_tv.setVisibility(View.GONE);
+            invoiceTextView.setVisibility(View.GONE);
         }
 
         completeJourneyTextView.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +153,26 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
+        endRecurringRideTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                endRecurringRide();
+            }
+        });
+
+        invoiceTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(currentTransaction.getInvoiceUrl()), "application/pdf");
+                if(!currentTransaction.getInvoiceUrl().isEmpty()) {
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(UserTransactionDetailsActivity.this, "No invoice available",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
@@ -539,7 +568,6 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
             // Uploading the file to Firebase Storage
             uploadPdfToFirebaseStorage(file);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -580,12 +608,84 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
                 "/invoiceUrl").setValue(invoiceUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(invoiceUrl), "application/pdf");
-                startActivity(intent);
+                invoiceTextView.setVisibility(View.VISIBLE);
             }
         });
 
     }
+
+
+    private void endRecurringRide() {
+
+
+        FirebaseDatabase.getInstance().getReference("company/" + currentTransaction.getCompanyId() + "/spaceShips")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        ArrayList<SpaceShip> spaceShipArrayList = new ArrayList<>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            SpaceShip spaceShip = dataSnapshot.getValue(SpaceShip.class);
+                            if (spaceShip != null && spaceShip.getSpaceShipId().equals(currentTransaction.getSpaceShipId())) {
+                                spaceShip.setNextSeatConfigurations(endingRecurringRide(spaceShip));
+                            }
+                            spaceShipArrayList.add(spaceShip);
+                        }
+
+                        FirebaseDatabase.getInstance().getReference("company/" + currentTransaction.getCompanyId()
+                                        + "/spaceShips")
+                                .setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        updateRecurringStatus();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+
+    private ArrayList<String> endingRecurringRide(SpaceShip spaceShip) {
+        int slotNo = Integer.parseInt(currentTransaction.getSlotNo());
+        ArrayList<String> nextSeatConfig = spaceShip.getNextSeatConfigurations();
+        String seats = nextSeatConfig.get(slotNo);
+        for(int position=0; position<12;position++) {
+            if(currentTransaction.getChosenSeatConfiguration().charAt(position)=='1') {
+                seats = setCharAt(seats, position, '1');
+            }
+        }
+        nextSeatConfig.set(slotNo,seats);
+        return nextSeatConfig;
+    }
+
+
+    private void updateRecurringStatus() {
+
+        try {
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions")
+                    .child(currentTransaction.getTransactionId());
+
+            databaseReference.child("transactionRecurring").setValue(false)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            endRecurringRideTextView.setVisibility(View.GONE);
+                            Toast.makeText(UserTransactionDetailsActivity.this, "Recurring ride " +
+                                    "seats vacated.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
 }

@@ -202,8 +202,13 @@ public class UserProfileActivity extends AppCompatActivity {
         /* After downloading image url from database we update it in realtime database by referencing using user UID(path).
          Path will be : user/Unique UID associated with user/profilePic */
         try {
-            FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser()
-                    .getUid() + "/profilePic").setValue(url);
+            if(loginMode.equals("user")) {
+                FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser()
+                        .getUid() + "/profilePic").setValue(url);
+            } else if(loginMode.equals("admin")){
+                FirebaseDatabase.getInstance().getReference("admin/" + FirebaseAuth.getInstance().getCurrentUser()
+                        .getUid() + "/profilePic").setValue(url);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
@@ -211,11 +216,4 @@ public class UserProfileActivity extends AppCompatActivity {
         userPic = url;
     }
 
-    private void eraseLoginMode() {
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("loginMode", "");
-        editor.putString("email", "");
-        editor.apply();
-    }
 }

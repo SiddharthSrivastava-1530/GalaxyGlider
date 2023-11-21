@@ -85,7 +85,7 @@ public class UserTransactionList extends Fragment {
                         transactions.clear();
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             Transaction transaction = dataSnapshot.getValue(Transaction.class);
-                            if (transaction != null && transaction.isTransactionComplete()) {
+                            if (transaction != null && (transaction.isTransactionComplete() || !transaction.isTransactionRecurring())) {
                                 transactions.add(transaction);
                             }
                         }

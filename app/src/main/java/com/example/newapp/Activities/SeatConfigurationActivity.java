@@ -70,6 +70,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
     private String description;
     private String price;
     private boolean booleanUpdate;
+    private ArrayList<String> nextSeatConfigurations;
 
 
     @Override
@@ -79,6 +80,8 @@ public class SeatConfigurationActivity extends AppCompatActivity {
 
         // hide the action bar.
         getSupportActionBar().hide();
+
+        nextSeatConfigurations = new ArrayList<>();
 
         // attach all views with viewVariables using respective viewId's
         seat1 = findViewById(R.id.seat1);
@@ -317,6 +320,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         currentSpaceShip.setSlot6(slot6);
         currentSpaceShip.setSlot7(slot7);
         currentSpaceShip.setSlot8(slot8);
+        currentSpaceShip.setNextSeatConfigurations(nextSeatConfigurations);
 
         DatabaseReference companyRef = FirebaseDatabase.getInstance().getReference("company").child(companyId);
 
@@ -402,6 +406,14 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         } else {
             slot8 = "000000000000";
         }
+        nextSeatConfigurations.add(slot1);
+        nextSeatConfigurations.add(slot2);
+        nextSeatConfigurations.add(slot3);
+        nextSeatConfigurations.add(slot4);
+        nextSeatConfigurations.add(slot5);
+        nextSeatConfigurations.add(slot6);
+        nextSeatConfigurations.add(slot7);
+        nextSeatConfigurations.add(slot8);
     }
 
 
