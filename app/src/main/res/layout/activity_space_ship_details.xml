@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/spaceship_details">
+    android:background="@color/blackPrimaryShade">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline44"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.16" />
+        app:layout_constraintGuide_percent="0.12" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline46"
@@ -25,7 +25,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.56" />
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/inter"
+        android:gravity="start|top"
+        android:text="Ref Id"
+        android:textColor="#ACA9A9"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline141"
+        app:layout_constraintEnd_toStartOf="@+id/guideline45"
+        app:layout_constraintStart_toStartOf="@+id/guideline44"
+        app:layout_constraintTop_toTopOf="@+id/guideline143" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/inter"
+        android:gravity="start|top"
+        android:text="Company"
+        android:textColor="#ACA9A9"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline43"
+        app:layout_constraintEnd_toStartOf="@+id/guideline45"
+        app:layout_constraintStart_toStartOf="@+id/guideline44"
+        app:layout_constraintTop_toTopOf="@+id/guideline142" />
 
     <TextView
         android:id="@+id/seat_tv"
@@ -69,17 +96,33 @@
         app:layout_constraintStart_toStartOf="@+id/guideline44"
         app:layout_constraintTop_toTopOf="@+id/guideline37" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:text="Glider Details"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline33"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/spaceShipName_details_activity"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="@null"
-        android:fontFamily="@font/inter"
+        android:fontFamily="@font/atma_semibold"
+        android:textStyle="bold"
         android:gravity="center"
         android:text="Lunar SpaceRover"
-        android:textColor="#fff"
-        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:textSize="44sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline34"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -120,9 +163,9 @@
     </ScrollView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="310dp"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/white"
+        android:layout_width="305dp"
+        android:layout_height="55dp"
+        android:backgroundTint="@color/impureWhite"
         app:cardCornerRadius="12dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline42"
         app:layout_constraintEnd_toStartOf="@+id/guideline46"
@@ -133,7 +176,7 @@
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:backgroundTint="#000000"
+            android:backgroundTint="@color/blackPrimaryShade"
             app:cardCornerRadius="12dp">
 
             <TextView
@@ -143,7 +186,7 @@
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"
                 android:text="View Glider Reviews"
-                android:textColor="#ffffff"
+                android:textColor="#0091EA"
                 android:textSize="23sp" />
 
         </androidx.cardview.widget.CardView>
@@ -163,16 +206,38 @@
         app:layout_constraintTop_toTopOf="@+id/guideline36"
         app:layout_constraintVertical_bias="0.555" />
 
+    <TextView
+        android:id="@+id/company_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:text="SpaceX"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline44"
+        app:layout_constraintTop_toTopOf="@+id/guideline43" />
+
+    <TextView
+        android:id="@+id/RefId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="7637625638"
+        android:textColor="@color/impureWhite"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline44"
+        app:layout_constraintTop_toTopOf="@+id/guideline141" />
+
     <RatingBar
         android:id="@+id/ratingBar_spaceship_details"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="1dp"
+        style="?android:attr/ratingBarStyleSmall"
         android:background="@color/white"
-        android:backgroundTint="@color/black"
-        android:progressBackgroundTint="@color/black"
-        android:progressTint="@color/white"
+        android:backgroundTint="@color/blackPrimaryShade"
+        android:progressBackgroundTint="@color/blackPrimaryShade"
+        android:progressTint="@color/rating_color"
         android:rating="2"
         android:stepSize="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline44"
@@ -184,7 +249,7 @@
         android:layout_height="0dp"
         android:background="@null"
         android:text="1200"
-        android:textColor="#fff"
+        android:textColor="@color/green"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline41"
         app:layout_constraintStart_toStartOf="@+id/guideline45"
@@ -202,56 +267,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.04" />
+        app:layout_constraintGuide_percent="0.07" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline34"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.14" />
+        app:layout_constraintGuide_percent="0.16" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline35"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.22" />
+        app:layout_constraintGuide_percent="0.39" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline36"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.42" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline37"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.33" />
+        app:layout_constraintGuide_percent="0.52" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline38"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.36" />
+        app:layout_constraintGuide_percent="0.55" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline39"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.62" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline41"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.31" />
+        app:layout_constraintGuide_percent="0.48" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline42"
@@ -279,21 +344,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.67" />
+        app:layout_constraintGuide_percent="0.76" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline143"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.18" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline141"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.21" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline43"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.43" />
+        app:layout_constraintGuide_percent="0.31" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline142"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.28" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.49" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_details_activity"
@@ -301,6 +387,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:src="@drawable/edit_img"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline42" />
@@ -318,8 +405,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline100" />
+        app:layout_constraintTop_toTopOf="@+id/guideline100"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

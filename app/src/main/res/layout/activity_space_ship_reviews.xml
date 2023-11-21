@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/blackPrimaryShade"
     tools:context=".Activities.SpaceShipReviews">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +36,7 @@
             android:id="@+id/progressbar_reviews"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="#000000"
+            android:background="@color/blackPrimaryShade"
             android:indeterminate="true"
             android:indeterminateTint="#ffffff"
             android:indeterminateTintMode="src_atop"
@@ -49,6 +49,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_reviews"
             android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:background="@color/black"
             android:layout_height="0dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"

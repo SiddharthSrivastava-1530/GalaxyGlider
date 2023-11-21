@@ -4,18 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="10dp"
-    android:background="@color/black">
+    android:background="@color/blackPrimaryShade"
+    android:paddingTop="10dp">
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:text="Select Operational Slots"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline152"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/blackPrimaryShade"
+        android:layout_marginBottom="50dp"
         android:stretchColumns="*"
+        app:layout_constraintBottom_toTopOf="@+id/confirm_time_slots"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/guideline152">
 
         <!-- Table Header -->
         <TableRow>
@@ -23,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
+                android:background="@color/blackPrimaryShade"
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"
                 android:padding="5dp"
@@ -35,7 +53,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
+                android:background="@color/blackPrimaryShade"
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"
                 android:padding="5dp"
@@ -47,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/black"
+                android:background="@color/blackPrimaryShade"
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"
                 android:padding="5dp"
@@ -76,6 +94,9 @@
                 android:id="@+id/slot03"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 1 here -->
         </TableRow>
@@ -101,6 +122,8 @@
                 android:id="@+id/slot36"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
@@ -123,7 +146,9 @@
                 android:id="@+id/slot69"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:theme="@style/TableTextViewForSlots"/>
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
 
@@ -145,6 +170,8 @@
                 android:id="@+id/slot9_12"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
@@ -167,6 +194,8 @@
                 android:id="@+id/slot12_15"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
@@ -189,6 +218,8 @@
                 android:id="@+id/slot15_18"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
@@ -211,6 +242,8 @@
                 android:id="@+id/slot18_21"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
@@ -233,6 +266,9 @@
                 android:id="@+id/slot21_24"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:theme="@style/TableTextViewForSlots" />
             <!-- Add your slot selection widget for Row 2 here -->
         </TableRow>
@@ -254,5 +290,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline152"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.07" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

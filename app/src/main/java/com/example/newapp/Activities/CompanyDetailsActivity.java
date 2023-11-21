@@ -57,12 +57,6 @@ public class CompanyDetailsActivity extends AppCompatActivity {
         authorizeTextView = findViewById(R.id.verify_company_details_activity_tv);
         statusAuthorization = findViewById(R.id.cardView3);
 
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-        // Remember that you should never show the action bar if the
-        // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
         // getting data from intent.

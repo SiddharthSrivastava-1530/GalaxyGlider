@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="140dp"
+    android:layout_marginBottom="1dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:backgroundTint="#000000">
+    android:backgroundTint="@color/blackPrimaryShade">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_semibold"
-                android:textColor="#ffffff"
+                android:textColor="@color/white"
                 android:text="Luna Rover"
                 android:layout_marginLeft="15dp"
                 android:textSize="16sp"
@@ -65,17 +66,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rating"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/inter"
-                    android:gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:layout_gravity="center"
-                    android:textSize="16sp"/>
-
                 <Space
                     android:layout_width="11dp"
                     android:layout_height="0dp"/>
@@ -86,10 +76,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:backgroundTint="@color/black"
-                    android:progressBackgroundTint="@color/black"
-                    android:progressTint="@color/white"
+                    android:backgroundTint="@color/blackPrimaryShade"
+                    android:progressBackgroundTint="@color/blackPrimaryShade"
+                    android:progressTint="@color/rating_color"
                     android:stepSize="0.5"
+                    android:layout_marginStart="4dp"
                     android:rating="2"
                     style="?android:attr/ratingBarStyleSmall"
                     android:background="@color/white"
@@ -101,13 +92,13 @@
             android:id="@+id/spaceShip_price_SpaceShipList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
             android:layout_marginLeft="10dp"
             android:layout_weight="0.1"
             android:fontFamily="@font/inter"
-            android:layout_gravity="end|center"
-            android:textColor="#ffffff"
-            android:textSize="22sp"
-            android:text="$220" />
+            android:text="$220"
+            android:textColor="@color/green"
+            android:textSize="16sp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

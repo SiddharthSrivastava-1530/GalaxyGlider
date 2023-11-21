@@ -45,12 +45,6 @@ public class AllTransactionsList extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        View decorView = getWindow().getDecorView();
-//        // Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-//        // Remember that you should never show the action bar if the
-//        // status bar is hidden, so hide that too if necessary.
         getSupportActionBar().hide();
 
         tabLayout = findViewById(R.id.tablayout_transactions_all);
@@ -67,8 +61,8 @@ public class AllTransactionsList extends AppCompatActivity {
         VPAdapter vPadapter = new VPAdapter(getSupportFragmentManager(),
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        vPadapter.addFragment(new OngoingTransactionsList(), "ONGOING TRANSACTIONS");
-        vPadapter.addFragment(new UserTransactionList(), "COMPLETED TRANSACTIONS");
+        vPadapter.addFragment(new OngoingTransactionsList(), "ONGOING");
+        vPadapter.addFragment(new UserTransactionList(), "COMPLETED");
         viewPager.setAdapter(vPadapter);
 
 

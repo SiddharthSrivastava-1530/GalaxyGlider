@@ -59,6 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         // Remember that you should never show the action bar if the
         // status bar is hidden, so hide that too if necessary.
+
         getSupportActionBar().hide();
 
         Intent intent1 = getIntent();

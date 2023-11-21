@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blackPrimaryShade"
     tools:context=".Activities.AllTransactionsList">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayout_transactions_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/black"
+            android:background="@color/blackPrimaryShade"
             app:tabMode="auto"
             app:tabSelectedTextColor="@color/white"
             app:tabTextColor="#ACA9A9"
+            app:tabIndicator="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -31,7 +33,7 @@
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager.widget.ViewPager
-            android:background="@color/black"
+            android:background="@color/blackPrimaryShade"
             android:id="@+id/viewpager_transactions_all"
             android:layout_width="0dp"
             android:layout_height="0dp"

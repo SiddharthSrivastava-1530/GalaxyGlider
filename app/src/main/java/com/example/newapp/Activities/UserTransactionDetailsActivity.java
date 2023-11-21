@@ -16,10 +16,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.newapp.DataModel.Data;
+import com.example.newapp.DataModel.NotificationSender;
 import com.example.newapp.R;
+import com.example.newapp.utils.APIService;
+import com.example.newapp.utils.Client;
+import com.example.newapp.utils.MyResponse;
+import com.example.newapp.utils.ServiceSettingsUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,6 +53,10 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class UserTransactionDetailsActivity extends AppCompatActivity {
 
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -61,11 +72,9 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     private TextView spaceShipNameTextView;
     private TextView transactionIdTextView;
     private TextView fromTextView;
-    private TextView seatsConfig;
     private TextView toTextView;
     private TextView distanceTextView;
     private TextView totalCostTextView;
-    private TextView timeTextView;
     private TextView isTransactionComplete_tv;
     private TextView completeJourneyTextView;
     private TextView endRecurringRideTextView;
@@ -78,10 +87,32 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     private Float rating;
     private String invoiceUrl;
 
+    private ScrollView scrollView;
+
+    private TextView rating_and_review_tv;
+
+    private TextView status_tv;
+
+    private TextView invoiceInfo;
+
+    private TextView invoiceLink;
+
+    private TextView line_tv;
+
+    private APIService apiService;
+
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_transaction_details);
+
+        getSupportActionBar().hide();
+
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        token ="c_dGJ7q4TBeVhkJdHGr7U-:APA91bFd4-WX3dP1-EIF_WeZ9TtGrOf5Vvb5TkBb8uiGZo40EFC1CJhG9UBCXHjMoItUiDxvDovUyzD1NDifSJWlZb56oKfmViYtNjpXLDsRWe3XxBltDCK5uSrt-Ldjx5kWogMmT7EU";
+
+//        sendNotifications(token,"Low Rated Companies","There are some low rated companies.");
 
         companyNameTextView = findViewById(R.id.companyName_transaction_details);
         spaceShipNameTextView = findViewById(R.id.spaceShipName_transaction_details);
@@ -90,14 +121,18 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         toTextView = findViewById(R.id.to_transaction_details);
         distanceTextView = findViewById(R.id.distance_transaction_details);
         transactionIdTextView = findViewById(R.id.transactionId_transaction_details);
-        timeTextView = findViewById(R.id.time_transaction_details);
         isTransactionComplete_tv = findViewById(R.id.isOngoing_transaction_details);
         completeJourneyTextView = findViewById(R.id.complete_transaction_details);
-        seatsConfig = findViewById(R.id.seatsChosen_transaction_details);
         reviews_et = findViewById(R.id.user_review_et);
         reviews_tv = findViewById(R.id.user_review_tv);
         ratingBar = findViewById(R.id.ratingBar);
         submitReview_tv = findViewById(R.id.submit_review_tv);
+        rating_and_review_tv = findViewById(R.id.rating_and_review_tv);
+        scrollView = findViewById(R.id.scrollView3);
+        status_tv = findViewById(R.id.status_tv);
+        invoiceInfo = findViewById(R.id.textView19);
+        invoiceLink = findViewById(R.id.invoice_tv);
+        line_tv = findViewById(R.id.line_tv);
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
@@ -117,11 +152,19 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
         if (currentTransaction.isTransactionComplete()) {
             completeJourneyTextView.setVisibility(View.GONE);
+            status_tv.setVisibility(View.GONE);
+            invoiceLink.setVisibility(View.VISIBLE);
+            invoiceInfo.setVisibility(View.VISIBLE);
+            line_tv.setVisibility(View.VISIBLE);
+
             if (currentTransaction.getReview().getTime() == 0) {
                 reviews_tv.setVisibility(View.GONE);
             } else {
+                scrollView.setVisibility(View.VISIBLE);
                 reviews_et.setVisibility(View.GONE);
                 submitReview_tv.setVisibility(View.GONE);
+                ratingBar.setFocusable(false);
+                ratingBar.setIsIndicator(true);
             }
         } else {
             reviews_et.setVisibility(View.GONE);
@@ -129,6 +172,8 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             submitReview_tv.setVisibility(View.GONE);
             reviews_tv.setVisibility(View.GONE);
             invoiceTextView.setVisibility(View.GONE);
+            rating_and_review_tv.setVisibility(View.GONE);
+            line_tv.setVisibility(View.GONE);
         }
 
         completeJourneyTextView.setOnClickListener(new View.OnClickListener() {
@@ -182,12 +227,17 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         companyNameTextView.setText(currentTransaction.getCompanyName());
         fromTextView.setText(currentTransaction.getDeparture());
         toTextView.setText(currentTransaction.getDestination());
-        distanceTextView.setText(currentTransaction.getDistance());
-        totalCostTextView.setText(String.valueOf(currentTransaction.getTotalFare()));
+        distanceTextView.setText(currentTransaction.getDistance()+" ly");
+        totalCostTextView.setText("$"+String.valueOf(currentTransaction.getTotalFare()));
         transactionIdTextView.setText(currentTransaction.getTransactionId());
-        timeTextView.setText(String.valueOf(currentTransaction.getTransactionTime()));
-        isTransactionComplete_tv.setText(String.valueOf(currentTransaction.isTransactionComplete()));
-        seatsConfig.setText(currentTransaction.getChosenSeatConfiguration());
+        String transaction_complete = String.valueOf(currentTransaction.isTransactionComplete());
+        if(transaction_complete.equals("false")){
+            isTransactionComplete_tv.setText("Ongoing");
+        }
+        else{
+            isTransactionComplete_tv.setText("");
+        }
+
         if (currentTransaction.getReview().getTime() > 0) {
             ratingBar.setRating(Float.parseFloat(currentTransaction.getReview().getRating()));
             reviews_tv.setText(currentTransaction.getReview().getReview());
@@ -255,6 +305,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             completeJourneyTextView.setVisibility(View.GONE);
                             printPdf();
+                            ServiceSettingsUtil.stopRideService(getApplicationContext());
                             Toast.makeText(UserTransactionDetailsActivity.this, "Invoice downloaded", Toast.LENGTH_SHORT).show();
                             Intent intent1 = new Intent(UserTransactionDetailsActivity.this, AllTransactionsList.class);
                             intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -687,5 +738,29 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
     }
 
+
+    //This Method Sends the notifications combining all class of
+    //SendNotificationPack Package work together
+    public void sendNotifications(String usertoken, String title, String message) {
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotifcation(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call,
+                                   Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    assert response.body() != null;
+                    if (response.body().success != 1) {
+                        Log.e("UserTransactionDetailsActivity","Sorry admin could not be informed. Please try again later.");
+                    }else {
+                        Log.e("UserTransactionDetailsActivity","Admin has been informed.");
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+            }
+        });
+    }
 
 }

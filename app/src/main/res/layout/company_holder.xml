@@ -3,39 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:backgroundTint="@color/black"
+    android:layout_marginBottom="1dp"
+    android:backgroundTint="@color/blackPrimaryShade"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/black">
+        android:background="@color/blackPrimaryShade">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView5"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:backgroundTint="@color/white"
+            android:layout_width="202dp"
+            android:layout_height="202dp"
             android:elevation="5dp"
             app:cardCornerRadius="200dp"
+            android:backgroundTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline123">
 
-            <ImageView
-                android:id="@+id/img_Company"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center"
-                android:background="@drawable/spaceship" />
+            <androidx.cardview.widget.CardView
 
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/white"
+                android:elevation="5dp"
+                app:cardCornerRadius="200dp">
+
+                <ImageView
+                    android:id="@+id/img_Company"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:scaleType="fitXY"
+                    android:background="@drawable/spaceship" />
+
+            </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
 
 
+
+
         <LinearLayout
-            android:background="@color/black"
+            android:background="@color/blackPrimaryShade"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -49,30 +62,28 @@
                 android:id="@+id/companyName_CompanyList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:background="@color/black"
-                android:layout_marginTop="5dp"
+                android:background="@color/blackPrimaryShade"
                 android:fontFamily="@font/inter_semibold"
                 android:text="Luna Rover"
-                android:textColor="#ffffff"
+                android:textColor="@color/impureWhite"
+                android:layout_marginLeft="30dp"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/companyDescription_CompanyList"
-                android:layout_width="match_parent"
-                android:background="@color/black"
+                android:layout_width="320dp"
+                android:background="@color/blackPrimaryShade"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:ellipsize="end"
                 android:fontFamily="@font/inter"
                 android:maxLines="5"
                 android:layout_marginTop="5dp"
-                android:padding="8dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
+                android:layout_marginBottom="20dp"
                 android:text="Simple, Fast and Reliable"
                 android:textColor="#ACA9A9"
                 android:textSize="18sp" />

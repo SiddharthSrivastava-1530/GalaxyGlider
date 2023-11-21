@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
@@ -69,12 +70,24 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private String chosenSeatConfiguration;
     private boolean isRideRecurring;
 
+    private TextView prev_ride_detail;
+
+    private TextView next_ride_detail;
+
+    private int count_next_click;
+
+    private ViewFlipper viewFlipper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_seat_configuration);
 
         getSupportActionBar().hide();
+
+        count_next_click=0;
+
+        viewFlipper = findViewById(R.id.ride_detail_viewFlipper);
 
         fromLocation = findViewById(R.id.dept_et);
         toLocation = findViewById(R.id.dest_et);
@@ -122,6 +135,9 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         noRideSharingMessage = findViewById(R.id.no_ride_sharing_message_tv);
         selectRecurringTextView = findViewById(R.id.recurring_ride_selection_tv);
 
+        prev_ride_detail = findViewById(R.id.prev_ride_detail);
+        next_ride_detail = findViewById(R.id.next_ride_detail);
+
         Intent intent = getIntent();
         currentSpaceShip = (SpaceShip) intent.getSerializableExtra("spaceship_ss");
         selectedSlotNumber = intent.getStringExtra("slot_number");
@@ -150,6 +166,34 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                     isRideRecurring = false;
                     selectRecurringTextView.setText("YES");
                 }
+            }
+        });
+
+        prev_ride_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                count_next_click--;
+                if(count_next_click<2){
+                    next_ride_detail.setVisibility(View.VISIBLE);
+                }
+                if(count_next_click==0){
+                    prev_ride_detail.setVisibility(View.GONE);
+                }
+                viewFlipper.showPrevious();
+            }
+        });
+
+        next_ride_detail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                count_next_click++;
+                if(count_next_click==1){
+                    prev_ride_detail.setVisibility(View.VISIBLE);
+                }
+                if(count_next_click==2){
+                    next_ride_detail.setVisibility(View.GONE);
+                }
+                viewFlipper.showNext();
             }
         });
 

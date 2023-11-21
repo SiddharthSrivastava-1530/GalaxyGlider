@@ -3,248 +3,295 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/company_details"
-    tools:context=".Activities.CompanyDetailsActivity">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fontFamily="@font/inter"
-        android:text="Name"
-        android:textColor="#ACA9A9"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline48"
-        app:layout_constraintEnd_toStartOf="@+id/guideline71"
-        app:layout_constraintStart_toStartOf="@+id/guideline74"
-        app:layout_constraintTop_toTopOf="@+id/guideline82" />
-
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fontFamily="@font/inter"
-        android:gravity="left"
-        android:text="Description"
-        android:textColor="#ACA9A9"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline50"
-        app:layout_constraintEnd_toStartOf="@+id/guideline71"
-        app:layout_constraintStart_toStartOf="@+id/guideline74"
-        app:layout_constraintTop_toTopOf="@+id/guideline49" />
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:cardCornerRadius="200dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline47"
-        app:layout_constraintEnd_toStartOf="@+id/guideline73"
-        app:layout_constraintStart_toStartOf="@+id/guideline74"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/img_company_details"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/spaceship" />
-
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/name_company_details"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:fontFamily="@font/inter"
-        android:text="Nasa"
-        android:textColor="#ffffff"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline49"
-        app:layout_constraintStart_toStartOf="@+id/guideline74"
-        app:layout_constraintTop_toTopOf="@+id/guideline48" />
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline51"
-        app:layout_constraintEnd_toStartOf="@+id/guideline81"
-        app:layout_constraintStart_toStartOf="@+id/guideline74"
-        app:layout_constraintTop_toTopOf="@+id/guideline50">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/desc_company_details"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="NASA stands for National Aeronautics and Space Administration. NASA is a U.S. government agency that is responsible for science and technology related to air and space. The Space Age started in 1957 with the launch of the Soviet satellite Sputnik.NASA opened for business on Oct. 1, 1958. The agency was created to oversee U.S. space exploration and aeronautics research. The administrator is in charge of NASA. The NASA administrator is nominated by the president and confirmed by a vote in the Senate."
-            android:textColor="#ffffff"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline49"
-            app:layout_constraintEnd_toStartOf="@+id/guideline71"
-            app:layout_constraintStart_toStartOf="@+id/guideline74"
-            app:layout_constraintTop_toTopOf="@+id/guideline48" />
+            android:background="@color/blackPrimaryShade"
+            tools:context=".Activities.CompanyDetailsActivity">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@null"
+                android:fontFamily="@font/inter"
+                android:gravity="center"
+                android:text="Company Details"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/guideline47"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/inter"
+                android:gravity="left"
+                android:text="About Us"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline50"
+                app:layout_constraintStart_toStartOf="@+id/guideline74"
+                app:layout_constraintTop_toTopOf="@+id/guideline49" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/inter"
+                android:gravity="left"
+                android:text="Contact Us Here"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline74"
+                app:layout_constraintTop_toBottomOf="@+id/desc_company_details" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView6"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:backgroundTint="@color/usegray"
+                app:cardCornerRadius="200dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline146"
+                app:layout_constraintStart_toStartOf="@+id/guideline74"
+                app:layout_constraintTop_toTopOf="@+id/guideline73">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="200dp">
+
+                    <ImageView
+                        android:id="@+id/img_company_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/spaceship" />
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/name_company_details"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/inter"
+                android:text="Nasa"
+                android:textColor="#FF5252"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cardView6"
+                app:layout_constraintTop_toTopOf="@+id/guideline144" />
+
+
+            <TextView
+                android:id="@+id/desc_company_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
+                android:text="NASA stands for National Aeronautics and Space Administration. NASA is a U.S. government agency that is responsible for science and technology related to air and space. The Space Age started in 1957 with the launch of the Soviet satellite Sputnik.NASA opened for business on Oct. 1, 1958. The agency was created to oversee U.S. space exploration and aeronautics research. The administrator is in charge of NASA. The NASA administrator is nominated by the president and confirmed by a vote in the Senate."
+                android:textColor="@color/usegray"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline81"
+                app:layout_constraintStart_toStartOf="@+id/guideline74"
+                app:layout_constraintTop_toTopOf="@+id/guideline50" />
+
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/inter"
+                android:text="www.spaceX.com"
+                android:textColor="@color/usegray"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline74"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:fontFamily="@font/inter"
+                android:text="spaceX@gmail.com"
+                android:textColor="@color/usegray"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/guideline74"
+                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView3"
+                android:layout_width="200dp"
+                android:layout_marginRight="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#333333"
+                app:cardCornerRadius="80dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10">
+
+                <TextView
+                    android:id="@+id/verify_company_details_activity_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/inter"
+                    android:gravity="center"
+                    android:text="Click to authorize company:"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/seePdf_tv_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter"
+                android:gravity="center"
+                android:text="@string/LicenceString"
+                android:textColor="#0075FF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginLeft="7dp"
+                app:layout_constraintStart_toEndOf="@+id/cardView3"
+                app:layout_constraintTop_toTopOf="@+id/cardView3" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline47"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.07" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline144"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.13" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline73"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.1" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline146"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.22" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline49"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.26" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.3" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.61" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline54"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.92" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline74"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.12" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline84"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.08" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline81"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.9" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline149"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline83"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.71" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:backgroundTint="#333333"
-        app:cardCornerRadius="80dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline53"
-        app:layout_constraintEnd_toStartOf="@+id/guideline83"
-        app:layout_constraintStart_toStartOf="@+id/guideline84"
-        app:layout_constraintTop_toTopOf="@+id/guideline52">
-
-        <TextView
-            android:id="@+id/verify_company_details_activity_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:fontFamily="@font/inter"
-            android:text="Click to authorize company:"
-            android:textColor="#ffffff"
-            android:textSize="16sp" />
-
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/seePdf_tv_details"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fontFamily="@font/inter"
-        android:gravity="center"
-        android:text="@string/LicenceString"
-        android:textColor="#0075FF"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline53"
-        app:layout_constraintEnd_toStartOf="@+id/guideline81"
-        app:layout_constraintStart_toStartOf="@+id/guideline83"
-        app:layout_constraintTop_toTopOf="@+id/guideline52" />
 
     <TextView
         android:id="@+id/seeAllSpaceShips_tv_company_details"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:fontFamily="@font/inter_semibold"
         android:gravity="center"
+        android:padding="10dp"
         android:text="Gliders"
         android:textColor="#000000"
         android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline54" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline47"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.37" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline48"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.44" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline82"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline49"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.54" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline51"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.82" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline52"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.86" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline53"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.89" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline54"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.92" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline71"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.7" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline74"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.12" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline84"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.08" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline81"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.9" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline73"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.79" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline83"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.71" />
 </androidx.constraintlayout.widget.ConstraintLayout>
