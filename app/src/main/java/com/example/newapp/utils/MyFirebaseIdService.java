@@ -1,5 +1,6 @@
 package com.example.newapp.utils;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,7 +28,7 @@ public class MyFirebaseIdService extends FirebaseMessagingService {
 
                         // if token generation is unsuccessful generate Toast message and return;
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "new token failed", Toast.LENGTH_SHORT).show();
+                            Log.e("MyFirebaseIdService","new token failed");
                             return;
                         }
 

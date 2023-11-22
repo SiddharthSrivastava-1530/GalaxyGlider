@@ -113,18 +113,36 @@ public class ShowSeatScheduleActivity extends AppCompatActivity {
 
     }
 
+    private void setSlotSeatCountView() {
+        String availableSeatCount1 = getAvailableSeatCount(currentSpaceShip.getSlot1());
 
-    private void setSlotSeatCountView(){
 
-        slots[0].setText(getAvailableSeatCount(currentSpaceShip.getSlot1()));
-        slots[1].setText(getAvailableSeatCount(currentSpaceShip.getSlot2()));
-        slots[2].setText(getAvailableSeatCount(currentSpaceShip.getSlot3()));
-        slots[3].setText(getAvailableSeatCount(currentSpaceShip.getSlot4()));
-        slots[4].setText(getAvailableSeatCount(currentSpaceShip.getSlot5()));
-        slots[5].setText(getAvailableSeatCount(currentSpaceShip.getSlot6()));
-        slots[6].setText(getAvailableSeatCount(currentSpaceShip.getSlot7()));
-        slots[7].setText(getAvailableSeatCount(currentSpaceShip.getSlot8()));
+        String availableSeatCount2 = getAvailableSeatCount(currentSpaceShip.getSlot2());
+        String availableSeatCount3 = getAvailableSeatCount(currentSpaceShip.getSlot3());
+        String availableSeatCount4 = getAvailableSeatCount(currentSpaceShip.getSlot4());
+        String availableSeatCount5 = getAvailableSeatCount(currentSpaceShip.getSlot5());
+        String availableSeatCount6 = getAvailableSeatCount(currentSpaceShip.getSlot6());
+        String availableSeatCount7 = getAvailableSeatCount(currentSpaceShip.getSlot7());
+        String availableSeatCount8 = getAvailableSeatCount(currentSpaceShip.getSlot8());
 
+        String[] seatCounts = {
+                availableSeatCount1,
+                availableSeatCount2,
+                availableSeatCount3,
+                availableSeatCount4,
+                availableSeatCount5,
+                availableSeatCount6,
+                availableSeatCount7,
+                availableSeatCount8
+        };
+
+        for (int i = 0; i < seatCounts.length; i++) {
+            String availableSeats = seatCounts[i];
+            int color = (Integer.parseInt(availableSeats) <= 4) ? Color.RED : Color.GREEN;
+
+            slots[i].setText(availableSeats);
+            slots[i].setTextColor(color);
+        }
     }
 
     private String getAvailableSeatCount(String seatsAvailable){

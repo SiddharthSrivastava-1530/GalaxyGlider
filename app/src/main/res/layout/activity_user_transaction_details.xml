@@ -1,29 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_width="match_parent"
     android:background="@color/blackPrimaryShade">
 
     <TextView
-        android:id="@+id/recurring_ride_end_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/rating_and_review_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fontFamily="@font/inter_semibold"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:text="Rating and Review"
+        android:textColor="@color/black"
+        android:padding="10dp"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/complete_transaction_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fontFamily="@font/inter_semibold"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:text="Journey Complete"
+        android:textColor="@color/black"
+        android:padding="10dp"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_insetEdge="bottom"
+        android:background="@color/blackPrimaryShade">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/rating_and_review_tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:fontFamily="@font/inter"
+                android:gravity="center"
+                android:layout_gravity="bottom|center"
+                android:text="Rating and Review"
+                android:textColor="@color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/blackPrimaryShade"
+                android:progressBackgroundTint="@color/black"
+                android:progressTint="@color/rating_color"
+                android:rating="2"
+                android:stepSize="0.5" />
+
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_width="wrap_content"
+                android:layout_height="135dp"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/user_review_et"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Enjoyed the ride. Provide feedback here..."
+                    android:inputType="textMultiLine"
+                    android:fontFamily="@font/inter"
+                    android:paddingStart="20dp"
+                    android:paddingRight="12dp"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/gray"
+                    android:textCursorDrawable="@null"
+                    android:textSize="20sp" />
+
+            </ScrollView>
+
+            <ScrollView
+                android:visibility="gone"
+                android:id="@+id/scrollView3"
+                android:layout_width="match_parent"
+                android:paddingStart="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/user_review_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/submit_review_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="Submit"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:textSize="28sp"
+                android:textStyle="bold"/>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="734dp"
+    android:background="@color/blackPrimaryShade"
+    app:layout_dodgeInsetEdges="bottom">
 
     <TextView
         android:id="@+id/share_ride_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginRight="8dp"
-        android:text="Share App"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/font_awesome_solid"
+        android:text="&#xf14d;"
         android:textColor="@color/white"
-        android:textSize="24dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline48"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView18"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/recurring_ride_end_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guideline150"
+        app:layout_constraintStart_toStartOf="@+id/guideline155" />
 
     <TextView
         android:id="@+id/textView18"
@@ -40,29 +175,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/line_tv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/guideline162"
-        app:layout_constraintTop_toTopOf="@+id/guideline163" />
-
-    <TextView
-        android:id="@+id/rating_and_review_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:background="@null"
-        android:fontFamily="@font/inter"
-        android:gravity="center"
-        android:text="Rating and Review"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline154"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
     <TextView
@@ -118,27 +230,27 @@
 
     <TextView
         android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:fontFamily="@font/font_awesome_solid"
         android:gravity="center"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="7dp"
         android:text="&#xf7a2;"
         android:textColor="@color/impureWhite"
-        android:textSize="22sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline148"
         app:layout_constraintStart_toStartOf="@+id/guideline53" />
 
     <TextView
         android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:fontFamily="@font/font_awesome_solid"
         android:gravity="center"
-        android:layout_marginBottom="3dp"
+        android:layout_marginBottom="7dp"
         android:text="&#xf7a2;"
         android:textColor="@color/impureWhite"
-        android:textSize="22sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline157"
         app:layout_constraintStart_toStartOf="@+id/guideline53" />
 
@@ -149,7 +261,7 @@
         android:gravity="center"
         android:text="&#xf063;"
         android:textColor="@color/impureWhite"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="7dp"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textView15"
         app:layout_constraintStart_toStartOf="@+id/guideline53"
@@ -186,7 +298,7 @@
         android:fontFamily="@font/inter"
         android:text="Jupiter"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline148"
         app:layout_constraintStart_toStartOf="@+id/guideline155" />
 
@@ -208,7 +320,7 @@
         android:fontFamily="@font/inter"
         android:text="Uranus"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline157"
         app:layout_constraintStart_toStartOf="@+id/guideline155" />
 
@@ -229,7 +341,7 @@
         android:layout_height="wrap_content"
         android:text="RefId:"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline151"
         app:layout_constraintStart_toStartOf="@+id/guideline53" />
 
@@ -241,10 +353,10 @@
         android:fontFamily="@font/inter"
         android:text="7637625638"
         android:textColor="@color/white"
+        android:layout_marginBottom="3dp"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline151"
-        app:layout_constraintStart_toStartOf="@+id/guideline155"
-        app:layout_constraintTop_toTopOf="@+id/textView8" />
+        app:layout_constraintStart_toStartOf="@+id/guideline158" />
 
     <TextView
         android:id="@+id/isOngoing_transaction_details"
@@ -254,8 +366,8 @@
         android:fontFamily="@font/inter"
         android:text="Ongoing"
         android:textColor="#FF5252"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline160"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline150"
         app:layout_constraintStart_toEndOf="@+id/status_tv" />
 
     <TextView
@@ -278,9 +390,9 @@
         android:fontFamily="@font/inter"
         android:text="Status:"
         android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline160"
-        app:layout_constraintStart_toStartOf="@+id/guideline158" />
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline150"
+        app:layout_constraintStart_toStartOf="@+id/guideline155" />
 
     <TextView
         android:id="@+id/textView19"
@@ -294,98 +406,6 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline150"
         app:layout_constraintStart_toStartOf="@+id/guideline53" />
 
-    <TextView
-        android:id="@+id/complete_transaction_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:fontFamily="@font/inter_semibold"
-        android:gravity="center"
-        android:text="Journey Complete"
-        android:textColor="@color/black"
-        android:padding="10dp"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/white"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/blackPrimaryShade"
-        android:progressBackgroundTint="@color/black"
-        android:progressTint="@color/rating_color"
-        android:rating="2"
-        android:stepSize="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline159" />
-
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="135dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar">
-
-        <EditText
-            android:id="@+id/user_review_et"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:hint="Enjoyed the ride. Provide feedback here..."
-            android:inputType="textMultiLine"
-            android:fontFamily="@font/inter"
-            android:paddingStart="20dp"
-            android:paddingRight="12dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/gray"
-            android:textSize="20sp" />
-
-    </ScrollView>
-
-    <ScrollView
-        android:visibility="gone"
-        android:id="@+id/scrollView3"
-        android:layout_width="352dp"
-        android:layout_height="138dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar">
-
-        <TextView
-            android:id="@+id/user_review_tv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/white"
-            android:textSize="16sp"/>
-
-    </ScrollView>
-
-    <TextView
-        android:id="@+id/submit_review_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:fontFamily="@font/inter_semibold"
-        android:gravity="center"
-        android:text="Submit"
-        android:textColor="@color/black"
-        android:padding="10dp"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline48"
@@ -399,91 +419,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.18" />
+        app:layout_constraintGuide_percent="0.27" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline151"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.12" />
+        app:layout_constraintGuide_percent="0.17" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline71"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.24" />
+        app:layout_constraintGuide_percent="0.37" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline82"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3" />
+        app:layout_constraintGuide_percent="0.47" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline161"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.36" />
+        app:layout_constraintGuide_percent="0.57" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline148"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.43" />
+        app:layout_constraintGuide_percent="0.67" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline157"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.77" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline150"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline162"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.59" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline163"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.588" />
+        app:layout_constraintGuide_percent="0.87" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline160"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.66" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline154"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline159"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.97" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline53"
@@ -508,3 +500,5 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

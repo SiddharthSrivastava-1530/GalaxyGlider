@@ -51,8 +51,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         holder.distanceTextView.setText(transactions.get(position).getDistance()+" ly");
         String priceOfJour = String.valueOf(transactions.get(position).getTotalFare());
-        double priceVal = Double.parseDouble(priceOfJour);
-        holder.totalCostTextView.setText("$"+getLastTwoDigitsBeforeDecimal(priceVal));
+        int priceVal = (int) Double.parseDouble(priceOfJour);
+        holder.totalCostTextView.setText("$"+priceVal);
         holder.transactionIdTextView.setText("RefId: "+transactions.get(position).getTransactionId());
         String time = getDateFromTime(transactions.get(position).getTransactionTime());
         holder.timeTextView.setText(time);
@@ -137,20 +137,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     private String getMonthString(int month) {
         String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         return months[month];
-    }
-
-    private String getLastTwoDigitsBeforeDecimal(double number) {
-        // Convert the double to a string
-        String numberString = String.valueOf(number);
-
-        // Find the index of the decimal point
-        int decimalIndex = numberString.indexOf('.');
-
-        // Extract the substring containing the last two digits before the decimal
-        String lastTwoDigits = numberString.substring(decimalIndex - 2, decimalIndex);
-
-        // Parse the substring to an integer
-        return String.valueOf(lastTwoDigits);
     }
 
 }

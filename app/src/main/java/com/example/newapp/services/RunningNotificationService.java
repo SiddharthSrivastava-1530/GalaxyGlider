@@ -3,13 +3,16 @@ package com.example.newapp.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.newapp.Activities.AllTransactionsList;
 import com.example.newapp.R;
 
 public class RunningNotificationService extends Service {
@@ -22,18 +25,35 @@ public class RunningNotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannel();
-//        Intent notificationIntent = new Intent(this, MoodFragment.class);
-//        PendingIntent pendingIntent =
-//                PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        Notification notification =
-                new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setContentTitle("Your Ride")
-                        .setContentText("You are travelling")
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-//                        .setContentIntent(pendingIntent)
-                        .setTicker(getText(R.string.app_name))
-                        .build();
+
+        String companyName = intent.getStringExtra("companyName");
+        String spaceShipName = intent.getStringExtra("spaceShipName");
+        String fromPlanet = intent.getStringExtra("fromPlanet");
+        String toPlanet = intent.getStringExtra("toPlanet");
+        String distance = intent.getStringExtra("distance");
+
+        Intent notificationIntent = new Intent(this, AllTransactionsList.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(notificationIntent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("New Journey with " + companyName)
+                .setContentText("You are on an exciting space adventure")
+                .setTicker(getText(R.string.app_name))
+                .setContentIntent(pendingIntent)  // Set the modified PendingIntent here
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Space Ship: " + spaceShipName + "\n"
+                                + "Welcome to the exciting journey in space!\n"
+                                + "Journey Details:\n"
+                                + "From: " + fromPlanet + "\n"
+                                + "To: " + toPlanet + "\n"
+                                + "Distance: " + distance))
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        Notification notification = builder.build();
 
         startForeground(1, notification);
 

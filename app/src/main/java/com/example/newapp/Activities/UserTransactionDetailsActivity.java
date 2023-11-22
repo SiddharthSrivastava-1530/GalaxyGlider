@@ -29,6 +29,7 @@ import com.example.newapp.utils.Client;
 import com.example.newapp.utils.MyResponse;
 import com.example.newapp.utils.ServiceSettingsUtil;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -96,11 +97,17 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
     private Float rating;
     private String invoiceUrl;
     private ScrollView scrollView;
+
+    private ScrollView scrollView2;
     private TextView rating_and_review_tv;
     private TextView status_tv;
     private TextView invoiceInfo;
     private TextView invoiceLink;
-    private TextView line_tv;
+
+    private BottomSheetBehavior bottomSheetBehavior;
+
+    private TextView rating_tv2;
+
     private APIService apiService;
     private String token;
     private int countSpaceShipsOnSamePath;
@@ -131,15 +138,34 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         submitReview_tv = findViewById(R.id.submit_review_tv);
         rating_and_review_tv = findViewById(R.id.rating_and_review_tv);
         scrollView = findViewById(R.id.scrollView3);
+        scrollView2 = findViewById(R.id.scrollView2);
         status_tv = findViewById(R.id.status_tv);
         invoiceInfo = findViewById(R.id.textView19);
         invoiceLink = findViewById(R.id.invoice_tv);
-        line_tv = findViewById(R.id.line_tv);
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
         shareRideTextView = findViewById(R.id.share_ride_tv);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
         scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 60, false);
+
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        rating_tv2 = findViewById(R.id.rating_and_review_tv2);
+
+        rating_and_review_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
+
+        rating_tv2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
 
         Intent intent = getIntent();
         currentTransaction = (Transaction) intent.getSerializableExtra("transaction");
@@ -159,12 +185,12 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
             status_tv.setVisibility(View.GONE);
             invoiceLink.setVisibility(View.VISIBLE);
             invoiceInfo.setVisibility(View.VISIBLE);
-            line_tv.setVisibility(View.VISIBLE);
 
             if (currentTransaction.getReview().getTime() == 0) {
                 reviews_tv.setVisibility(View.GONE);
             } else {
                 scrollView.setVisibility(View.VISIBLE);
+                scrollView2.setVisibility(View.GONE);
                 reviews_et.setVisibility(View.GONE);
                 submitReview_tv.setVisibility(View.GONE);
                 ratingBar.setFocusable(false);
@@ -177,7 +203,6 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
             reviews_tv.setVisibility(View.GONE);
             invoiceTextView.setVisibility(View.GONE);
             rating_and_review_tv.setVisibility(View.GONE);
-            line_tv.setVisibility(View.GONE);
         }
 
         completeJourneyTextView.setOnClickListener(new View.OnClickListener() {

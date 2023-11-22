@@ -116,7 +116,8 @@ public class SelectSlotsActivity extends AppCompatActivity {
     private void toggleBackground(TextView textView, int position) {
         int currentBackgroundColor = ((ColorDrawable) textView.getBackground()).getColor();
         int targetColor = Color.parseColor("#FF1744");
-        int newBackgroundColor = (currentBackgroundColor == targetColor) ? Color.GREEN : targetColor;
+        int greenColor = Color.parseColor("#26A347");
+        int newBackgroundColor = (currentBackgroundColor == targetColor) ? greenColor : targetColor;
         // Set the new background color
         textView.setBackgroundColor(newBackgroundColor);
         if(slotsSelected.charAt(position)=='0'){
