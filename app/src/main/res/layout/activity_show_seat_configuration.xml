@@ -8,6 +8,18 @@
     tools:context=".Activities.SeatConfigurationActivity">
 
     <TextView
+        android:id="@+id/textView21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Do you wish to repeat this ride?"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline129"
+        app:layout_constraintEnd_toStartOf="@+id/guideline119"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline109" />
+
+    <TextView
         android:id="@+id/prev_ride_detail"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
@@ -109,18 +121,18 @@
         android:background="@drawable/single_seat"
         app:layout_constraintBottom_toTopOf="@+id/guideline104"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline103" />
 
     <TextView
         android:id="@+id/seat1_show_trans"
         android:layout_width="56dp"
         android:layout_height="70dp"
-        android:visibility="visible"
         android:background="@drawable/transparent_seat"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline104"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline103" />
 
     <TextView
@@ -147,15 +159,18 @@
 
 
     <TextView
+        android:id="@+id/select_seat_for_ride_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter"
+        android:gravity="center"
         android:text="Select seats for your ride"
-        android:textColor="#ffffff"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline118"
-        app:layout_constraintEnd_toStartOf="@+id/guideline119"
-        app:layout_constraintStart_toStartOf="@+id/guideline111" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline125" />
 
 
     <TextView
@@ -164,21 +179,19 @@
         android:layout_height="40dp"
         android:visibility="gone"
         android:background="@drawable/baseline_fastfood_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline105"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline104" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
         android:id="@+id/food_not_tv_show"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:visibility="visible"
         android:background="@drawable/food_not"
-        app:layout_constraintBottom_toTopOf="@+id/guideline105"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline104" />
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
 
     <TextView
@@ -187,10 +200,10 @@
         android:layout_height="40dp"
         android:visibility="gone"
         android:background="@drawable/baseline_music_note_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline106"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline105" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintEnd_toStartOf="@+id/guideline110"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
         android:id="@+id/music_not_tv_show"
@@ -198,10 +211,10 @@
         android:layout_height="40dp"
         android:background="@drawable/music_not"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline106"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline105" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintEnd_toStartOf="@+id/guideline110"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
         android:id="@+id/sleep_tv_show"
@@ -209,10 +222,10 @@
         android:layout_height="40dp"
         android:background="@drawable/sleep"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline107"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline106" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintEnd_toStartOf="@+id/guideline112"
+        app:layout_constraintStart_toStartOf="@+id/guideline110"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
         android:id="@+id/sleep_not_tv_show"
@@ -220,10 +233,10 @@
         android:layout_height="40dp"
         android:background="@drawable/sleep_not"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline107"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline106" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintEnd_toStartOf="@+id/guideline112"
+        app:layout_constraintStart_toStartOf="@+id/guideline110"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
         android:id="@+id/fitness_tv_show"
@@ -231,10 +244,9 @@
         android:layout_height="40dp"
         android:background="@drawable/fitness"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline108"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline107" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintEnd_toStartOf="@+id/guideline119"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
         android:id="@+id/fitness_not_tv_show"
@@ -242,23 +254,23 @@
         android:layout_height="40dp"
         android:background="@drawable/fitness_not"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/guideline108"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline107" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline128"
+        app:layout_constraintEnd_toStartOf="@+id/guideline119"
+        app:layout_constraintTop_toTopOf="@+id/guideline165" />
 
     <TextView
+        android:id="@+id/textView20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter"
-        android:text="Services"
         android:gravity="center"
-        android:textColor="#ffffff"
+        android:text="Services"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline104"
+        app:layout_constraintBottom_toTopOf="@+id/guideline165"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline112"
-        app:layout_constraintTop_toTopOf="@+id/guideline103" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline129" />
 
     <TextView
         android:id="@+id/seat3_show"
@@ -268,18 +280,18 @@
         android:background="@drawable/single_seat"
         app:layout_constraintBottom_toTopOf="@+id/guideline105"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline104" />
 
     <TextView
         android:id="@+id/seat3_show_trans"
         android:layout_width="56dp"
         android:layout_height="70dp"
-        android:visibility="visible"
         android:background="@drawable/transparent_seat"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline105"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline104" />
 
     <TextView
@@ -312,18 +324,18 @@
         android:background="@drawable/single_seat"
         app:layout_constraintBottom_toTopOf="@+id/guideline106"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline105" />
 
     <TextView
         android:id="@+id/seat5_show_trans"
         android:layout_width="56dp"
         android:layout_height="70dp"
-        android:visibility="visible"
         android:background="@drawable/transparent_seat"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline106"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline105" />
 
     <TextView
@@ -378,7 +390,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/guideline107"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline106" />
 
     <TextView
@@ -389,7 +401,7 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline107"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline106" />
 
     <TextView
@@ -422,18 +434,18 @@
         android:background="@drawable/single_seat"
         app:layout_constraintBottom_toTopOf="@+id/guideline109"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline108" />
 
     <TextView
         android:id="@+id/seat11_show_trans"
         android:layout_width="56dp"
         android:layout_height="70dp"
-        android:visibility="visible"
         android:background="@drawable/transparent_seat"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline109"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline108" />
 
     <TextView
@@ -466,25 +478,25 @@
         android:background="@drawable/single_seat"
         app:layout_constraintBottom_toTopOf="@+id/guideline108"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline107" />
 
     <TextView
         android:id="@+id/seat9_show_trans"
         android:layout_width="56dp"
         android:layout_height="70dp"
-        android:visibility="visible"
         android:background="@drawable/transparent_seat"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/guideline108"
         app:layout_constraintEnd_toStartOf="@+id/guideline110"
-        app:layout_constraintStart_toStartOf="@+id/guideline111"
+        app:layout_constraintStart_toStartOf="@+id/guideline153"
         app:layout_constraintTop_toTopOf="@+id/guideline107" />
 
 
     <TextView
         android:id="@+id/confirm_seats"
-        android:layout_width="416dp"
-        android:layout_height="76dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@color/white"
         android:fontFamily="@font/inter_semibold"
         android:gravity="center"
@@ -498,13 +510,12 @@
         app:layout_constraintTop_toTopOf="@+id/guideline113" />
 
 
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline103"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.22" />
+        app:layout_constraintGuide_percent="0.18" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline117"
@@ -518,35 +529,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.14" />
+        app:layout_constraintGuide_percent="0.12" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline118"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.21" />
+        app:layout_constraintGuide_percent="0.18" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline104"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3133" />
+        app:layout_constraintGuide_percent="0.27" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline110"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.29" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline129"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.34" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline111"
@@ -560,7 +564,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline119"
@@ -568,13 +572,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.93" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline130"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.61" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline126"
@@ -595,74 +592,88 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4066" />
+        app:layout_constraintGuide_percent="0.36" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline106"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4999" />
+        app:layout_constraintGuide_percent="0.45" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline107"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5932" />
+        app:layout_constraintGuide_percent="0.54" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline108"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6865" />
+        app:layout_constraintGuide_percent="0.63" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline109"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.7798" />
+        app:layout_constraintGuide_percent="0.72" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline129"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.77" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline165"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.82" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline128"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.87" />
+        app:layout_constraintGuide_percent="0.88" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline113"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_percent="0.94" />
 
     <TextView
         android:id="@+id/no_ride_sharing_message_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
         android:text="Seat sharing not allowed"
         android:textColor="@color/white"
-        android:fontFamily="@font/inter"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline113"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline109" />
+        app:layout_constraintTop_toTopOf="@+id/guideline128" />
 
     <TextView
         android:id="@+id/recurring_ride_selection_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:gravity="center"
         android:fontFamily="@font/inter_semibold"
         android:text="YES"
         android:textColor="@color/white"
-        android:textSize="28dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline109"
-        app:layout_constraintEnd_toStartOf="@+id/guideline119"
-        app:layout_constraintStart_toStartOf="@+id/guideline130"
-        app:layout_constraintTop_toTopOf="@+id/guideline108" />
+        android:textSize="22dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline129"
+        app:layout_constraintStart_toEndOf="@+id/textView21"
+        app:layout_constraintTop_toTopOf="@+id/guideline109" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

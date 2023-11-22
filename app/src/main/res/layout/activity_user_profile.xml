@@ -9,18 +9,6 @@
     tools:context=".Activities.UserProfileActivity">
 
     <TextView
-        android:id="@+id/textView12"
-        android:layout_width="35dp"
-        android:layout_height="30dp"
-        android:fontFamily="@font/font_awesome_solid"
-        android:gravity="center"
-        android:text="&#xf5b7;"
-        android:textColor="@color/impureWhite"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="@+id/guideline80"
-        app:layout_constraintTop_toTopOf="@+id/guideline75" />
-
-    <TextView
         android:id="@+id/textView13"
         android:layout_width="35dp"
         android:layout_height="30dp"
@@ -108,10 +96,10 @@
         android:id="@+id/mode_info1_user_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="top|left"
+        android:gravity="center|left"
         android:text="User"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline79"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline67"
@@ -125,6 +113,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.535" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline130"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.48" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline79"
@@ -208,10 +203,10 @@
         android:id="@+id/email_profile_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="top|left"
+        android:gravity="left|center"
         android:text="Arsh123@gmail.com"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline77"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline67"
@@ -221,15 +216,14 @@
         android:id="@+id/name_profile_et"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="top|left"
+        android:gravity="center"
         android:text="Arsh Jeet Singh"
-        android:textColor="#fff"
-        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline78"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline67"
-        app:layout_constraintTop_toTopOf="@+id/guideline75"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline130" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

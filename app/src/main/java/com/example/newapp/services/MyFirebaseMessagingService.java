@@ -22,9 +22,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    // title and message of notification
-    String title="Heading of notification ", ourmessage = " low rating of company";
-
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
 
@@ -54,8 +51,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),1
                 ,intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
-        title = message.getData().get("Title");
-        ourmessage = message.getData().get("Message");
+        String company = message.getData().get("Title");
+        String spaceShip = message.getData().get("Message");
         Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(),   // changing jpg to bitmap
                 R.drawable.ic_launcher_background);
 
@@ -64,10 +61,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"GalaxyGliderNotification")
                 .setLargeIcon(icon)
                 .setSmallIcon(R.drawable.notification_)
-                .setContentTitle(title)
-                .setContentText(ourmessage)
+                .setContentTitle("Low-Rated Space Ship")
+                .setContentText(company + "'s " + spaceShip + " has been flagged as a low-rated spaceship")
                 .setAutoCancel(true)
-                .setColor(Color.BLUE)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(resultPendingIntent);
 

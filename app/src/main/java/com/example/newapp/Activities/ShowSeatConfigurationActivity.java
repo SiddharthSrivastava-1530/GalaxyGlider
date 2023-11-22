@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,18 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private EditText fromLocation, toLocation, distance;
@@ -78,6 +72,8 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
     private ViewFlipper viewFlipper;
 
+    private TextView show_seat_tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +84,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         count_next_click=0;
 
         viewFlipper = findViewById(R.id.ride_detail_viewFlipper);
+        show_seat_tv =findViewById(R.id.select_seat_for_ride_tv);
 
         fromLocation = findViewById(R.id.dept_et);
         toLocation = findViewById(R.id.dest_et);
@@ -143,6 +140,48 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         selectedSlotNumber = intent.getStringExtra("slot_number");
         companyId = intent.getStringExtra("companyID");
 
+        viewFlipper.setFlipInterval(2000);
+        viewFlipper.startFlipping();
+
+        fromLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Disable auto-start when EditText has focus, enable otherwise
+                if(hasFocus){
+                    viewFlipper.stopFlipping();
+                }
+                else{
+                    viewFlipper.startFlipping();
+                }
+            }
+        });
+
+        toLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Disable auto-start when EditText has focus, enable otherwise
+                if(hasFocus){
+                    viewFlipper.stopFlipping();
+                }
+                else{
+                    viewFlipper.startFlipping();
+                }
+            }
+        });
+
+        distance.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // Disable auto-start when EditText has focus, enable otherwise
+                if(hasFocus){
+                    viewFlipper.stopFlipping();
+                }
+                else{
+                    viewFlipper.startFlipping();
+                }
+            }
+        });
+
 //        distance.setText("123");
 //        fromLocation.setText("dis");
 //        toLocation.setText("dis");
@@ -159,12 +198,12 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         selectRecurringTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(selectRecurringTextView.getText().toString().equals("YES")){
+                if(selectRecurringTextView.getText().toString().equals("NO")){
                     isRideRecurring = true;
-                    selectRecurringTextView.setText("NO");
+                    selectRecurringTextView.setText("YES");
                 } else {
                     isRideRecurring = false;
-                    selectRecurringTextView.setText("YES");
+                    selectRecurringTextView.setText("NO");
                 }
             }
         });
@@ -172,6 +211,8 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         prev_ride_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                viewFlipper.setInAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_in_left);
+                viewFlipper.setOutAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_out_right);
                 count_next_click--;
                 if(count_next_click<2){
                     next_ride_detail.setVisibility(View.VISIBLE);
@@ -186,6 +227,8 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         next_ride_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                viewFlipper.setInAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_in_right);
+                viewFlipper.setOutAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_out_left);
                 count_next_click++;
                 if(count_next_click==1){
                     prev_ride_detail.setVisibility(View.VISIBLE);
@@ -395,6 +438,9 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                 }
             });
 
+        }
+        else{
+            show_seat_tv.setText("Seats for your ride");
         }
 
 

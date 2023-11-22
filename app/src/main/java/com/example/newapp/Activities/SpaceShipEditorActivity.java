@@ -88,11 +88,11 @@ public class SpaceShipEditorActivity extends AppCompatActivity {
         rideSharingTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (rideSharingTextView.getText().toString().equals("YES")) {
-                    rideSharingTextView.setText("NO");
+                if (rideSharingTextView.getText().toString().equals("NO")) {
+                    rideSharingTextView.setText("YES");
                     haveRideSharing = true;
                 } else {
-                    rideSharingTextView.setText("YES");
+                    rideSharingTextView.setText("NO");
                     haveRideSharing = false;
                 }
             }
