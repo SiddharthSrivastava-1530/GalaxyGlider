@@ -1,4 +1,4 @@
-package com.example.newapp.utils;
+package com.example.newapp.services;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

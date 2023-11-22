@@ -56,7 +56,6 @@ public class AllListActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         getSupportActionBar().hide();
-        UpdateToken();
 
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
@@ -144,6 +143,10 @@ public class AllListActivity extends AppCompatActivity {
             }
         });
 
+        if(loginMode.equals("admin")) {
+            UpdateToken();
+        }
+
     }
 
     //Updating the user tokens to send notifications
@@ -221,7 +224,7 @@ public class AllListActivity extends AppCompatActivity {
             // Getting data about user from database.
             FirebaseDatabase.getInstance().getReference(key + "/" +
                             FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (loginMode.equals("admin")) {

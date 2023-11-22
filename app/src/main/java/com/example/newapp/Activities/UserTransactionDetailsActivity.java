@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,10 +24,11 @@ import android.widget.Toast;
 import com.example.newapp.DataModel.Data;
 import com.example.newapp.DataModel.NotificationSender;
 import com.example.newapp.R;
-import com.example.newapp.utils.APIService;
+import com.example.newapp.services.APIService;
 import com.example.newapp.utils.Client;
 import com.example.newapp.utils.MyResponse;
 import com.example.newapp.utils.ServiceSettingsUtil;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,6 +42,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.widget.RatingBar;
@@ -50,14 +53,19 @@ import com.example.newapp.DataModel.Transaction;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class UserTransactionDetailsActivity extends AppCompatActivity {
+public class UserTransactionDetailsActivity extends AppCompatActivity implements PaymentResultListener {
 
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
     @SuppressLint("SimpleDateFormat")
@@ -79,6 +87,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     private TextView completeJourneyTextView;
     private TextView endRecurringRideTextView;
     private TextView invoiceTextView;
+    private TextView shareRideTextView;
     private Transaction currentTransaction;
     private SpaceShip transactionSpaceShip;
     private String chosenSeatConfig;
@@ -86,22 +95,17 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     private ArrayList<Transaction> transactionArrayList;
     private Float rating;
     private String invoiceUrl;
-
     private ScrollView scrollView;
-
     private TextView rating_and_review_tv;
-
     private TextView status_tv;
-
     private TextView invoiceInfo;
-
     private TextView invoiceLink;
-
     private TextView line_tv;
-
     private APIService apiService;
-
     private String token;
+    private int countSpaceShipsOnSamePath;
+    private float basicPay, serviceCharge, spaceTax , dynamicTrafficCost, totalAmount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,9 +114,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-        token ="c_dGJ7q4TBeVhkJdHGr7U-:APA91bFd4-WX3dP1-EIF_WeZ9TtGrOf5Vvb5TkBb8uiGZo40EFC1CJhG9UBCXHjMoItUiDxvDovUyzD1NDifSJWlZb56oKfmViYtNjpXLDsRWe3XxBltDCK5uSrt-Ldjx5kWogMmT7EU";
 
-//        sendNotifications(token,"Low Rated Companies","There are some low rated companies.");
 
         companyNameTextView = findViewById(R.id.companyName_transaction_details);
         spaceShipNameTextView = findViewById(R.id.spaceShipName_transaction_details);
@@ -135,6 +137,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         line_tv = findViewById(R.id.line_tv);
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
+        shareRideTextView = findViewById(R.id.share_ride_tv);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
         scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 60, false);
 
@@ -144,9 +147,10 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         transactionArrayList = new ArrayList<>();
 
         setDataViews();
+        spaceShipDensityCount();
         attachSeatsListener();
 
-        if(!currentTransaction.isTransactionRecurring()){
+        if (!currentTransaction.isTransactionRecurring()) {
             endRecurringRideTextView.setVisibility(View.GONE);
         }
 
@@ -179,7 +183,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         completeJourneyTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateSeats();
+                onPaymentSuccess(UUID.randomUUID().toString());
             }
         });
 
@@ -210,7 +214,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse(currentTransaction.getInvoiceUrl()), "application/pdf");
-                if(!currentTransaction.getInvoiceUrl().isEmpty()) {
+                if (!currentTransaction.getInvoiceUrl().isEmpty()) {
                     startActivity(intent);
                 } else {
                     Toast.makeText(UserTransactionDetailsActivity.this, "No invoice available",
@@ -219,7 +223,90 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             }
         });
 
+        shareRideTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String message = "Guess what? I'm embarking on a cosmic ride through the galaxy, " +
+                        "and I want to share the details of this interstellar journey with you.\n" +
+                        "\n" +
+                        "\uD83C\uDF0D Journey: From " + currentTransaction.getDeparture()
+                        + " to " + currentTransaction.getDestination() + "\n" +
+                        "\uD83D\uDD52 Departure Time: " + getDateFromTime(currentTransaction.getTransactionTime()) + "\n"
+                        + "\uD83D\uDE80 Spaceship Model: " + currentTransaction.getSpaceShipName() +
+                        "\n\n Emergency Contact:\n" +
+                        "\uD83D\uDCDE Spaceship Hotline: 9056810273\n" +
+                        " Let's make this ride a space-tacular adventure together! \uD83D\uDEF8\uD83D\uDCAB" +
+                        " Safe travels across the cosmos!\n" + "\n" +
+                        "#SpaceRide #GalaxyGlider #OutOfThisWorld.";
+
+                // Creating a share intent
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+                // shareIntent.setPackage("com.whatsapp");
+                startActivity(Intent.createChooser(shareIntent, "Share using"));
+            }
+        });
+
     }
+
+
+    private void startPayment() {
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_YEx4Fc8oJfPIUu");
+        checkout.setImage(R.drawable.checkout_logo);
+
+        final Activity activity = this;
+
+        try {
+            JSONObject options = new JSONObject();
+            String amount = "6";
+            amount = getIntent().getStringExtra("amt");
+            options.put("name", "Galaxy Glider");
+            options.put("description", "description");
+            options.put("theme.color", "#000000");
+            options.put("currency", "INR");
+            options.put("amount", amount);
+            options.put("prefill.email", "as.nishu18@gmail.com");
+//            options.put("prefill.contact","8707279750");
+            JSONObject retryObj = new JSONObject();
+            checkout.open(activity, options);
+        } catch (Exception e) {
+            Log.e("TAG", "Error in starting Razorpay Checkout", e);
+        }
+    }
+
+
+    @Override
+    public void onPaymentSuccess(String s) {
+//        Checkout.clearUserData(this);
+        updateSeats();
+        Log.d("onSUCCESS", "onPaymentSuccess: " + s);
+    }
+
+
+    // if payment fails redirect user to current activity.
+    @Override
+    public void onPaymentError(int i, String s) {
+        Log.d("onERROR", "onPaymentError: " + s);
+    }
+
+
+    private float calculateFair(int countOfGliders) {
+        countOfGliders++; // glider itself is a source of traffic.
+        float journeyDistance = Float.parseFloat(currentTransaction.getDistance());
+        float basePay = 1000;
+        float pricePerLY = transactionSpaceShip.getPrice();
+        basicPay = (pricePerLY * journeyDistance);
+        serviceCharge = 0.18f * basicPay;
+        dynamicTrafficCost = (countOfGliders / 100.0f) * basePay;
+        float netCost = (dynamicTrafficCost) + basicPay + (serviceCharge);
+        spaceTax = .02f * netCost;
+        totalAmount = netCost + spaceTax;
+        return totalAmount;
+    }
+
 
     private void setDataViews() {
 
@@ -227,14 +314,13 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         companyNameTextView.setText(currentTransaction.getCompanyName());
         fromTextView.setText(currentTransaction.getDeparture());
         toTextView.setText(currentTransaction.getDestination());
-        distanceTextView.setText(currentTransaction.getDistance()+" ly");
-        totalCostTextView.setText("$"+String.valueOf(currentTransaction.getTotalFare()));
+        distanceTextView.setText(currentTransaction.getDistance() + " ly");
+        totalCostTextView.setText("$" + String.valueOf(currentTransaction.getTotalFare()));
         transactionIdTextView.setText(currentTransaction.getTransactionId());
         String transaction_complete = String.valueOf(currentTransaction.isTransactionComplete());
-        if(transaction_complete.equals("false")){
+        if (transaction_complete.equals("false")) {
             isTransactionComplete_tv.setText("Ongoing");
-        }
-        else{
+        } else {
             isTransactionComplete_tv.setText("");
         }
 
@@ -242,6 +328,21 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
             ratingBar.setRating(Float.parseFloat(currentTransaction.getReview().getRating()));
             reviews_tv.setText(currentTransaction.getReview().getReview());
         }
+
+        FirebaseDatabase.getInstance().getReference("Tokens/V7pthYVNJ7c24rUfNumgT2W6JDs2/token")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        token = snapshot.getValue().toString();
+                        Log.e("token", token );
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
     }
 
@@ -298,6 +399,15 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
 
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions")
                     .child(currentTransaction.getTransactionId());
+
+
+            databaseReference.child("totalFare").setValue(calculateFair(countSpaceShipsOnSamePath))
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
 
             databaseReference.child("transactionComplete").setValue(true)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -454,13 +564,13 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
     }
 
 
-    private String updatedCompanyRating(SpaceShip currentSpaceShip) {
+    private float updatedCompanyRating(SpaceShip currentSpaceShip) {
         float reviewCount = 0;
         if (currentSpaceShip.getTransactionIds() != null) {
             reviewCount = currentSpaceShip.getTransactionIds().size();
         }
         float currentRating = Float.parseFloat(currentSpaceShip.getSpaceShipRating());
-        return String.valueOf(((currentRating * reviewCount) + rating) / (reviewCount + 1));
+        return ((currentRating * reviewCount) + rating) / (reviewCount + 1);
     }
 
 
@@ -475,8 +585,12 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             SpaceShip spaceShip = dataSnapshot.getValue(SpaceShip.class);
                             if (spaceShip != null && spaceShip.getSpaceShipId().equals(currentTransaction.getSpaceShipId())) {
-                                spaceShip.setSpaceShipRating(updatedCompanyRating(spaceShip));
-                                Log.e("updated comp rating", updatedCompanyRating(spaceShip));
+                                float newRating = updatedCompanyRating(spaceShip);
+                                spaceShip.setSpaceShipRating(String.valueOf(newRating));
+                                Log.e("updated comp rating", String.valueOf(newRating));
+                                if(newRating <= 2.0){
+                                    sendNotifications(token, currentTransaction.getCompanyName(),currentTransaction.getSpaceShipName());
+                                }
                             }
                             spaceShipArrayList.add(spaceShip);
                         }
@@ -568,33 +682,32 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         y += 40;
 
         // amount calculation ---- Dynamic Fair
-        double amount = 1248f;
 
         canvas.drawText("Basic Pay ", 20, y, paint);
-        canvas.drawText("20rs/LightYear", 120, y, paint);
+        canvas.drawText(transactionSpaceShip.getPrice() + " $/LightYear", 120, y, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(String.valueOf(decimalFormat.format(amount)), 230, y, paint);
+        canvas.drawText(String.valueOf(basicPay), 230, y, paint);
         paint.setTextAlign(Paint.Align.LEFT);
 
         canvas.drawText("Service Charges", 20, y + 12, paint);
         canvas.drawText("Tax 18%", 120, y + 12, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(decimalFormat.format(amount * 18 / 100), 230, y + 12, paint);
+        canvas.drawText(decimalFormat.format(serviceCharge), 230, y + 12, paint);
         paint.setTextAlign(Paint.Align.LEFT);
 
         canvas.drawText("Additional Charges", 20, y + 24, paint);
-        canvas.drawText("Space Tax 4%", 120, y + 24, paint);
+        canvas.drawText("Space Tax 2%", 120, y + 24, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(decimalFormat.format(amount * 4 / 100), 230, y + 24, paint);
+        canvas.drawText(decimalFormat.format(spaceTax), 230, y + 24, paint);
         paint.setTextAlign(Paint.Align.LEFT);
 
-        canvas.drawText("Trafic Cost", 20, y + 36, paint);
+        canvas.drawText("Traffic Cost", 20, y + 36, paint);
         canvas.drawText("Variable", 120, y + 36, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(decimalFormat.format(amount * 2 / 100), 230, y + 36, paint);
+        canvas.drawText(decimalFormat.format(dynamicTrafficCost), 230, y + 36, paint);
         paint.setTextAlign(Paint.Align.LEFT);
 
-        double totalAmount = amount + amount * 18 / 100 + amount * 4 / 100 + amount * 2 / 100;
+
         canvas.drawText("Total", 20, y + 53, paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText(decimalFormat.format(totalAmount), 230, y + 53, paint);
@@ -704,12 +817,12 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
         int slotNo = Integer.parseInt(currentTransaction.getSlotNo());
         ArrayList<String> nextSeatConfig = spaceShip.getNextSeatConfigurations();
         String seats = nextSeatConfig.get(slotNo);
-        for(int position=0; position<12;position++) {
-            if(currentTransaction.getChosenSeatConfiguration().charAt(position)=='1') {
+        for (int position = 0; position < 12; position++) {
+            if (currentTransaction.getChosenSeatConfiguration().charAt(position) == '1') {
                 seats = setCharAt(seats, position, '1');
             }
         }
-        nextSeatConfig.set(slotNo,seats);
+        nextSeatConfig.set(slotNo, seats);
         return nextSeatConfig;
     }
 
@@ -751,16 +864,72 @@ public class UserTransactionDetailsActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     assert response.body() != null;
                     if (response.body().success != 1) {
-                        Log.e("UserTransactionDetailsActivity","Sorry admin could not be informed. Please try again later.");
-                    }else {
-                        Log.e("UserTransactionDetailsActivity","Admin has been informed.");
+                        Log.e("UserTransactionDetailsActivity", "Sorry admin could not be informed. Please try again later.");
+                    } else {
+                        Log.e("UserTransactionDetailsActivity", "Admin has been informed.");
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<MyResponse> call, Throwable t) {
             }
         });
+    }
+
+    private String getDateFromTime(long currentTimeInMillis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(currentTimeInMillis);
+
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        String dayOfWeekStr = getDayOfWeekString(dayOfWeek);
+
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        String monthStr = getMonthString(month);
+
+        int year = calendar.get(Calendar.YEAR);
+
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        String amPm = (calendar.get(Calendar.AM_PM) == Calendar.AM) ? "AM" : "PM";
+
+        return dayOfWeekStr + ", " + monthStr + " " + day + ", " + String.format("%02d:%02d", hour, minute) + " " + amPm;
+    }
+
+    private String getDayOfWeekString(int dayOfWeek) {
+        String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        return daysOfWeek[dayOfWeek - 1];
+    }
+
+    private String getMonthString(int month) {
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        return months[month];
+    }
+
+    private void spaceShipDensityCount() {
+
+        String from = currentTransaction.getDeparture();
+        String to = currentTransaction.getDestination();
+
+        FirebaseDatabase.getInstance().getReference("transactions/")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Transaction transaction = dataSnapshot.getValue(Transaction.class);
+                            if(transaction.getDeparture().equals(from) && transaction.getDestination().equals(to)){
+                                countSpaceShipsOnSamePath++;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
 }

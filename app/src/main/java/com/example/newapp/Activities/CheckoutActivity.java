@@ -38,7 +38,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class CheckoutActivity extends AppCompatActivity implements PaymentResultListener {
+public class CheckoutActivity extends AppCompatActivity {
     private TextView bookRideButton;
     private String userEmail;
     private String userName;
@@ -89,58 +89,8 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
         attachSpaceShipListener();
 
         String refId = UUID.randomUUID().toString();
-        onPaymentSuccess(refId);
+        updateSeats(refId);
 
-    }
-
-
-    private float calculateFair(int countOfGliders) {
-        float journeyDistance = Float.parseFloat(distance);
-        float basePay = 1000;
-        float pricePerLY = currentSpaceShip.getPrice();
-        float serviceCharges = 20;
-        float totalCost = (countOfGliders / 100.0f) * basePay + pricePerLY * journeyDistance + serviceCharges;
-        return totalCost;
-    }
-
-    private void startPayment() {
-        Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_YEx4Fc8oJfPIUu");
-        checkout.setImage(R.drawable.checkout_logo);
-
-        final Activity activity = this;
-
-        try {
-            JSONObject options = new JSONObject();
-            String amount = "6";
-            amount = getIntent().getStringExtra("amt");
-            options.put("name", "Galaxy Glider");
-            options.put("description", "description");
-            options.put("theme.color", "#000000");
-            options.put("currency", "INR");
-            options.put("amount", amount);
-            options.put("prefill.email", "as.nishu18@gmail.com");
-//            options.put("prefill.contact","8707279750");
-            JSONObject retryObj = new JSONObject();
-            checkout.open(activity, options);
-        } catch (Exception e) {
-            Log.e("TAG", "Error in starting Razorpay Checkout", e);
-        }
-    }
-
-
-    @Override
-    public void onPaymentSuccess(String s) {
-//        Checkout.clearUserData(this);
-        updateSeats(s);
-        Log.d("onSUCCESS", "onPaymentSuccess: " + s);
-    }
-
-
-    // if payment fails redirect user to current activity.
-    @Override
-    public void onPaymentError(int i, String s) {
-        Log.d("onERROR", "onPaymentError: " + s);
     }
 
 
@@ -208,7 +158,7 @@ public class CheckoutActivity extends AppCompatActivity implements PaymentResult
                         Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
                                 companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
                                 chosenSeatConfig, departure, destination, distance, selectedSlotNumber, "",
-                                System.currentTimeMillis(), calculateFair(4), false,
+                                System.currentTimeMillis(), -1.0f, false,
                                 isRideRecurring, review);
 
                         // add transaction to database in node - 'transactions'

@@ -1,6 +1,7 @@
-package com.example.newapp.utils;
+package com.example.newapp.services;
 
 import com.example.newapp.DataModel.NotificationSender;
+import com.example.newapp.utils.MyResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
