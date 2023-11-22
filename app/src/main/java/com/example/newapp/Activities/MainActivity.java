@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.newapp.services.MyService;
 import com.example.newapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -86,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Creating an Intent to start the service
+        Intent serviceIntent = new Intent(this, MyService.class);
+        startService(serviceIntent);
+
     }
 
     // if firebase user is not null (is logged in) fetch the loginMode of last login

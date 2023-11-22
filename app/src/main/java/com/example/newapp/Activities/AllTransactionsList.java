@@ -68,4 +68,11 @@ public class AllTransactionsList extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Intent intent1 = new Intent(AllTransactionsList.this, AllListActivity.class);
+        intent1.putExtra("loginMode", "user");
+        startActivity(intent1);
+    }
 }

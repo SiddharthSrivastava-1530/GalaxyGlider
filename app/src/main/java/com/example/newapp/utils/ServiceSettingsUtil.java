@@ -5,6 +5,8 @@ import android.content.Intent;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.newapp.services.RunningNotificationService;
+
 public class ServiceSettingsUtil {
     public static void stopRideService(Context context) {
         Intent serviceIntent = new Intent(context, RunningNotificationService.class);

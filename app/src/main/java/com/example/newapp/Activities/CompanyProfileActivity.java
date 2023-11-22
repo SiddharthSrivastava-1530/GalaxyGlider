@@ -23,6 +23,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
 //import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -105,11 +106,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!userPic.isEmpty()) {
-                    updateDescription();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please add a profile picture..", Toast.LENGTH_SHORT).show();
-                }
+                updateDescription();
             }
         });
 
@@ -117,11 +114,11 @@ public class CompanyProfileActivity extends AppCompatActivity {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ImagePicker.with(CompanyProfileActivity.this)
-//                        .crop()
-//                        .compress(512)
-//                        .maxResultSize(512, 512)	//Final image resolution
-//                        .start();
+                ImagePicker.with(CompanyProfileActivity.this)
+                        .crop()
+                        .compress(512)
+                        .maxResultSize(512, 512)    //Final image resolution
+                        .start();
             }
         });
 
@@ -153,6 +150,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
             Uri selectedData = data.getData();
             String mimeType = getContentResolver().getType(selectedData);
             try {
+                assert mimeType != null;
                 if (mimeType.startsWith("image/")) {
                     imagePath = selectedData;
                     getImageInImageView();
@@ -238,7 +236,12 @@ public class CompanyProfileActivity extends AppCompatActivity {
          Path will be : user/Unique UID associated with user/profilePic */
         try {
             FirebaseDatabase.getInstance().getReference("company/" + FirebaseAuth.getInstance().getCurrentUser()
-                    .getUid() + "/imageUrl").setValue(url);
+                    .getUid() + "/imageUrl").setValue(url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(getApplicationContext(), "Slow Internet Connection", Toast.LENGTH_SHORT).show();
@@ -257,7 +260,7 @@ public class CompanyProfileActivity extends AppCompatActivity {
         databaseReference.setValue(description).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                finish();
+                Toast.makeText(CompanyProfileActivity.this, "description updated...", Toast.LENGTH_SHORT).show();
             }
         });
     }

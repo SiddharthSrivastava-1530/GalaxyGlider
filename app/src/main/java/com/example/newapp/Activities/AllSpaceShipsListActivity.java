@@ -54,8 +54,8 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private String companyId;
+    private String currentUserDesc;
     private ArrayList<SpaceShip> spaceShipArrayList;
-    private boolean isCurrentSlotUpdated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,6 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
         viewPager.setAdapter(vPadapter);
 
         getUserData();
-        checkIfNewDay(System.currentTimeMillis());
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -113,10 +112,11 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else if (loginMode.equals("owner")) {
                         Intent intent = new Intent(AllSpaceShipsListActivity.this, CompanyProfileActivity.class);
-                        intent.putExtra("update_from_allList", false);
+                        intent.putExtra("update_from_allList", true);
                         intent.putExtra("sender_pic", currentUserPic);
                         intent.putExtra("sender_name", currentUserName);
                         intent.putExtra("licenseUrl", currentLicenseUrl);
+                        intent.putExtra("sender_desc", currentUserDesc);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(AllSpaceShipsListActivity.this, UserProfileActivity.class);
@@ -205,7 +205,7 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
             // Getting data about user from database.
             FirebaseDatabase.getInstance().getReference(key + "/" +
                             FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (loginMode.equals("admin")) {
@@ -216,6 +216,7 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
                                 currentUserEmail = snapshot.getValue(Company.class).getEmail();
                                 currentUserPic = snapshot.getValue(Company.class).getImageUrl();
                                 currentLicenseUrl = snapshot.getValue(Company.class).getLicenseUrl();
+                                currentUserDesc = snapshot.getValue(Company.class).getDescription();
                             } else if (loginMode.equals("user")) {
                                 currentUserName = snapshot.getValue(Customer.class).getName();
                                 currentUserEmail = snapshot.getValue(Customer.class).getEmail();
@@ -243,147 +244,6 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
         editor.putString("loginMode", "");
         editor.putString("email", "");
         editor.apply();
-    }
-
-
-
-    private void checkIfNewDay(long time){
-        FirebaseDatabase.getInstance().getReference("company/" + companyId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        isCurrentSlotUpdated = snapshot.getValue(Company.class).isCurrentSlotUpdated();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-        Calendar currentDate = Calendar.getInstance();
-        int currentDayOfYear = currentDate.get(Calendar.DAY_OF_YEAR);
-        int currentYear = currentDate.get(Calendar.YEAR);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", MODE_PRIVATE);
-        int lastCompletedDayOfYear = sharedPreferences.getInt("lastCompletedDayOfYear", -1);
-        int lastCompletedYear = sharedPreferences.getInt("lastCompletedYear", -1);
-
-        if(lastCompletedDayOfYear !=-1 && lastCompletedYear !=-1)
-        {
-            if (lastCompletedYear < currentYear || lastCompletedDayOfYear < currentDayOfYear) {
-                // Day has been complete saving the current date as the last completed date
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("lastCompletedDayOfYear", currentDayOfYear);
-                editor.putInt("lastCompletedYear", currentYear);
-                editor.putLong("time",time/6000);
-                if(!isCurrentSlotUpdated) {
-                    changeSlotConfigurationOnNewDay();
-                }
-                editor.apply();
-            } else {
-                // Day has not been completed
-            }
-        } else
-        {
-            // This is the first time the app is being used saving the current date as the last completed date.
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong("time",time/6000);
-            editor.putInt("lastCompletedDayOfYear", currentDayOfYear);
-            editor.putInt("lastCompletedYear", currentYear);
-            if(!isCurrentSlotUpdated) {
-                changeSlotConfigurationOnNewDay();
-            }
-            editor.apply();
-        }
-    }
-
-
-
-    private void changeSlotConfigurationOnNewDay() {
-        try {
-
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company").child(companyId).child("spaceShips");
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    spaceShipArrayList.clear();
-                    if (dataSnapshot.exists()) {
-                        for (DataSnapshot spaceShipSnapshot : dataSnapshot.getChildren()) {
-                            SpaceShip spaceShip = spaceShipSnapshot.getValue(SpaceShip.class);
-                            if (spaceShip != null) {
-                                spaceShipArrayList.add(getChangedNewDayConfig(spaceShip));
-                            }
-                        }
-                    }
-
-                    databaseReference.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isComplete()){
-                                Toast.makeText(AllSpaceShipsListActivity.this,"New day configuration updated",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(AllSpaceShipsListActivity.this, "Slow Internet Connection", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    private SpaceShip getChangedNewDayConfig(SpaceShip spaceShip){
-
-        String nextSlotConfig = spaceShip.getNextSlotConfig();
-        if(nextSlotConfig.charAt(0)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(0));
-        } else {
-            spaceShip.setSlot1("000000000000");
-        }
-        if(nextSlotConfig.charAt(1)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(1));
-        } else {
-            spaceShip.setSlot2("000000000000");
-        }
-        if(nextSlotConfig.charAt(2)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(2));
-        } else {
-            spaceShip.setSlot3("000000000000");
-        }
-        if(nextSlotConfig.charAt(3)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(3));
-        } else {
-            spaceShip.setSlot4("000000000000");
-        }
-        if(nextSlotConfig.charAt(4)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(4));
-        } else {
-            spaceShip.setSlot5("000000000000");
-        }
-        if(nextSlotConfig.charAt(5)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(5));
-        } else {
-            spaceShip.setSlot6("000000000000");
-        }
-        if(nextSlotConfig.charAt(6)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(6));
-        } else {
-            spaceShip.setSlot7("000000000000");
-        }
-        if(nextSlotConfig.charAt(7)=='1'){
-            spaceShip.setSlot1(spaceShip.getNextSeatConfigurations().get(7));
-        } else {
-            spaceShip.setSlot8("000000000000");
-        }
-        return spaceShip;
     }
 
 

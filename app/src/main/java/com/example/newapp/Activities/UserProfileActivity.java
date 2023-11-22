@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
 //import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -98,11 +99,11 @@ public class UserProfileActivity extends AppCompatActivity {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ImagePicker.with(UserProfileActivity.this)
-//                        .crop()
-//                        .compress(512)
-//                        .maxResultSize(512, 512)	//Final image resolution
-//                        .start();
+                ImagePicker.with(UserProfileActivity.this)
+                        .crop()
+                        .compress(512)
+                        .maxResultSize(512, 512)	//Final image resolution
+                        .start();
             }
         });
     }
@@ -198,10 +199,22 @@ public class UserProfileActivity extends AppCompatActivity {
         try {
             if(loginMode.equals("user")) {
                 FirebaseDatabase.getInstance().getReference("users/" + FirebaseAuth.getInstance().getCurrentUser()
-                        .getUid() + "/profilePic").setValue(url);
+                        .getUid() + "/profilePic").setValue(url)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+                        });
             } else if(loginMode.equals("admin")){
                 FirebaseDatabase.getInstance().getReference("admin/" + FirebaseAuth.getInstance().getCurrentUser()
-                        .getUid() + "/profilePic").setValue(url);
+                        .getUid() + "/profilePic").setValue(url)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                            }
+                        });
             }
         } catch (Exception e) {
             e.printStackTrace();
