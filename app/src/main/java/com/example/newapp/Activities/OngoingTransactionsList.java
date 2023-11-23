@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.newapp.Activities.UserTransactionDetailsActivity;
@@ -37,6 +39,8 @@ public class OngoingTransactionsList extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TransactionAdapter transactionAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView no_rides;
     TransactionAdapter.OnTransactionClickListener onTransactionClickListener;
 
 
@@ -57,6 +61,18 @@ public class OngoingTransactionsList extends Fragment {
 
         progressBar = getView().findViewById(R.id.progressbar_transaction_list_current);
         recyclerView = getView().findViewById(R.id.recycler_transaction_list_current);
+        swipeRefreshLayout =getView().findViewById(R.id.swip_ref_ongoing_trans_list);
+        no_rides = getView().findViewById(R.id.no_rides);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserTransactions();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        getUserTransactions();
 
 
         onTransactionClickListener = new TransactionAdapter.OnTransactionClickListener() {
@@ -67,10 +83,6 @@ public class OngoingTransactionsList extends Fragment {
                 startActivity(intent1);
             }
         };
-
-        getUserTransactions();
-
-
     }
 
 
@@ -79,7 +91,7 @@ public class OngoingTransactionsList extends Fragment {
         String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions");
         databaseReference.orderByChild("userUID").equalTo(userUID)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         transactions.clear();
@@ -103,6 +115,12 @@ public class OngoingTransactionsList extends Fragment {
 
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<Transaction> arrayList) {
+        if(transactions.size()==0){
+            no_rides.setVisibility(View.VISIBLE);
+        }
+        else{
+            no_rides.setVisibility(View.INVISIBLE);
+        }
         transactionAdapter = new TransactionAdapter(arrayList, getActivity(), onTransactionClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         progressBar.setVisibility(View.GONE);

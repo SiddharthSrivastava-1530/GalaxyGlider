@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,8 @@ public class LowRatedCompanyList extends Fragment {
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_low_rated_company_list, container, false);
@@ -55,9 +58,20 @@ public class LowRatedCompanyList extends Fragment {
 
         progressBar = getView().findViewById(R.id.progressbar_lowRated);
         recyclerView = getView().findViewById(R.id.recycler_lowRated);
+        swipeRefreshLayout = getView().findViewById(R.id.swip_ref_low_company_list);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getLowRatedCompanies(searchCompany.getQuery().toString());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        getLowRatedCompanies(searchCompany.getQuery().toString());
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
@@ -91,22 +105,13 @@ public class LowRatedCompanyList extends Fragment {
 
     }
 
-    // fetch the companies when fragment resumes.
-    @Override
-    public void onResume() {
-        super.onResume();
-        companyArrayList.clear();
-        setAdapter(companyArrayList);
-        getLowRatedCompanies(searchCompany.getQuery().toString());
-    }
-
     // fetch the low rated companies and set them to adapter based upon query in searchView
     private void getLowRatedCompanies(String userQuery) {
         companyArrayList.clear();
         try {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
             Query query = databaseReference;
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     companyArrayList.clear();

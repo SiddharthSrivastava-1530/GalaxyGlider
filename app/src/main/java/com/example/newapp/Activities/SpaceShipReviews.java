@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.ReviewAdapter;
@@ -42,7 +44,8 @@ public class SpaceShipReviews extends AppCompatActivity {
     final private String filtersUsed[] = {"Sort By", "Rating", "Time"};
     private String spaceShipId;
     private String companyID;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView no_reviews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +58,22 @@ public class SpaceShipReviews extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressbar_reviews);
         recyclerView = findViewById(R.id.recycler_reviews);
+        swipeRefreshLayout = findViewById(R.id.swip_ref_review_list);
+        no_reviews = findViewById(R.id.no_reviews);
 
         Intent intent = getIntent();
         spaceShipId = intent.getStringExtra("id_ss");
         companyID = intent.getStringExtra("companyID");
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getSpaceShipReviews();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        getSpaceShipReviews();
 
 
         // setting up spinner for sorting reviews.
@@ -87,6 +102,12 @@ public class SpaceShipReviews extends AppCompatActivity {
 
     // Set arraylist to given adapter.
     private void setAdapter(ArrayList<Review> arrayList) {
+        if(arrayList.size()==0){
+            no_reviews.setVisibility(View.VISIBLE);
+        }
+        else{
+            no_reviews.setVisibility(View.INVISIBLE);
+        }
         reviewAdapter = new ReviewAdapter(arrayList, SpaceShipReviews.this);
         recyclerView.setLayoutManager(new LinearLayoutManager(SpaceShipReviews.this));
         progressBar.setVisibility(View.GONE);
@@ -101,7 +122,7 @@ public class SpaceShipReviews extends AppCompatActivity {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("transactions");
         databaseReference.orderByChild("spaceShipId").equalTo(spaceShipId)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         reviewArrayList.clear();

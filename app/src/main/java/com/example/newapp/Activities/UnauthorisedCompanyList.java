@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.newapp.Adapter.CompanyAdapter;
 import com.example.newapp.DataModel.Company;
@@ -34,6 +35,7 @@ public class UnauthorisedCompanyList extends Fragment {
     private ProgressBar progressBar;
     private CompanyAdapter companyAdapter;
     private String loginMode;
+    private SwipeRefreshLayout swipeRefreshLayout;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
     @Override
@@ -53,9 +55,20 @@ public class UnauthorisedCompanyList extends Fragment {
 
         progressBar = getView().findViewById(R.id.progressbar_unauthorized);
         recyclerView = getView().findViewById(R.id.recycler_unauthorized);
+        swipeRefreshLayout = getView().findViewById(R.id.swip_ref_unauthorised_list);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUnauthorizedCompanies(searchCompany.getQuery().toString());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        getUnauthorizedCompanies(searchCompany.getQuery().toString());
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
@@ -89,22 +102,13 @@ public class UnauthorisedCompanyList extends Fragment {
 
     }
 
-    // fetch the companies when fragment resumes.
-    @Override
-    public void onResume() {
-        super.onResume();
-        companyArrayList.clear();
-        setAdapter(companyArrayList);
-        getUnauthorizedCompanies(searchCompany.getQuery().toString());
-    }
-
     // fetch the unauthorized companies and set them to adapter based upon query in searchView
     private void getUnauthorizedCompanies(String userQuery) {
         companyArrayList.clear();
         try {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
             Query query = databaseReference;
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     companyArrayList.clear();

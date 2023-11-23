@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -66,6 +67,7 @@ public class SpaceShipList extends Fragment {
     private String companyId;
     private String loginMode;
     private String currentUserDescription;
+    private SwipeRefreshLayout swipeRefreshLayout;
     final private String filtersUsed[] = {"Sort By", "Rating", "Price"};
 
     @Override
@@ -89,6 +91,7 @@ public class SpaceShipList extends Fragment {
         progressBar = getView().findViewById(R.id.progressbar_spaceship);
         recyclerView = getView().findViewById(R.id.recycler_spaceship);
         floatingActionButton = getView().findViewById(R.id.fab_spaceship);
+        swipeRefreshLayout = getView().findViewById(R.id.swip_ref_private_ride_list);
 
         Intent intent = getActivity().getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -117,6 +120,16 @@ public class SpaceShipList extends Fragment {
                 }
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getSpaceShips(searchSpaceship.getQuery().toString());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        getSpaceShips(searchSpaceship.getQuery().toString());
 
 
         // Open the details of specific spaceship clicked
@@ -164,15 +177,6 @@ public class SpaceShipList extends Fragment {
     }
 
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        searchSpaceship.setQuery("", false);
-        getSpaceShips("");
-    }
-
-
     private void getSpaceShips(String userQuery) {
         spaceShipArrayList.clear();
         try {
@@ -190,7 +194,7 @@ public class SpaceShipList extends Fragment {
             if (!child.isEmpty()) {
                 query = databaseReference.orderByChild(child);
             }
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     spaceShipArrayList.clear();
@@ -248,7 +252,7 @@ public class SpaceShipList extends Fragment {
             // Getting data about user from database.
             FirebaseDatabase.getInstance().getReference(key + "/" +
                             FirebaseAuth.getInstance().getCurrentUser().getUid())
-                    .addValueEventListener(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (loginMode.equals("admin")) {
