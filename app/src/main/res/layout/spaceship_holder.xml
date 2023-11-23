@@ -19,12 +19,13 @@
             android:layout_height="50dp"
             app:cardCornerRadius="200dp">
 
-            <TextView
-                android:id="@+id/textView2"
+            <ImageView
+                android:id="@+id/spaceShip_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:scaleType="fitXY"
                 android:layout_gravity="start|center"
-                android:background="@drawable/spaceship"/>
+                android:background="@drawable/spaceship8"/>
 
         </androidx.cardview.widget.CardView>
 

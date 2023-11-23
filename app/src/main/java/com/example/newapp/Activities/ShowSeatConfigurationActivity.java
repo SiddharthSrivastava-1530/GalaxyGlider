@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +58,6 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private TextView food;
     private TextView food_not;
     private TextView confirm_seats;
-    private TextView noRideSharingMessage;
     private TextView selectRecurringTextView;
     private SpaceShip currentSpaceShip;
     private String companyId;
@@ -129,7 +131,6 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         fitness_not = findViewById(R.id.fitness_not_tv_show);
 
         confirm_seats = findViewById(R.id.confirm_seats);
-        noRideSharingMessage = findViewById(R.id.no_ride_sharing_message_tv);
         selectRecurringTextView = findViewById(R.id.recurring_ride_selection_tv);
 
         prev_ride_detail = findViewById(R.id.prev_ride_detail);
@@ -143,6 +144,19 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         viewFlipper.setFlipInterval(2000);
         viewFlipper.startFlipping();
 
+        fromLocation.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+
+        fromLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+
+                    next_ride_detail.callOnClick();
+                    return true; // Consume the event
+                }
+                return false; // Let the system handle the event
+            }
+        });
         fromLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -156,6 +170,20 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
+        toLocation.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+
+        toLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+
+                    next_ride_detail.callOnClick();
+                    return true; // Consume the event
+                }
+                return false; // Let the system handle the event
+            }
+        });
+
         toLocation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -166,6 +194,20 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
                 else{
                     viewFlipper.startFlipping();
                 }
+            }
+        });
+
+        distance.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+
+        distance.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+
+                    next_ride_detail.callOnClick();
+                    return true; // Consume the event
+                }
+                return false; // Let the system handle the event
             }
         });
 
@@ -191,19 +233,17 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
 
         attachSpaceShipListener();
 
-        if (currentSpaceShip.isHaveRideSharing()) {
-            noRideSharingMessage.setVisibility(View.GONE);
-        }
-
         selectRecurringTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(selectRecurringTextView.getText().toString().equals("NO")){
                     isRideRecurring = true;
                     selectRecurringTextView.setText("YES");
+                    selectRecurringTextView.setTextColor(Color.GREEN);
                 } else {
                     isRideRecurring = false;
                     selectRecurringTextView.setText("NO");
+                    selectRecurringTextView.setTextColor(Color.RED);
                 }
             }
         });
@@ -213,13 +253,6 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 viewFlipper.setInAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_in_left);
                 viewFlipper.setOutAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_out_right);
-                count_next_click--;
-                if(count_next_click<2){
-                    next_ride_detail.setVisibility(View.VISIBLE);
-                }
-                if(count_next_click==0){
-                    prev_ride_detail.setVisibility(View.GONE);
-                }
                 viewFlipper.showPrevious();
             }
         });
@@ -229,13 +262,6 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 viewFlipper.setInAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_in_right);
                 viewFlipper.setOutAnimation(ShowSeatConfigurationActivity.this,R.anim.slide_out_left);
-                count_next_click++;
-                if(count_next_click==1){
-                    prev_ride_detail.setVisibility(View.VISIBLE);
-                }
-                if(count_next_click==2){
-                    next_ride_detail.setVisibility(View.GONE);
-                }
                 viewFlipper.showNext();
             }
         });

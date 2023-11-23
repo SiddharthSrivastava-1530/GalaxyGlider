@@ -3,10 +3,12 @@ package com.example.newapp.Activities;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -34,6 +36,8 @@ public class CompanyList extends Fragment {
     private ProgressBar progressBar;
     private CompanyAdapter companyAdapter;
     private String loginMode;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
 
     @Override
@@ -51,22 +55,22 @@ public class CompanyList extends Fragment {
 
         companyArrayList = new ArrayList<>();
 
+        swipeRefreshLayout = getView().findViewById(R.id.swip_ref_company_list);
         progressBar = getView().findViewById(R.id.progressbar);
         recyclerView = getView().findViewById(R.id.recycler);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
 
-        Toast.makeText(getActivity(), loginMode, Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCompanies(searchCompany.getQuery().toString());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
-
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                getCompanies(searchCompany.getQuery().toString());
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
-//        });
+        getCompanies(searchCompany.getQuery().toString());
 
 
         onCompanyClickListener = new CompanyAdapter.OnCompanyClickListener() {
@@ -102,12 +106,6 @@ public class CompanyList extends Fragment {
 
     }
 
-    // fetch the companies when fragment resumes.
-    @Override
-    public void onResume() {
-        super.onResume();
-        getCompanies(searchCompany.getQuery().toString());
-    }
 
     // fetch the companies and set them to adapter based upon query in searchView
     private void getCompanies(String userQuery) {
@@ -115,7 +113,7 @@ public class CompanyList extends Fragment {
         try {
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("company");
             Query query = databaseReference;
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     companyArrayList.clear();
@@ -152,7 +150,6 @@ public class CompanyList extends Fragment {
         recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(companyAdapter);
         companyAdapter.notifyDataSetChanged();
-
     }
 
 }

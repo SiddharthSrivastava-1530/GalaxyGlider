@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swip_ref_ongoing_trans_list"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/companies_constraint"
@@ -10,13 +15,13 @@
 
     <ProgressBar
         android:id="@+id/progressbar_transaction_list_current"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:visibility="visible"
         android:indeterminate="true"
         android:indeterminateTintMode="src_atop"
         android:indeterminateTint="#ffffff"
-        android:background="#000000"
+        android:background="@color/blackPrimaryShade"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +32,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/blackPrimaryShade"
-        android:visibility="visible"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/no_rides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="No Ongoing Rides"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:fontFamily="@font/atma_semibold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,3 +54,5 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

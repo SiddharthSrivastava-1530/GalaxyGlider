@@ -2,36 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/blackPrimaryShade"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@null"
+        android:fontFamily="@font/inter"
+        android:gravity="center"
+        android:text="Company Details"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline47"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/guideline47">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/blackPrimaryShade"
             tools:context=".Activities.CompanyDetailsActivity">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:background="@null"
-                android:fontFamily="@font/inter"
-                android:gravity="center"
-                android:text="Company Details"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/guideline47"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView9"
@@ -80,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                        android:src="@drawable/spaceship" />
+                        android:src="@drawable/spaceship8" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -138,8 +140,8 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView3"
                 android:layout_width="200dp"
-                android:layout_marginRight="60dp"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="#333333"
                 app:cardCornerRadius="80dp"
@@ -165,23 +167,16 @@
                 android:id="@+id/seePdf_tv_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
                 android:fontFamily="@font/inter"
                 android:gravity="center"
                 android:text="@string/LicenceString"
                 android:textColor="#0075FF"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginLeft="7dp"
                 app:layout_constraintStart_toEndOf="@+id/cardView3"
                 app:layout_constraintTop_toTopOf="@+id/cardView3" />
 
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline47"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.07" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline144"
@@ -278,17 +273,25 @@
 
     </ScrollView>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.07" />
+
+
     <TextView
         android:id="@+id/seeAllSpaceShips_tv_company_details"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="75dp"
         android:background="@color/white"
         android:fontFamily="@font/inter_semibold"
         android:gravity="center"
         android:padding="10dp"
         android:text="Gliders"
         android:textColor="#000000"
-        android:textSize="26sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

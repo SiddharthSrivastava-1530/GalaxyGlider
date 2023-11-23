@@ -80,7 +80,9 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onCompanyClickListener.onCompaniesClicked(getAdapterPosition());
+                    if(getItemCount()>0){
+                        onCompanyClickListener.onCompaniesClicked(getAdapterPosition());
+                    }
                 }
             });
 

@@ -91,7 +91,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onTransactionClickListener.onTransactionsClicked(getAdapterPosition());
+                    if(getItemCount()>0){
+                        onTransactionClickListener.onTransactionsClicked(getAdapterPosition());
+                    }
                 }
             });
 
