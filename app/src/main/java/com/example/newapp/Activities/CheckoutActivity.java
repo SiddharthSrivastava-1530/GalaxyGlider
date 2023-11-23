@@ -19,6 +19,7 @@ import com.example.newapp.DataModel.Review;
 import com.example.newapp.DataModel.SpaceShip;
 import com.example.newapp.DataModel.Transaction;
 import com.example.newapp.R;
+import com.example.newapp.utils.DataUpdateServiceSettingsUtil;
 import com.example.newapp.utils.ServiceSettingsUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -139,58 +140,58 @@ public class CheckoutActivity extends AppCompatActivity {
                     // add spaceship to arraylist.
                     spaceShipArrayList.set(index, currentSpaceShip);
                     Toast.makeText(CheckoutActivity.this, "Seats booked...", Toast.LENGTH_SHORT).show();
+
+                    // Set the updated spaceShips back to the company reference and sending intent to
+                    // journey activity on completion of task.
+                    companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                            // Set this ride as an ongoing transaction object in database in separate node.
+                            Review review = new Review();
+                            Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
+                                    companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
+                                    chosenSeatConfig, departure, destination, distance, selectedSlotNumber, "",
+                                    System.currentTimeMillis(), -1.0f, false,
+                                    isRideRecurring, review);
+
+                            // add transaction to database in node - 'transactions'
+                            FirebaseDatabase.getInstance().getReference("transactions/" + refId)
+                                    .setValue(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                        }
+                                    });
+
+                            // add userTransactionsIds arraylist to 'users' node
+                            Log.e("transaction List size", String.valueOf(userTransactionIds.size()));
+                            userTransactionIds.add(refId);
+
+                            FirebaseDatabase.getInstance().getReference("users/" + userUID + "/transactionIds")
+                                    .setValue(userTransactionIds).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isComplete()) {
+                                                DataUpdateServiceSettingsUtil.startRecurringRideService(getApplicationContext(),transaction);
+                                                ServiceSettingsUtil.startRideService(getApplicationContext(),companyName,currentSpaceShip.getSpaceShipName(),departure,destination,distance);
+                                                // Start the journey and move further to review activity.
+                                                Intent intent1 = new Intent(CheckoutActivity.this, AllSpaceShipsListActivity.class);
+                                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                intent1.putExtra("companyID", companyId);
+                                                intent1.putExtra("loginMode", "user");
+                                                startActivity(intent1);
+                                            }
+                                        }
+                                    });
+                        }
+                    });
                 } else {
                     Toast.makeText(CheckoutActivity.this, "Chosen configuration unavailable at moment." +
                             " Please retry", Toast.LENGTH_SHORT).show();
                 }
-
-
-                // Set the updated spaceShips back to the company reference and sending intent to
-                // journey activity on completion of task.
-                companyRef.setValue(spaceShipArrayList).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        String userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                        // Set this ride as an ongoing transaction object in database in separate node.
-                        Review review = new Review();
-                        Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
-                                companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
-                                chosenSeatConfig, departure, destination, distance, selectedSlotNumber, "",
-                                System.currentTimeMillis(), -1.0f, false,
-                                isRideRecurring, review);
-
-                        // add transaction to database in node - 'transactions'
-                        FirebaseDatabase.getInstance().getReference("transactions/" + refId)
-                                .setValue(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                    }
-                                });
-
-                        // add userTransactionsIds arraylist to 'users' node
-                        Log.e("transaction List size", String.valueOf(userTransactionIds.size()));
-                        userTransactionIds.add(refId);
-
-                        FirebaseDatabase.getInstance().getReference("users/" + userUID + "/transactionIds")
-                                .setValue(userTransactionIds).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isComplete()) {
-                                            ServiceSettingsUtil.startRideService(getApplicationContext(),companyName,currentSpaceShip.getSpaceShipName(),departure,destination,distance);
-                                            // Start the journey and move further to review activity.
-                                            Intent intent1 = new Intent(CheckoutActivity.this, AllSpaceShipsListActivity.class);
-                                            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            intent1.putExtra("companyID", companyId);
-                                            intent1.putExtra("loginMode", "user");
-                                            startActivity(intent1);
-                                        }
-                                    }
-                                });
-                    }
-                });
 
             }
 

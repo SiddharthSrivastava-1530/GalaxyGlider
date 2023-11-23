@@ -136,7 +136,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
-    android:layout_height="734dp"
+    android:layout_height="700dp"
     android:background="@color/blackPrimaryShade"
     app:layout_dodgeInsetEdges="bottom">
 
@@ -157,8 +157,14 @@
         android:id="@+id/recurring_ride_end_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/guideline150"
-        app:layout_constraintStart_toStartOf="@+id/guideline155" />
+        android:text="END RECURRING RIDE"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/isOngoing_transaction_details" />
 
     <TextView
         android:id="@+id/textView18"

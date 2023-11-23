@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.example.newapp.DataModel.Transaction;
 import com.example.newapp.utils.MyReceiver;
 
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class MyService extends Service {
         // Getting the current date and time
         Calendar calendar = Calendar.getInstance();
 
-        // Setting the time to 00:05:00
+        // Setting the time to 00:00:00
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -41,7 +42,7 @@ public class MyService extends Service {
         // Get the time in milliseconds
         long triggerTime = calendar.getTimeInMillis();
 
-        // Creating an Intent that will be broadcasted when the alarm fires
+        // Creating an Intent that will be broadCasted when the alarm fires
         Intent alarmIntent = new Intent(this, MyReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_IMMUTABLE);
 

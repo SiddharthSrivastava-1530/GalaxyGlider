@@ -26,6 +26,7 @@ import com.example.newapp.DataModel.NotificationSender;
 import com.example.newapp.R;
 import com.example.newapp.services.APIService;
 import com.example.newapp.utils.Client;
+import com.example.newapp.utils.DataUpdateServiceSettingsUtil;
 import com.example.newapp.utils.MyResponse;
 import com.example.newapp.utils.ServiceSettingsUtil;
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,7 +103,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
     private TextView rating_and_review_tv;
     private TextView status_tv;
     private TextView invoiceInfo;
-    private TextView invoiceLink;
+//    private TextView invoiceLink;
 
     private BottomSheetBehavior bottomSheetBehavior;
 
@@ -141,7 +142,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         scrollView2 = findViewById(R.id.scrollView2);
         status_tv = findViewById(R.id.status_tv);
         invoiceInfo = findViewById(R.id.textView19);
-        invoiceLink = findViewById(R.id.invoice_tv);
+//        invoiceLink = findViewById(R.id.invoice_tv);
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
         shareRideTextView = findViewById(R.id.share_ride_tv);
@@ -183,7 +184,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         if (currentTransaction.isTransactionComplete()) {
             completeJourneyTextView.setVisibility(View.GONE);
             status_tv.setVisibility(View.GONE);
-            invoiceLink.setVisibility(View.VISIBLE);
+            invoiceTextView.setVisibility(View.VISIBLE);
             invoiceInfo.setVisibility(View.VISIBLE);
 
             if (currentTransaction.getReview().getTime() == 0) {
@@ -864,6 +865,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             endRecurringRideTextView.setVisibility(View.GONE);
+                            DataUpdateServiceSettingsUtil.stopRecurringRideService(getApplicationContext());
                             Toast.makeText(UserTransactionDetailsActivity.this, "Recurring ride " +
                                     "seats vacated.", Toast.LENGTH_SHORT).show();
                         }
