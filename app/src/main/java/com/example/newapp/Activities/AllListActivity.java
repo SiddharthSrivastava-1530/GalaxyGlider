@@ -128,8 +128,10 @@ public class AllListActivity extends AppCompatActivity {
                     finish();
                 }
                 if(item.getItemId() == R.id.your_rides){
-                    Intent intent1 = new Intent(AllListActivity.this, AllTransactionsList.class);
-                    startActivity(intent1);
+                    if(loginMode.equals("user")){
+                        Intent intent1 = new Intent(AllListActivity.this, AllTransactionsList.class);
+                        startActivity(intent1);
+                    }
                 }
                 if(item.getItemId() == R.id.share1){
                     // Creating a share intent

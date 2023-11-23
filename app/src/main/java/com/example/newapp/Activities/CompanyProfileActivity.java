@@ -2,11 +2,13 @@ package com.example.newapp.Activities;
 
 import android.app.ProgressDialog;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -18,11 +20,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.bumptech.glide.Glide;
 import com.example.newapp.R;
-//import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -139,29 +142,49 @@ public class CompanyProfileActivity extends AppCompatActivity {
         });
 
     }
+    private String getMimeType(Uri uri) {
+        if (uri.getScheme().equals("file")) {
+            // Convert file URI to content URI using FileProvider
+            uri = FileProvider.getUriForFile(this, getPackageName() + ".provider", new File(uri.getPath()));
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+        return contentResolver.getType(uri);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Get the image selected in gallery on icon
+        // Get the image selected in gallery or PDF
         if (resultCode == RESULT_OK && data != null) {
-
             Uri selectedData = data.getData();
-            String mimeType = getContentResolver().getType(selectedData);
+            String mimeType = getMimeType(selectedData);
+
             try {
-                assert mimeType != null;
-                if (mimeType.startsWith("image/")) {
+                if (mimeType != null && mimeType.startsWith("image/")) {
+                    // Selected data is an image
                     imagePath = selectedData;
                     getImageInImageView();
-                } else if (mimeType.startsWith("application/pdf")) {
+                } else if (mimeType != null && mimeType.startsWith("application/pdf")) {
+                    // Selected data is a PDF
                     uploadFiles(selectedData);
+                } else {
+                    // Handle other types of files or show an error message
+                    showToast("Unsupported file type");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                // Handle IOException
+                showToast("Error processing the selected file");
             }
         }
     }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
 
     //Transform Uri (path) to Bitmap and put image in imageView.
     private void getImageInImageView() throws IOException {

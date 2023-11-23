@@ -136,8 +136,18 @@ public class AllSpaceShipsListActivity extends AppCompatActivity {
                     finish();
                 }
                 if(item.getItemId() == R.id.your_rides){
-                    Intent intent1 = new Intent(AllSpaceShipsListActivity.this, AllTransactionsList.class);
-                    startActivity(intent1);
+                    if(loginMode.equals("user")){
+                        Intent intent1 = new Intent(AllSpaceShipsListActivity.this, AllTransactionsList.class);
+                        startActivity(intent1);
+                    }
+                }
+                if(item.getItemId() == R.id.share1){
+                    // Creating a share intent
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out my awesome app!");
+                    // shareIntent.setPackage("com.whatsapp");
+                    startActivity(Intent.createChooser(shareIntent, "Share using"));
                 }
                 return false;
             }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,8 @@ public class SeatConfigurationActivity extends AppCompatActivity {
     private boolean booleanUpdate;
     private ArrayList<String> nextSeatConfigurations;
 
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +119,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         addSeatbtn = findViewById(R.id.add_btn_seats);
         removeSeatbtn = findViewById(R.id.remove_seat);
         confirmSeatConfiguration = findViewById(R.id.confirm_seat_config);
+        progressBar = findViewById(R.id.progressBar_seatConfig);
 
 
         // getting data from intent.
@@ -276,6 +280,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
         confirmSeatConfiguration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 if (!booleanUpdate) {
                     for (int position = 0; position < total_seats; position++) {
                         seatsAvailable = setCharAt(seatsAvailable, position, '1');
@@ -342,6 +347,7 @@ public class SeatConfigurationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isComplete()) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(SeatConfigurationActivity.this, "SpaceShip added...",
                                     Toast.LENGTH_SHORT).show();
                             Intent intent1 = new Intent(SeatConfigurationActivity.this, AllSpaceShipsListActivity.class);

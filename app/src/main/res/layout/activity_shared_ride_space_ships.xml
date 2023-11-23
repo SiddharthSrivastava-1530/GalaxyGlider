@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
                         android:layout_marginStart="5dp"
-                        android:queryHint="Search Spaceships..."
+                        android:queryHint="Search Gliders..."
                         android:layout_gravity="center_vertical"
                         android:visibility="visible"
                         android:queryBackground="@android:color/transparent"

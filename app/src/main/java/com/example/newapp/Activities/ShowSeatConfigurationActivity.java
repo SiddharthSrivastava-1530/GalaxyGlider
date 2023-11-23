@@ -65,15 +65,9 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
     private String currentSeatConfiguration;
     private String chosenSeatConfiguration;
     private boolean isRideRecurring;
-
     private TextView prev_ride_detail;
-
     private TextView next_ride_detail;
-
-    private int count_next_click;
-
     private ViewFlipper viewFlipper;
-
     private TextView show_seat_tv;
 
     @Override
@@ -82,8 +76,6 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_seat_configuration);
 
         getSupportActionBar().hide();
-
-        count_next_click=0;
 
         viewFlipper = findViewById(R.id.ride_detail_viewFlipper);
         show_seat_tv =findViewById(R.id.select_seat_for_ride_tv);
@@ -141,8 +133,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         selectedSlotNumber = intent.getStringExtra("slot_number");
         companyId = intent.getStringExtra("companyID");
 
-        viewFlipper.setFlipInterval(2000);
-        viewFlipper.startFlipping();
+        isRideRecurring = true;
 
         fromLocation.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 
@@ -224,9 +215,6 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
             }
         });
 
-//        distance.setText("123");
-//        fromLocation.setText("dis");
-//        toLocation.setText("dis");
 
 
         chosenSeatConfiguration = "000000000000";
