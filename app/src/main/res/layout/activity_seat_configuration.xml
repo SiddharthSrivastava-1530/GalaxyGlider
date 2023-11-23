@@ -288,6 +288,20 @@
         app:layout_constraintStart_toStartOf="@+id/guideline111"
         app:layout_constraintTop_toTopOf="@+id/guideline114" />
 
+    <ProgressBar
+        android:id="@+id/progressBar_seatConfig"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/blackPrimaryShade"
+        android:indeterminate="true"
+        android:indeterminateTint="#ffffff"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/remove_seat"
         android:layout_width="0dp"
@@ -308,7 +322,7 @@
         android:fontFamily="@font/inter_semibold"
         android:textStyle="bold"
         android:gravity="center"
-        android:textSize="26sp"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -412,7 +426,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9316006" />
+        app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline114"

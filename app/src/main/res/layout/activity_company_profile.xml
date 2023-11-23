@@ -7,6 +7,18 @@
     tools:context=".Activities.CompanyProfileActivity"
     android:background="@color/blackPrimaryShade">
 
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="35dp"
+        android:layout_height="30dp"
+        android:fontFamily="@font/font_awesome_solid"
+        android:gravity="center"
+        android:text="&#xf0e0;"
+        android:textColor="@color/impureWhite"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline80"
+        app:layout_constraintTop_toTopOf="@+id/guideline78" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -124,9 +136,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:backgroundTint="#48000000"
         app:cardCornerRadius="6dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline91"
+        app:layout_constraintBottom_toTopOf="@+id/guideline70"
         app:layout_constraintEnd_toStartOf="@+id/guideline97"
         app:layout_constraintStart_toStartOf="@+id/guideline80"
         app:layout_constraintTop_toTopOf="@+id/guideline90">
@@ -134,6 +145,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#272626"
             android:padding="12dp">
 
             <EditText
@@ -147,6 +159,7 @@
                 android:inputType="textMultiLine"
                 android:textColor="@color/white"
                 android:textColorHint="#ACA9A9"
+                android:textCursorDrawable="@null"
                 android:textSize="18sp" />
 
 
@@ -217,14 +230,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.93" />
+        app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline90"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.29" />
+        app:layout_constraintGuide_percent="0.36" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline92"
@@ -280,7 +293,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.64" />
+        app:layout_constraintGuide_percent="0.67" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline72"
@@ -294,7 +307,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.63" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline80"
@@ -303,6 +316,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.11" />
 
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline154"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.24" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline85"
@@ -345,11 +365,11 @@
         android:layout_height="0dp"
         android:text="GALAXY_GLIDER@gmail.com"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:gravity="center|left"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline77"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline80"
+        app:layout_constraintStart_toStartOf="@+id/guideline154"
         app:layout_constraintTop_toTopOf="@+id/guideline78"
         app:layout_constraintVertical_bias="1.0" />
 
@@ -357,15 +377,15 @@
         android:id="@+id/name_profile_et_company_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="@color/red"
-        android:text="Arsh Jeet Singh"
         android:fontFamily="@font/inter"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline70"
+        android:gravity="center"
+        android:text="Arsh Jeet Singh"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline90"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline80"
-        app:layout_constraintTop_toTopOf="@+id/guideline75" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline92" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

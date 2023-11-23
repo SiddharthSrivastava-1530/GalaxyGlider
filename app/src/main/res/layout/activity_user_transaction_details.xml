@@ -153,18 +153,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/recurring_ride_end_tv"
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="END RECURRING RIDE"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        android:textStyle="bold"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/isOngoing_transaction_details" />
+        app:layout_constraintTop_toTopOf="@+id/guideline150">
+
+        <TextView
+            android:id="@+id/recurring_ride_end_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="6dp"
+            android:text="END RECURRING RIDE"
+            android:textColor="@color/blackPrimaryShade"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+
 
     <TextView
         android:id="@+id/textView18"

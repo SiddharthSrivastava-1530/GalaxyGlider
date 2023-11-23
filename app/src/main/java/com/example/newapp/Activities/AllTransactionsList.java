@@ -64,15 +64,5 @@ public class AllTransactionsList extends AppCompatActivity {
         vPadapter.addFragment(new OngoingTransactionsList(), "ONGOING");
         vPadapter.addFragment(new UserTransactionList(), "COMPLETED");
         viewPager.setAdapter(vPadapter);
-
-
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        Intent intent1 = new Intent(AllTransactionsList.this, AllListActivity.class);
-        intent1.putExtra("loginMode", "user");
-        startActivity(intent1);
     }
 }

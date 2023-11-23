@@ -80,7 +80,7 @@
                         android:layout_weight="5"
                         android:iconifiedByDefault="false"
                         android:queryBackground="@android:color/transparent"
-                        android:queryHint="Search Spaceships..."
+                        android:queryHint="Search Gliders..."
                         android:visibility="visible" />
 
                     <Spinner

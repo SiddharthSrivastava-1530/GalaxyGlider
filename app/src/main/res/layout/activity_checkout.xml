@@ -4,19 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/spaceship_details"
+    android:background="@color/blackPrimaryShade"
     tools:context=".Activities.CheckoutActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please wait"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/bookRideButton"
+        app:layout_constraintStart_toStartOf="@+id/bookRideButton" />
 
     <TextView
         android:id="@+id/bookRideButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BOOK RIDE"
+        android:text="BOOKING RIDE..."
         android:textColor="@color/white"
         android:textSize="32sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline162"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/impureWhite"
+        android:background="@color/blackPrimaryShade"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline162"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
