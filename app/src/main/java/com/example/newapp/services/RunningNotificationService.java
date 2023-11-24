@@ -39,7 +39,7 @@ public class RunningNotificationService extends Service {
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.app_icon)
                 .setContentTitle("New Journey with " + companyName)
                 .setContentText("You are on an exciting space adventure")
                 .setTicker(getText(R.string.app_name))

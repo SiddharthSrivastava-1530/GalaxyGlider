@@ -14,6 +14,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText pass;
     private TextView sub;
     private TextView signup;
-    private ImageView psw_show;
     private String loginMode;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         pass = findViewById(R.id.password_login_et);
         sub = findViewById(R.id.submit_login_tv);
         signup = findViewById(R.id.signup_tv);
-        psw_show = findViewById(R.id.psd_eye);
+        progressBar = findViewById(R.id.progressBar_login);
 
         Intent intent = getIntent();
         loginMode = intent.getStringExtra("loginMode");
@@ -62,23 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         if (loginMode.equals("admin")) {
             signup.setVisibility(View.GONE);
         }
-
-        psw_show.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (pass.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
-                    //If password is visible then hide it.
-                    pass.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    //Change icon
-//                    psw_show.setImageResource(R.drawable.ic_hide_pwd);
-                } else {
-                    //If password is not visible the show it.
-                    pass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    //Change icon
-//                    psw_show.setImageResource(R.drawable.ic_show_pwd);
-                }
-            }
-        });
 
         //Submit button to login user
         sub.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     return;
                 }
+                progressBar.setVisibility(View.VISIBLE);
                 handleLogin();
             }
         });

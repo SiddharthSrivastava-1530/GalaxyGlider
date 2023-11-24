@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +73,6 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
     DecimalFormat decimalFormat = new DecimalFormat("#.##");
     @SuppressLint("SimpleDateFormat")
     SimpleDateFormat datePatternFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
-    private Bitmap bmp;
     private Bitmap scaledBitmap;
     private TextView reviews_et;
     private TextView reviews_tv;
@@ -103,16 +103,13 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
     private TextView rating_and_review_tv;
     private TextView status_tv;
     private TextView invoiceInfo;
-//    private TextView invoiceLink;
-
     private BottomSheetBehavior bottomSheetBehavior;
-
     private TextView rating_tv2;
-
     private APIService apiService;
     private String token;
     private int countSpaceShipsOnSamePath;
     private float basicPay, serviceCharge, spaceTax , dynamicTrafficCost, totalAmount;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,12 +143,11 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
         shareRideTextView = findViewById(R.id.share_ride_tv);
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
-        scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 60, false);
 
         View bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         rating_tv2 = findViewById(R.id.rating_and_review_tv2);
+        progressBar = findViewById(R.id.progressBar_transaction);
 
         rating_and_review_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +205,10 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         completeJourneyTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressBar.setVisibility(View.VISIBLE);
                 onPaymentSuccess(UUID.randomUUID().toString());
+                // Disable the button after the first click
+                completeJourneyTextView.setEnabled(false);
             }
         });
 
@@ -225,6 +224,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 updateReviews();
+                submitReview_tv.setEnabled(false);
             }
         });
 
@@ -442,7 +442,6 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
                             completeJourneyTextView.setVisibility(View.GONE);
                             printPdf();
                             ServiceSettingsUtil.stopRideService(getApplicationContext());
-                            Toast.makeText(UserTransactionDetailsActivity.this, "Invoice downloaded", Toast.LENGTH_SHORT).show();
                             Intent intent1 = new Intent(UserTransactionDetailsActivity.this, AllTransactionsList.class);
                             intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent1);
