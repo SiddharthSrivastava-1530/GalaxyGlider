@@ -53,14 +53,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String company = message.getData().get("Title");
         String spaceShip = message.getData().get("Message");
-        Bitmap icon = BitmapFactory.decodeResource(getApplicationContext().getResources(),   // changing jpg to bitmap
-                R.drawable.ic_launcher_background);
-
 
         // creating custom notification using NotificationCompat Builder
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"GalaxyGliderNotification")
-                .setLargeIcon(icon)
-                .setSmallIcon(R.drawable.notification_)
+                .setSmallIcon(R.drawable.app_icon)
                 .setContentTitle("Low-Rated Space Ship")
                 .setContentText(company + "'s " + spaceShip + " has been flagged as a low-rated spaceship")
                 .setAutoCancel(true)

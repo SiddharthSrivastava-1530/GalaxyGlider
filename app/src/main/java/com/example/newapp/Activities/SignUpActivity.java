@@ -1,6 +1,7 @@
 package com.example.newapp.Activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.PluralsRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String useremail;
     private String loginMode;
     private TextView loginView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password_et);
         submit = findViewById(R.id.submit_tv);
         loginView = findViewById(R.id.login_sign_up_activity_tv);
+        progressBar = findViewById(R.id.progressBar_signUp);
 
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
@@ -119,10 +123,12 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 // Checking if password and confirmedPassword are not same
                 else if (!(userConfirmedPassword.equals(userPassword))) {
-                    Toast.makeText(SignUpActivity.this, "Password & confirmed password are not the same",
+                    Toast.makeText(SignUpActivity.this, "Password & Confirmed password are not the same",
                             Toast.LENGTH_SHORT).show();
+                    return;
                 }
-
+                progressBar.setVisibility(View.VISIBLE);
+                submit.setEnabled(false);
                 if (loginMode.equals("user")) {
                     handleUserSignUp();
                 } else if (loginMode.equals("owner")) {

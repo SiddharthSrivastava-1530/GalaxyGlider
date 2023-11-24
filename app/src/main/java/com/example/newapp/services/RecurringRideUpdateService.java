@@ -95,7 +95,7 @@ public class RecurringRideUpdateService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "your_channel_id")
                 .setContentTitle("Galaxy Glider")
                 .setContentText("You are on a recurring ride..")
-                .setSmallIcon(R.drawable.ic_launcher_foreground);
+                .setSmallIcon(R.drawable.app_icon);
 
         // Set the notification to be ongoing (not dismissible by the user)
         builder.setOngoing(true);
