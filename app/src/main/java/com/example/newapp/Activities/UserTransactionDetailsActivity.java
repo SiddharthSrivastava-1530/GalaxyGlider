@@ -690,17 +690,17 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
 
 
         y = 75;
-        canvas.drawText(String.valueOf(currentTransaction.getTransactionId() + 1), 140, y, paint);
-        canvas.drawText(datePatternFormat.format(new Date().getTime()), 140, y + 12, paint);
-        canvas.drawText("Paid", 140, y + 24, paint);
+        canvas.drawText(String.valueOf(currentTransaction.getTransactionId() + 1), 120, y, paint);
+        canvas.drawText(datePatternFormat.format(new Date().getTime()), 120, y + 12, paint);
+        canvas.drawText("Paid", 120, y + 24, paint);
         y += 36;
-        canvas.drawText(name, 140, y, paint);
-        canvas.drawText(mail, 140, y + 12, paint);
-        canvas.drawText(from, 140, y + 24, paint);
-        canvas.drawText(to, 140, y + 36, paint);
-        canvas.drawText(String.valueOf(dis) + " LightYears", 140, y + 48, paint);
-        canvas.drawText(company, 140, y + 60, paint);
-        canvas.drawText(spaceShip, 140, y + 72, paint);
+        canvas.drawText(name, 120, y, paint);
+        canvas.drawText(mail, 120, y + 12, paint);
+        canvas.drawText(from, 120, y + 24, paint);
+        canvas.drawText(to, 120, y + 36, paint);
+        canvas.drawText(String.valueOf(dis) + " LightYears", 120, y + 48, paint);
+        canvas.drawText(company, 120, y + 60, paint);
+        canvas.drawText(spaceShip, 120, y + 72, paint);
 
         y += 82;
         canvas.drawLine(10, y, 240, y, linePaint);
