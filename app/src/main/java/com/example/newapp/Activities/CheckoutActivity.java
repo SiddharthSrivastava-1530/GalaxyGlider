@@ -154,9 +154,8 @@ public class CheckoutActivity extends AppCompatActivity {
                             Transaction transaction = new Transaction(userUID, userName, userEmail, refId, companyId,
                                     companyName, currentSpaceShip.getSpaceShipId(), currentSpaceShip.getSpaceShipName(),
                                     chosenSeatConfig, departure, destination, distance, selectedSlotNumber, "",
-                                    System.currentTimeMillis(), -1.0f, false,
+                                    System.currentTimeMillis(), currentSpaceShip.getPrice()*Float.parseFloat(distance), false,
                                     isRideRecurring, review);
-
                             // add transaction to database in node - 'transactions'
                             FirebaseDatabase.getInstance().getReference("transactions/" + refId)
                                     .setValue(transaction).addOnCompleteListener(new OnCompleteListener<Void>() {

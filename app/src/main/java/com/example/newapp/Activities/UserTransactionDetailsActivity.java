@@ -140,7 +140,6 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         scrollView2 = findViewById(R.id.scrollView2);
         status_tv = findViewById(R.id.status_tv);
         invoiceInfo = findViewById(R.id.textView19);
-//        invoiceLink = findViewById(R.id.invoice_tv);
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
         shareRideTextView = findViewById(R.id.share_ride_tv);
