@@ -133,7 +133,7 @@ public class ShowSeatConfigurationActivity extends AppCompatActivity {
         selectedSlotNumber = intent.getStringExtra("slot_number");
         companyId = intent.getStringExtra("companyID");
 
-        isRideRecurring = true;
+        isRideRecurring = false;
 
         fromLocation.setImeOptions(EditorInfo.IME_ACTION_NEXT);
 

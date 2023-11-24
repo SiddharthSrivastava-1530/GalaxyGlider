@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -37,6 +38,8 @@ public class UnauthorisedCompanyList extends Fragment {
     private String loginMode;
     private SwipeRefreshLayout swipeRefreshLayout;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
+    private TextView no_auth_tv;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class UnauthorisedCompanyList extends Fragment {
         progressBar = getView().findViewById(R.id.progressbar_unauthorized);
         recyclerView = getView().findViewById(R.id.recycler_unauthorized);
         swipeRefreshLayout = getView().findViewById(R.id.swip_ref_unauthorised_list);
+        no_auth_tv = getView().findViewById(R.id.no_auth_tv);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
@@ -141,6 +145,12 @@ public class UnauthorisedCompanyList extends Fragment {
 
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<Company> arrayList) {
+        if(arrayList.size()==0){
+            no_auth_tv.setVisibility(View.VISIBLE);
+        }
+        else{
+            no_auth_tv.setVisibility(View.GONE);
+        }
         companyAdapter = new CompanyAdapter(arrayList, getActivity(), onCompanyClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         progressBar.setVisibility(View.GONE);

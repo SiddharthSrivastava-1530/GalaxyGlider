@@ -8,11 +8,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.newapp.Adapter.CompanyAdapter;
@@ -27,6 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class LowRatedCompanyList extends Fragment {
@@ -38,8 +42,8 @@ public class LowRatedCompanyList extends Fragment {
     private CompanyAdapter companyAdapter;
     private String loginMode;
     CompanyAdapter.OnCompanyClickListener onCompanyClickListener;
-
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView no_rated_tv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class LowRatedCompanyList extends Fragment {
         progressBar = getView().findViewById(R.id.progressbar_lowRated);
         recyclerView = getView().findViewById(R.id.recycler_lowRated);
         swipeRefreshLayout = getView().findViewById(R.id.swip_ref_low_company_list);
+        no_rated_tv = getView().findViewById(R.id.no_rated_tv);
 
         Intent intent1 = getActivity().getIntent();
         loginMode = intent1.getStringExtra("loginMode");
@@ -149,10 +154,17 @@ public class LowRatedCompanyList extends Fragment {
 
     // Setting up the adapter to show the list of companies in the arraylist.
     private void setAdapter(ArrayList<Company> arrayList) {
+        progressBar.setVisibility(View.GONE);
+        if(arrayList.size()==0){
+            no_rated_tv.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+        else{
+            no_rated_tv.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
         companyAdapter = new CompanyAdapter(arrayList, getActivity(), onCompanyClickListener);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        progressBar.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(companyAdapter);
         companyAdapter.notifyDataSetChanged();
 
