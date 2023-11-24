@@ -110,6 +110,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
     private int countSpaceShipsOnSamePath;
     private float basicPay, serviceCharge, spaceTax , dynamicTrafficCost, totalAmount;
     private ProgressBar progressBar;
+    private Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,9 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
         endRecurringRideTextView = findViewById(R.id.recurring_ride_end_tv);
         invoiceTextView = findViewById(R.id.invoice_tv);
         shareRideTextView = findViewById(R.id.share_ride_tv);
+
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+        scaledBitmap = Bitmap.createScaledBitmap(bmp, 250, 60, false);
 
         View bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -595,7 +599,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
             reviewCount = currentSpaceShip.getTransactionIds().size();
         }
         float currentRating = Float.parseFloat(currentSpaceShip.getSpaceShipRating());
-        return ((currentRating * reviewCount) + rating) / (reviewCount + 1);
+        return ((currentRating * (reviewCount-1)) + rating) / (reviewCount);
     }
 
 
@@ -783,7 +787,7 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
             // You can get the download URL of the uploaded file
             pdfRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 invoiceUrl = uri.toString();
-
+                Log.e("invoiceURL", invoiceUrl);
                 uploadInvoiceToDatabase();
 
             });
@@ -798,6 +802,8 @@ public class UserTransactionDetailsActivity extends AppCompatActivity implements
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 invoiceTextView.setVisibility(View.VISIBLE);
+                Toast.makeText(UserTransactionDetailsActivity.this, "invoice downloaded...",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 

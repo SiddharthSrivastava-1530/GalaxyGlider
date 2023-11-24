@@ -175,8 +175,10 @@ public class CheckoutActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isComplete()) {
-                                                DataUpdateServiceSettingsUtil.startRecurringRideService(getApplicationContext(),transaction);
-                                                ServiceSettingsUtil.startRideService(getApplicationContext(),companyName,currentSpaceShip.getSpaceShipName(),departure,destination,distance);
+                                                if (isRideRecurring) {
+                                                    DataUpdateServiceSettingsUtil.startRecurringRideService(getApplicationContext(), transaction);
+                                                }
+                                                ServiceSettingsUtil.startRideService(getApplicationContext(), companyName, currentSpaceShip.getSpaceShipName(), departure, destination, distance);
                                                 // Start the journey and move further to review activity.
                                                 Intent intent1 = new Intent(CheckoutActivity.this, AllSpaceShipsListActivity.class);
                                                 intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
